@@ -1,0 +1,100 @@
+@font-face {
+  font-family: 'BMW';
+  src: url('../fonts/bmwtypewebli_all.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/bmwtypewebli_all.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/bmwtypewebli_all.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/bmwtypewebli_all.svg#bmw') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'BMW Bold';
+  src: url('../fonts/bmwtypewebbo_all.eot'); /* IE9 Compat Modes */
+  src: url('../fonts/bmwtypewebbo_all.woff') format('woff'), /* Pretty Modern Browsers */
+       url('../fonts/bmwtypewebbo_all.ttf')  format('truetype'), /* Safari, Android, iOS */
+       url('../fonts/bmwtypewebbo_all.svg#bmw') format('svg'); /* Legacy iOS */
+}
+
+/*------ All colours ------*/
+
+$gray-theme: #d6d5d4;
+$gray-600: #3a3838;
+$gray-500: #817f7e;
+$gray-400: #979392;
+$gray-300: #a19e9d;
+$gray-200: #c1bfbf;
+$gray-100: #d6d5d4;
+
+$green: #46B27E;
+$blue: #00A6CE;
+$magenta: #C34580;
+$yellow: #FFCD44;
+$red: #EC6668;
+
+$dark-gray: $gray-600;
+$medium-gray: $gray-400;
+$light-gray: $gray-100;
+
+$white: #FFFFFF;
+$black: #000000;
+
+/*------ Theme colours ------*/
+
+$primary-color: $magenta;
+$secondary-color: $yellow;
+$tertiary-color: $dark-gray;
+$highlight-color: linear-gradient(100deg, $magenta 0%, $yellow 100%);
+$background-color: $medium-gray;
+
+
+/*------ Typography ------*/
+
+$body-font: 'BMW', 'Helvetica', 'Arial', sans-serif;
+$header-font: 'BMW Bold', 'Helvetica', 'Arial', sans-serif;
+$title-font: 'BMW Bold', 'Helvetica', 'Arial', sans-serif;
+$font-size-base: 16px;
+
+$font-size-h1: calc(3rem + 1.1vw);
+$font-size-h2: calc(2.2rem + 1vw);
+$font-size-h3: calc(1.25rem + 0.5vw);
+$font-size-h4: calc(1.125rem + 0.25vw);
+$font-size-h5: 1.125rem;
+$font-size-h6: 1.125rem;
+$font-size-sm: 1rem;
+$font-size-xs: 0.9rem;
+
+
+/*------ Spacing ------*/
+
+$spacing-base: 5px;
+$spacing-1: $spacing-base * 1;
+$spacing-2: $spacing-base * 2;
+$spacing-3: $spacing-base * 3;
+$spacing-4: $spacing-base * 4;
+$spacing-5: $spacing-base * 5;
+$spacing-6: $spacing-base * 6;
+$spacing-7: $spacing-base * 7;
+$spacing-8: $spacing-base * 8;
+$spacing-9: $spacing-base * 9;
+$spacing-10: $spacing-base * 10;
+
+/*------ Screen sizes ------*/
+
+$small-screen-up: 601px !default;
+$medium-screen-up: 961px !default;
+$large-screen-up: 1201px !default;
+$small-screen: 600px !default;
+$medium-screen: 960px !default;
+$large-screen: 1200px !default;
+
+$medium-and-up: "only screen and (min-width : #{$small-screen-up})" !default;
+$large-and-up: "only screen and (min-width : #{$medium-screen-up})" !default;
+$extra-large-and-up: "only screen and (min-width : #{$large-screen-up})" !default;
+$extra-large-and-down: "only screen and (max-width : #{$large-screen-up})" !default;
+$small-and-up: "only screen and (min-width : #{$small-screen})" !default;
+$small-and-down: "only screen and (max-width : #{$small-screen})" !default;
+$medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
+$large-and-down: "only screen and (max-width : #{$large-screen})" !default;
+$medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
+
+
+

@@ -1,0 +1,450 @@
+
+@for $i from -20 through 20 {
+  $margin: $spacing-base * $i;
+  .m-#{$i} {
+    margin: $margin + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $margin: $spacing-base * $i;
+  .ml-#{$i} {
+    margin-left: $margin + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $margin: $spacing-base * $i;
+  .mr-#{$i} {
+    margin-right: $margin + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $margin: $spacing-base * $i;
+  .mb-#{$i} {
+    margin-bottom: $margin + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $margin: $spacing-base * $i;
+  .mt-#{$i} {
+    margin-top: $margin + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $padding: $spacing-base * $i;
+  .p-#{$i} {
+    padding: $padding + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $padding: $spacing-base * $i;
+  .pl-#{$i} {
+    padding-left: $padding + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $padding: $spacing-base * $i;
+  .pr-#{$i} {
+    padding-right: $padding + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $padding: $spacing-base * $i;
+  .pb-#{$i} {
+    padding-bottom: $padding + 0px;
+  }
+}
+
+@for $i from -20 through 20 {
+  $padding: $spacing-base * $i;
+  .pt-#{$i} {
+    padding-top: $padding + 0px;
+  }
+}
+
+@for $i from 1 through 200 {
+  $width: 5 * $i;
+  .max-width-#{$width} {
+    max-width: $width + 0px;
+  }
+}
+
+.display {
+  &-flex {
+    display: flex;
+  }
+  &-block {
+    display: block;
+  }
+  &-inline-flex {
+    display: inline-flex;
+  }
+  &-inline-block {
+    display: inline-block;
+  }
+  &-none {
+    display: none;
+  }
+  &-inline {
+    display: inline;
+  }
+}
+
+.justify {
+  &-center {
+    justify-content: center;
+  }
+  &-left {
+    justify-content: flex-start;
+  }
+  &-right {
+    justify-content: flex-end;
+  }
+  &-between {
+    justify-content: space-between;
+  }
+  &-around {
+    justify-content: space-around;
+  }
+}
+
+.align {
+  &-center {
+    align-items: center;
+  }
+  &-left {
+    align-items: flex-start;
+  }
+  &-right {
+    align-items: flex-end;
+  }
+  &-baseline {
+    align-items: baseline;
+  }
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+
+.position {
+  &-relative {
+    position: relative;
+  }
+  &-absolute {
+    position: absolute;
+  }
+  &-fixed {
+    position: fixed;
+  }
+}
+
+.bg {
+  &-blue {
+    background-color: $blue;
+  }
+  &-green {
+    background-color: $green;
+  }
+  &-dark {
+    background-color: $dark-gray;
+  }
+  &-light {
+    background-color: $light-gray;
+  }
+  &-gray {
+    background-color: $medium-gray;
+  }
+  &-white {
+    background-color: $white;
+  }
+  &-gradient {
+    background: linear-gradient(160deg, $primary-color 0%, $secondary-color 100%);
+  }
+  &-black {
+    background-color: $black;
+  }
+  &-primary {
+    background-color: $primary-color;
+  }
+  &-secondary {
+    background-color: $secondary-color;
+  }
+}
+
+.btn {
+  font-size: inherit;
+  padding: 1rem 2rem;
+  background: $primary-color;
+  border: 0;
+  border-radius: 0;
+  color: $white;
+  text-decoration: none;
+  outline: none;
+  display: inline-block;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+
+  &:focus {
+    background: $gray-600;
+  }
+
+  &-sm {
+    padding: 0.4rem 0.6rem;
+  }
+
+  &-lg {
+    padding: 1.5rem 3rem;
+  }
+
+  &-blue {
+    background: $blue;
+    border: 1px solid $blue;
+    &:hover {
+      background: darken($blue, 10%);
+    }
+
+    &:focus {
+      background: $gray-600;
+    }
+  }
+
+  &-green {
+    background: $green;
+    &:hover {
+      background: darken($green, 10%);
+    }
+  }
+
+  &-dark {
+    background: $gray-600;
+    &:hover {
+      background: $black;
+    }
+    &:focus {
+      background: $gray-500;
+    }
+  }
+
+  &-light {
+    background: $light-gray;
+    color: $black;
+    &:hover {
+      background: darken($light-gray, 10%);
+    }
+    &:focus {
+      background: $gray-theme;
+    }
+  }
+  &-gray {
+    background: $gray-300;
+    &:hover {
+      background: $gray-400;
+    }
+    &:focus {
+      background: $gray-600;
+    }
+  }
+  &-white {
+    background: $white;
+    color: $black;
+    &:hover {
+      background: $gray-100;
+    }
+    &:focus {
+      background: $gray-200;
+    }
+  }
+  &-gradient {
+    background: linear-gradient(180deg, $primary-color 0%, $secondary-color 100%);
+    &:hover {
+      background: linear-gradient(100deg, $primary-color 0%, $secondary-color 100%);
+    }
+    &:focus {
+      background: linear-gradient(100deg, $secondary-color 0%, $primary-color 100%);
+    }
+  }
+  &-black {
+    background: $black;
+    &:hover {
+      background: $gray-400;
+    }
+  }
+  &-transparent {
+    background: transparent;
+    color: inherit;
+    &:hover {
+      background: $gray-100;
+    }
+    &:focus {
+      background: transparent;
+      border: 1px solid $blue;
+      color: $blue;
+    }
+  }
+}
+
+.text {
+  &-primary {
+    color: $primary-color;
+  }
+  &-secondary {
+    color: $secondary-color;
+  }
+  &-blue {
+    color: $blue;
+  }
+  &-green {
+    color: $green;
+  }
+  &-black {
+    color: $black;
+  }
+  &-white {
+    color: $white;
+  }
+  &-light {
+    color: $light-gray;
+  }
+  &-muted {
+    color: $medium-gray;
+  }
+  &-dark {
+    color: $dark-gray;
+  }
+  &-bold {
+    font-family: $header-font;
+  }
+  &-italic {
+    font-style: italic;
+  }
+  &-center {
+    text-align: center;
+  }
+  &-right {
+    text-align: right;
+  }
+  &-left {
+    text-align: left;
+  }
+  &-large {
+    font-size: 1.2em;
+  }
+  &-small {
+    font-size: $font-size-sm;
+  }
+  &-xs {
+    font-size: $font-size-xs;
+  }
+}
+
+.height-100 {
+  height: 100%;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.shadow-depth {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+
+}
+
+@mixin focus-border {
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $focus;
+  }
+}
+
+@keyframes delay-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.delay-in {
+  animation-name: delay-in;
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+}
+
+.embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.no-text-decoration {
+  text-decoration: none !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.margin-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.font-size {
+  &-h1 {
+    font-size: $font-size-h1;
+  }
+  &-h2 {
+    font-size: $font-size-h2;
+  }
+  &-h3 {
+    font-size: $font-size-h3;
+  }
+  &-h4 {
+    font-size: $font-size-h4;
+  }
+  &-h5 {
+    font-size: $font-size-h5;
+  }
+  &-h6 {
+    font-size: $font-size-h6;
+  }
+}

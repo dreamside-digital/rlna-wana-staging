@@ -1,0 +1,10 @@
+{
+  "sections": [
+    {
+      "content": [
+        { "type": "header", "content": { "text": "Header text" }},
+        { "type": "paragraph", "content": { "text": "<p>Section text</p>" }}
+      ]
+    }
+  ]
+}
