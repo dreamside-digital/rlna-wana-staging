@@ -12,18 +12,18 @@ const firebaseConfig = require(`./config/firebase-config.${process.env.GATSBY_FI
 
 module.exports = {
   siteMetadata: {
-    title: `Responsible Leaders Forum India`,
-    description: `Responsible Leaders Forum India`,
-    url: `https://www.rfl-india.online`
+    title: `Responsible Leaders Network Activation West Asia North Africa`,
+    description: `Responsible Leaders Network Activation`,
+    url: `https://rlna-wana-staging.firebaseapp.com/`
   },
   pathPrefix: `/`,
   plugins: [
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: "Responsible Leaders Forum India",
-        short_name: "Responsible Leaders Forum India",
-        start_url: "https://www.rfl-india.online",
+        name: "Responsible Leaders Network Activation",
+        short_name: "Responsible Leaders Network Activation",
+        start_url: "https://rlna-wana-staging.firebaseapp.com/",
         background_color: "#000",
         theme_color: "#00A6CE", // blue
         display: "minimal-ui",
