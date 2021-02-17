@@ -4,7 +4,13 @@ import { connect } from "react-redux";
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
-import { EditableText, EditableParagraph, EditableBackgroundImage, EditableEmbeddedIframe } from "react-easy-editables";
+import {
+  EditableText,
+  EditableParagraph,
+  EditableBackgroundImage,
+  EditableEmbeddedIframe,
+  EditableLink
+} from "react-easy-editables";
 
 import {
   updatePage,
@@ -19,7 +25,6 @@ import Section from "../components/common/Section"
 import Gallery from "../components/common/Gallery"
 import ParticipantGallery from "../components/common/ParticipantGallery"
 import ProgramElements from "../components/common/ProgramElements"
-import EmbeddedChat from "../components/common/EmbeddedChat"
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -99,7 +104,10 @@ class HomePage extends React.Component {
   render() {
     const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
 
+    // ---------- LOCK SCREEN ------------
+
     if (!this.props.accessGranted) {
+    // if (false) {
       return(
         <Layout theme="gray" location={this.props.location}>
           <EditableBackgroundImage
@@ -161,6 +169,8 @@ class HomePage extends React.Component {
       )
     }
 
+    // ----------------------
+
     return (
       <Layout theme="gray" location={this.props.location}>
         <EditableBackgroundImage
@@ -196,6 +206,11 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
+              <EditableLink
+                classes="btn btn-primary btn-lg mt-3"
+                content={content["intro-link"]}
+                onSave={this.onSave("intro-link")}
+              />
             </Grid>
           </Grid>
         </Section>
@@ -245,12 +260,19 @@ class HomePage extends React.Component {
 
         <Section id="connect" className="bg-white text-black">
           <Grid container>
-            <Grid item md={8} className="mb-4">
+            <Grid item md={8}>
               <h2 className="text-bold">
                 <EditableText content={content["connect-title"]} onSave={this.onSave("connect-title")} />
               </h2>
+              <EditableParagraph classes="font-size-h4 mb-8" content={content["connect-description"]} onSave={this.onSave("connect-description")} />
             </Grid>
-            <EditableEmbeddedIframe content={content["chat"]} onSave={this.onSave("chat")} />
+            <iframe
+              src={ "https://embed.tlk.io/responsible-leaders" }
+              frameBorder="0"
+              height={ "300" }
+              width={ "100%" }
+              title={ "Chat" }
+            />
           </Grid>
         </Section>
 

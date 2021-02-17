@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "rlna-wana-staging",
     "public": "public",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "headers": [

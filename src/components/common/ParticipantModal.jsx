@@ -5,10 +5,11 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {ImageUploadEditor, RichTextEditor} from "react-easy-editables";
+import {RichTextEditor} from "react-easy-editables";
+import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
+import { saveProfile, removeProfile } from "../../redux/actions"
 
 const emptyParticipant = {
   name: '',
@@ -60,13 +61,13 @@ class ParticipantModal extends React.Component {
       id
     }
 
-    this.props.onSaveItem(id)(data)
+    saveProfile(id, data)
     this.props.closeModal()
     this.setState({ newParticipant: emptyParticipant })
   }
 
   handleDeleteParticipant = () => {
-    this.props.onDeleteItem(this.state.newParticipant.id)()
+    removeProfile(this.state.newParticipant.id)
     this.props.closeModal()
     this.setState({ newParticipant: emptyParticipant })
   }
@@ -78,15 +79,9 @@ class ParticipantModal extends React.Component {
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
-        <DialogTitle id="form-dialog-title">{id ? 'Edit Participant' : 'New Participant' }</DialogTitle>
+        <DialogTitle id="form-dialog-title">{id ? 'Edit Participant' : 'Create a Profile' }</DialogTitle>
         <DialogContent>
-          {
-            !id &&
-            <DialogContentText>
-              Fill out this form to add a new participant.
-            </DialogContentText>
-          }
-          <ImageUploadEditor
+          <ImageUpload
             content={image}
             onContentChange={handleImageChange('image')}
             uploadImage={uploadImage}
@@ -169,10 +164,20 @@ class ParticipantModal extends React.Component {
                 }
               </Grid>
               <Grid item>
-                <Button onClick={closeModal} color="secondary">
+                <Button
+                  onClick={closeModal}
+                  color="default"
+                  variant="text"
+                  style={{borderRadius:0, marginRight: '8px'}}
+                  disableElevation>
                   Cancel
                 </Button>
-                <Button onClick={handleSaveParticipant} color="primary">
+                <Button
+                  onClick={handleSaveParticipant}
+                  color="primary"
+                  variant="contained"
+                  style={{borderRadius:0}}
+                  disableElevation>
                   Save
                 </Button>
               </Grid>

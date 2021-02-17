@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button"
+import AddIcon from "@material-ui/icons/Add"
 import { connect } from "react-redux";
 
 import ParticipantGalleryItem from "./ParticipantGalleryItem"
@@ -55,14 +56,21 @@ class ParticipantGallery extends React.Component {
 
     return (
       <div className={`collection width-100 mt-6 ${this.props.classes}`}>
-        {
-          this.props.isEditingPage &&
-          <div className="row mb-4">
-            <div className="col-12">
-              <Button onClick={() => this.setState({ showModal: true })} color="default" variant="contained">Add participant</Button>
-            </div>
+        <div className="row mb-4">
+          <div className="col-12">
+            <Button
+              onClick={() => this.setState({ showModal: true })}
+              color="primary"
+              variant="contained"
+              square
+              disableElevation
+              startIcon={<AddIcon />}
+              style={{ borderRadius: 0 }}>
+              Add your profile
+            </Button>
           </div>
-        }
+        </div>
+
         <Grid container className="position-relative">
         {itemsKeys.filter(k => this.props.content[k]).map((key,index) => {
             const content = this.props.content[key];

@@ -224,20 +224,21 @@ export function removeFootnote(footnoteId) {
   };
 }
 
-export function updateDefinition(id, definition) {
-  return { type: "UPDATE_DEFINITION", id, definition }
+// ---------- Profiles
+
+export function updateProfile(id, profile) {
+  return { type: "UPDATE_PROFILE", id, profile }
 }
 
-export function setDefinitions(definitions) {
-  return { type: "SET_DEFINITIONS", definitions }
+export function setProfiles(profiles) {
+  return { type: "SET_PROFILES", profiles }
 }
 
-export function saveDefinition(definitionId, definition) {
+export function saveProfile(profileId, profile) {
   return (dispatch, getState) => {
     const db = firebase.database();
-    const pageId = getState().page.data.id;
 
-    db.ref(`pages/${pageId}/definitions/${definitionId}`).update(definition, error => {
+    db.ref(`profiles/${profileId}`).update(profile, error => {
       if (error) {
         return dispatch(
           showNotification(
@@ -247,7 +248,7 @@ export function saveDefinition(definitionId, definition) {
         );
       }
 
-      dispatch(updateDefinition(definitionId, definition));
+      dispatch(updateProfile(profileId, profile));
       dispatch(
         showNotification(
           "Your changes have been saved.",
@@ -258,13 +259,12 @@ export function saveDefinition(definitionId, definition) {
   };
 }
 
-export function removeDefinition(definitionId) {
+export function removeProfile(profileId) {
   return (dispatch, getState) => {
     const db = firebase.database();
     const state = getState();
-    const pageId = state.page.data.id;
 
-    db.ref(`pages/${pageId}/definitions/`).update({[definitionId]: null}, error => {
+    db.ref(`profiles/`).update({[profileId]: null}, error => {
       if (error) {
         return dispatch(
           showNotification(
@@ -274,10 +274,10 @@ export function removeDefinition(definitionId) {
         );
       }
 
-      let allDefinitions = { ...state.page.data.definitions };
-      delete allDefinitions[definitionId];
+      let allProfiles = { ...state.page.data.profiles };
+      delete allProfiles[profileId];
 
-      dispatch(setDefinitions(allDefinitions));
+      dispatch(setProfiles(allProfiles));
       dispatch(
         showNotification(
           "Your changes have been saved. Publish your changes to make them public.",

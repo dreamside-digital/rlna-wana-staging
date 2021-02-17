@@ -27,14 +27,14 @@ const theme = createMuiTheme({
     }
   },
   typography: {
-    fontFamily: `'Helvetica', 'Arial', sans-serif`,
+    fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
     fontSize: 18,
     fontWeightLight: 300,
     fontWeightRegular: 400,
     fontWeightMedium: 500,
     color: 'hsla(0, 0%, 0%, .8)',
     display1: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       letterSpacing: "0.05rem",
       textTransform: "uppercase",
       fontSize: "3.333em",
@@ -42,7 +42,7 @@ const theme = createMuiTheme({
       fontWeight: 700,
     },
     display2: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       letterSpacing: "0.05rem",
       textTransform: "uppercase",
       fontSize: "2.222em",
@@ -50,7 +50,7 @@ const theme = createMuiTheme({
       fontWeight: 700,
     },
     display3: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       letterSpacing: "0.05rem",
       textTransform: "uppercase",
       fontSize: "1.667em",
@@ -58,21 +58,21 @@ const theme = createMuiTheme({
       fontWeight: 700,
     },
     display4: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       textTransform: "none",
       fontSize: "1.14em",
       color: 'hsla(0, 0%, 0%, .8)',
       fontWeight: 700,
     },
     title: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       letterSpacing: "0.05rem",
       textTransform: "uppercase",
       color: 'hsla(0, 0%, 0%, .8)',
       fontWeight: 700,
     },
     headline: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       letterSpacing: "0.05rem",
       textTransform: "uppercase",
       fontSize: "1.667em",
@@ -86,7 +86,7 @@ const theme = createMuiTheme({
       color: "#fff",
     },
     body1: {
-      fontFamily: `'Helvetica', 'Arial', sans-serif`,
+      fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
       fontSize: 18,
       fontWeightLight: 300,
       fontWeightRegular: 400,

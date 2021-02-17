@@ -49,6 +49,15 @@ a, button {
   cursor: pointer;
 }
 
+.icon {
+  padding: 1em;
+  color: $white;
+  background: linear-gradient(100deg, $primary-color 0%, $secondary-color 100%);
+  border-radius: 50px;
+  height: 50px;
+  width: 50px;
+}
+
 
 .pretty-link {
   border: none;
