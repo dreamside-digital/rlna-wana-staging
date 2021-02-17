@@ -56,22 +56,22 @@ class ParticipantGallery extends React.Component {
 
     return (
       <div className={`collection width-100 mt-6 ${this.props.classes}`}>
-        <div className="row mb-4">
-          <div className="col-12">
+        <Grid container className="position-relative">
+          <Grid item xs={6} sm={4} md={3} lg={2} style={{ display: 'flex', justifyContent: 'center' }}>
+            <div>
             <Button
               onClick={() => this.setState({ showModal: true })}
+              className="round-btn"
               color="primary"
               variant="contained"
               square
               disableElevation
               startIcon={<AddIcon />}
-              style={{ borderRadius: 0 }}>
+              style={{ borderRadius: '180px' }}>
               Add your profile
             </Button>
-          </div>
-        </div>
-
-        <Grid container className="position-relative">
+            </div>
+          </Grid>
         {itemsKeys.filter(k => this.props.content[k]).map((key,index) => {
             const content = this.props.content[key];
 
@@ -84,7 +84,7 @@ class ParticipantGallery extends React.Component {
                         theme={this.context.theme}
                         startEditing={() => this.setState({ showModal: true, editingParticipant: content })}
                       >
-                        <ParticipantGalleryItem content={content} />
+                        <ParticipantGalleryItem content={content} id={key} />
                       </EditorWrapper>
                     </ThemeProvider>
                   }

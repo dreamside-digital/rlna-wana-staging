@@ -599,33 +599,6 @@ body .nl-page {
     }
   }
 
-
-  &:hover, &:focus {
-    .participant-image {
-      img {
-        filter: grayscale(0) contrast(1);
-        transform: scale(1.075);
-      }
-
-      &:after {
-        opacity: 0;
-      }
-    }
-  }
-
-  &:hover {
-    .pretty-link:after {
-      width: 100%;
-    }
-  }
-
-  &:focus {
-    .pretty-link:after {
-      width: 100%;
-      background-color: $secondary-color;
-    }
-  }
-
   .participant-image {
     border-radius: 105px;
     position: relative;
@@ -644,7 +617,7 @@ body .nl-page {
       left: 0;
       border-radius: 100px;
       z-index: 2;
-      opacity: 1;
+      filter: opacity(100%);
       transition: all 0.3s ease;
       background: linear-gradient(100deg, transparentize($primary-color, 0.5) 0%, transparentize($secondary-color, 0.5) 100%);
     }
@@ -663,6 +636,48 @@ body .nl-page {
     }
   }
 
+  .participant-image img {
+    width: 180px;
+    height: 180px;
+    border-radius: 100px;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+    position: absolute;
+    transition: all 0.5s ease-in-out;
+    filter: grayscale(100%);
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: linear-gradient(100deg, transparentize($primary-color, 0.5) 0%, transparentize($secondary-color, 0.5) 100%);
+  }
+
+  &:hover, &:focus {
+    .participant-image {
+      img {
+        filter: grayscale(1%);
+        transform: scale(1.075);
+      }
+
+      &:after {
+        filter: opacity(1%);
+      }
+    }
+  }
+
+  &:hover {
+    .pretty-link:after {
+      width: 100%;
+    }
+  }
+
+  &:focus {
+    .pretty-link:after {
+      width: 100%;
+      background-color: $secondary-color;
+    }
+  }
+
   .participant-image-container {
     width: 180px;
     height: 180px;
@@ -675,22 +690,6 @@ body .nl-page {
     left: 5px;
     overflow: hidden;
 
-  }
-
-  .participant-image img {
-    width: 180px;
-    height: 180px;
-    border-radius: 100px;
-    object-fit: cover;
-    margin: 0 auto;
-    display: block;
-    position: absolute;
-    transition: all 0.5s ease-in-out;
-    filter: grayscale(1) contrast(1.5);
-    top: 0;
-    left: 0;
-    z-index: 2;
-    background: linear-gradient(100deg, transparentize($primary-color, 0.5) 0%, transparentize($secondary-color, 0.5) 100%);
   }
 
   .participant-name {
@@ -804,6 +803,24 @@ section.highlight {
 
 .timezone-select__menu {
   z-index: 15 !important;
+}
+
+.round-btn {
+  cursor: pointer;
+  background: linear-gradient(100deg, #C34580 0%, #EC6668 100%);
+  color: #FFFFFF;
+  padding: 6px 12px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: 'BMW', 'Helvetica', 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 105px;
+  position: relative;
+  width: 190px;
+  height: 190px;
+  margin: 0 auto 20px
 }
 
 @import "responsive";
