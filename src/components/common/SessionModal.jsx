@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import Button from "@material-ui/core/Button"
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
@@ -6,101 +7,99 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  KeyboardDateTimePicker,
+  MuiPickersUtilsProvider
+} from "@material-ui/pickers";
 import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
-import { saveProfile, removeProfile } from "../../redux/actions"
-import { connect } from "react-redux";
+import { saveSession, removeSession } from "../../redux/actions"
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveProfile: (id, profile) => {
-      dispatch(saveProfile(id, profile));
+    saveSession: (id, data) => {
+      dispatch(saveSession(id, data));
     },
-    removeProfile: (id) => {
-      dispatch(removeProfile(id));
+    removeSession: (id) => {
+      dispatch(removeSession(id));
     },
   };
 };
 
-const emptyParticipant = {
-  name: '',
-  affiliateOrganization: '',
-  description: 'Participant bio',
-  image: {},
-  twitter: '',
-  linkedin: '',
-  instagram: '',
-  website: '',
-  approved: false,
-}
+const emptySession = {
+    image: "",
+    title: { "text": "Title" },
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString(),
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    link: { "link": "/", "anchor": "Zoom Link" },
+    description: { "text": `<p>Description text</p>` },
 
-class ParticipantModal extends React.Component {
+  }
+
+class SessionModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newParticipant: props.participant || emptyParticipant }
+    this.state = { newSession: props.session || emptySession }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.participant !== this.props.participant && !Boolean(this.props.participant)) {
-      this.setState({ newParticipant: emptyParticipant })
+    if (prevProps.session !== this.props.session && !Boolean(this.props.session)) {
+      this.setState({ newSession: emptySession })
     }
 
-    if (prevProps.participant !== this.props.participant && this.props.participant?.id) {
-      this.setState({ newParticipant: this.props.participant })
+    if (prevProps.session !== this.props.session && this.props.session?.id) {
+      this.setState({ newSession: this.props.session })
     }
   }
 
   handleChange = key => event => {
     const value = event.currentTarget.value
-    this.setState({ newParticipant: {...this.state.newParticipant, [key]: value} })
+    this.setState({ newSession: {...this.state.newSession, [key]: value} })
   }
 
   handleImageChange = key => image => {
-    this.setState({ newParticipant: {...this.state.newParticipant, [key]: image} })
+    this.setState({ newSession: {...this.state.newSession, [key]: image} })
   }
 
   handleDescChange = key => desc => {
-    this.setState({ newParticipant: {...this.state.newParticipant, [key]: desc.text} })
+    this.setState({ newSession: {...this.state.newSession, [key]: desc.text} })
   }
 
-  handleSaveProfile = () => {
-    const { newParticipant } = this.state;
+  handleSaveSession = () => {
+    const { newSession } = this.state;
 
-    const id = newParticipant.id ? newParticipant.id : `profile-${Date.now()}`
+    const id = newSession.id ? newSession.id : `session-${Date.now()}`
 
     const data = {
-      ...newParticipant,
+      ...newSession,
       id
     }
 
     this.props.saveProfile(id, data)
     this.props.closeModal()
-    this.setState({ newParticipant: emptyParticipant })
+    this.setState({ newSession: emptySession })
   }
 
   handleDeleteParticipant = () => {
-    this.props.removeProfile(this.state.newParticipant.id)
+    this.props.removeProfile(this.state.newSession.id)
     this.props.closeModal()
-    this.setState({ newParticipant: emptyParticipant })
+    this.setState({ newSession: emptySession })
   }
 
   render() {
     const { handleDeleteParticipant, handleSaveProfile, handleChange, handleImageChange, handleDescChange } = this;
     const { showModal, closeModal } = this.props;
     const {
-      name,
-      affiliateOrganization,
-      description,
       image,
-      id,
-      twitter,
-      linkedin,
-      country,
-      website,
-      question1,
-      question2,
-      question3
-    } = this.state.newParticipant;
+      title,
+      startDate,
+      endDate,
+      timezone,
+      description,
+      link,
+      host
+    } = this.state.newSession;
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
@@ -245,11 +244,11 @@ class ParticipantModal extends React.Component {
 
 }
 
-ParticipantModal.defaultProps = {
+SessionModal.defaultProps = {
   onSaveItem: () => console.log("uh oh you're missing onSaveItem"),
-  participant: emptyParticipant,
+  session: emptyEvent,
   showModal: false
 }
 
-export default connect(null, mapDispatchToProps)(ParticipantModal)
+export default connect(null, mapDispatchToProps)(SessionModal)
 

@@ -366,37 +366,49 @@ export const page = (state={}, action) => {
 }
 
 
-export const topics = (state={topics: {}}, action) => {
+export const profiles = (state={profiles: {}}, action) => {
   switch (action.type) {
-    case 'SELECT_TOPIC':
+    case 'SET_PROFILES':
       return {
         ...state,
-        selected: action.selected
-      }
-    case 'UNSELECT_TOPIC':
-      return {
-        ...state,
-        selected: null,
+        profiles: action.profiles
       }
 
-    case 'SET_TOPICS':
+    case 'UPDATE_PROFILE':
       return {
         ...state,
-        topics: action.topics
-      }
-
-    case 'ADD_TOPIC':
-      return {
-        ...state,
-        topics: {
-          ...state.topics,
-          [action.topic.id]: action.topic
+        profiles: {
+          ...state.profiles,
+          [action.profile.id]: action.profile
         }
       }
     default:
       return state
   }
 }
+
+
+export const sessions = (state={sessions: {}}, action) => {
+  switch (action.type) {
+    case 'SET_SESSIONS':
+      return {
+        ...state,
+        sessions: action.sessions
+      }
+
+    case 'UPDATE_SESSION':
+      return {
+        ...state,
+        sessions: {
+          ...state.sessions,
+          [action.session.id]: action.session
+        }
+      }
+    default:
+      return state
+  }
+}
+
 
 export const categories = (state={ categories: {}}, action) => {
   switch (action.type) {
@@ -505,7 +517,8 @@ export const appReducers = (state = {}, action) => {
     adminTools: adminTools(state.adminTools, action),
     navigation: navigation(state.navigation, action),
     page: page(state.page, action),
-    topics: topics(state.topics, action),
+    profiles: profiles(state.profiles, action),
+    sessions: sessions(state.sessions, action),
     categories: categories(state.categories, action),
     pages: pages(state.pages, action),
     translations: translations(state.translations, action),

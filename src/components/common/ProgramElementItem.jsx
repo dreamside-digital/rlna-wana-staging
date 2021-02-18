@@ -6,12 +6,15 @@ import {
   PlainTextEditor,
   RichTextEditor,
   LinkEditor,
+  ImageUploadEditor,
   Editable,
 } from 'react-easy-editables';
 import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import LuxonUtils from "@date-io/luxon";
 import {DateTime} from "luxon";
 import TimezoneSelect from "./TimezoneSelect";
+import ImageUpload from '../editing/ImageUpload';
+import {uploadImage} from "../../firebase/operations";
 
 import { showNotification } from "../../redux/actions";
 
@@ -41,8 +44,15 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
     <div className="program-box mt-5">
       <Grid container className="position-relative">
         <Grid item xs={12}>
+          <ImageUploadEditor
+            content={content["image"]}
+            onContentChange={handleEditorChange('program-elements-image')}
+            uploadImage={uploadImage}
+          />
+          <label className="text-small mb-2" htmlFor="title">Session title</label>
           <PlainTextEditor
-            classes="mb-3"
+            id="title"
+            classes="mb-3 p-2"
             content={content["program-elements-title"]}
             onContentChange={handleEditorChange("program-elements-title")}
           />
@@ -63,6 +73,7 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
                 onContentChange({ ...content, 'program-elements-start-date': date })
               }}
               inputVariant="outlined"
+              shrink
             />
           </Grid>
           <Grid item xs={6}>
@@ -80,6 +91,7 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
                 onContentChange({ ...content, 'program-elements-end-date': date })
               }}
               inputVariant="outlined"
+              shrink
             />
           </Grid>
         </MuiPickersUtilsProvider>
@@ -105,6 +117,15 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           <LinkEditor
             content={content["program-elements-link"]}
             onContentChange={handleEditorChange("program-elements-link")}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <label className="text-small" htmlFor="video">Link to video (optional)</label>
+          <PlainTextEditor
+            id="video"
+            classes="mb-3 p-2"
+            content={content["program-elements-video"]}
+            onContentChange={handleEditorChange("program-elements-video")}
           />
         </Grid>
       </Grid>
@@ -173,7 +194,11 @@ const ProgramElementItem = props => {
     >
       <div className={`program-box mt-5 ${isCurrent ? 'is-large' : ''}`} data-aos="fade-right">
         <Grid container className="position-relative">
-          <Grid item md={5} xs={12}>
+          <Grid item md={4} xs={12}>
+            <div className="image-container" style={{background: `url(${content["program-elements-image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover'}}>
+            </div>
+          </Grid>
+          <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
             <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
               {
                 !isOpen &&
@@ -206,8 +231,6 @@ const ProgramElementItem = props => {
               {startDate.toLocaleString({ month: 'long', day: 'numeric' })} {endDate && !sameDay && `- ${endDate.toLocaleString({ day: 'numeric' })}`}
               <div className="text-muted text-xs"><time>{startDate.toLocaleString(DateTime.TIME_SIMPLE)}</time> - <time>{endDate.toLocaleString(DateTime.TIME_SIMPLE)}</time></div>
             </div>
-          </Grid>
-          <Grid item md={7} xs={11} className={isOpen ? '' : 'hide-on-med-and-down'}>
             <p className={`${isPast ? 'text-muted' : 'text-primary'} hide-on-med-and-down`}>
               {
                 isPast && 'past'
@@ -252,6 +275,8 @@ ProgramElementItem.defaultProps = {
     "program-elements-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
     "program-elements-link": { "link": "/", "anchor": "Zoom Link" },
     "program-elements-text": { "text": `<p>Description text</p>` },
+    "program-elements-image": { "imageSrc": "", "title": "" },
+    "program-elements-video": { "text": "" }
   },
   classes: "",
   onSave: () => { console.log('implement a function to save changes') }

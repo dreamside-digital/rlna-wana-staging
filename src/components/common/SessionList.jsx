@@ -3,12 +3,12 @@ import Button from "@material-ui/core/Button"
 import AddIcon from "@material-ui/icons/Add"
 import { connect } from "react-redux";
 
-import ParticipantGalleryItem from "./ParticipantGalleryItem"
-import ParticipantModal from "./ParticipantModal";
+import SessionItem from "./SessionItem"
+// import SessionModal from "./SessionModal";
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 import Grid from "@material-ui/core/Grid";
-import { fetchProfiles } from "../../redux/actions"
+import { fetchSessions } from "../../redux/actions"
 
 const muiTheme = createMuiTheme({
   palette: {
@@ -24,8 +24,8 @@ const muiTheme = createMuiTheme({
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchProfiles: () => {
-      dispatch(fetchProfiles());
+    fetchSessions: () => {
+      dispatch(fetchSessions());
     },
   };
 };
@@ -33,7 +33,7 @@ const mapDispatchToProps = dispatch => {
 const mapStateToProps = state => {
   return {
     isEditingPage: state.adminTools.isEditingPage,
-    profiles: state.profiles.profiles
+    sessions: state.sessions.sessions
   };
 };
 
@@ -44,7 +44,7 @@ class ParticipantGallery extends React.Component {
       showModal: false,
       editingParticipant: null,
     }
-    this.props.fetchProfiles()
+    this.props.fetchSessions()
   }
 
   onSaveItem = itemId => itemContent => {
@@ -65,19 +65,25 @@ class ParticipantGallery extends React.Component {
 
   render() {
     const { showModal, editingParticipant } = this.state;
-    const { profiles } = this.props;
+    const { sessions } = this.props;
 
     return (
       <div className={`collection width-100 mt-2 ${this.props.classes}`}>
-        <button onClick={() => this.setState({ showModal: true })} className="add-item-btn">
-          <div className="icon-btn">
-            <AddIcon />
-          </div>
-          <span className="pretty-link">Add your profile</span>
-        </button>
-        <Grid container className="position-relative mt-6">
-        {Object.keys(profiles).map((key,index) => {
-          const profile = profiles[key]
+        <Grid container className="position-relative">
+          <Grid item xs={12}>
+            <a href="mailto:" className="add-item-btn">
+              <div className="icon-btn">
+                <AddIcon />
+              </div>
+              <span className="pretty-link">Host a session</span>
+            </a>
+          </Grid>
+
+        {Object.keys(sessions).map((key,index) => {
+          const profile = sessions[key]
+          if (!profile.approved) {
+            return null
+          }
 
           return (
               <Grid item xs={6} sm={4} md={3} lg={2} key={profile.id} style={{ display: 'flex', justifyContent: 'center' }}>
@@ -88,26 +94,20 @@ class ParticipantGallery extends React.Component {
                       theme={this.context.theme}
                       startEditing={() => this.setState({ showModal: true, editingParticipant: profile })}
                     >
-                      <ParticipantGalleryItem content={profile} id={profile.id} />
+                      <SessionItem content={profile} id={profile.id} />
                     </EditorWrapper>
                   </ThemeProvider>
                 }
                 {
                   !this.props.isEditingPage &&
-                  <ParticipantGalleryItem content={profile} />
+                  <SessionItem content={profile} />
                 }
               </Grid>
             )
           })}
         </Grid>
 
-        <ParticipantModal
-          participant={editingParticipant}
-          onSaveItem={this.onSaveItem}
-          showModal={showModal}
-          closeModal={() => this.setState({ showModal: false, editingParticipant: null })}
-          onDeleteItem={this.onDeleteItem}
-        />
+
       </div>
     );
   }

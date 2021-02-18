@@ -226,11 +226,27 @@ export function removeFootnote(footnoteId) {
 
 // ---------- Profiles
 
+export function fetchProfiles() {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`profiles`)
+      .once('value')
+      .then(snap => {
+        dispatch(setProfiles(snap.val()));
+      })
+      .catch(error => {
+        console.log("Error fetching profiles", error)
+      })
+  };
+}
+
 export function updateProfile(id, profile) {
   return { type: "UPDATE_PROFILE", id, profile }
 }
 
 export function setProfiles(profiles) {
+  console.log({profiles})
   return { type: "SET_PROFILES", profiles }
 }
 
@@ -287,6 +303,88 @@ export function removeProfile(profileId) {
     })
   };
 }
+
+// ---------- Sessions
+
+export function fetchSessions() {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`sessions`)
+      .once('value')
+      .then(snap => {
+        dispatch(setSessions(snap.val()));
+      })
+      .catch(error => {
+        console.log("Error fetching sessions", error)
+      })
+  };
+}
+
+export function updateSession(id, session) {
+  return { type: "UPDATE_SESSION", id, session }
+}
+
+export function setSessions(sessions) {
+  console.log({sessions})
+  return { type: "SET_SESSIONS", sessions }
+}
+
+export function saveSession(sessionId, session) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`sessions/${sessionId}`).update(session, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "error"
+          )
+        );
+      }
+
+      dispatch(updateSession(sessionId, session));
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function removeSession(sessionId) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+    const state = getState();
+
+    db.ref(`sessions/`).update({[sessionId]: null}, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "success"
+          )
+        );
+      }
+
+      let allSessions = { ...state.page.data.sessions };
+      delete allSessions[sessionId];
+
+      dispatch(setSessions(allSessions));
+      dispatch(
+        showNotification(
+          "Your changes have been saved. Publish your changes to make them public.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+// -----------------
 
 export function savePage(pageData, pageId) {
   return dispatch => {

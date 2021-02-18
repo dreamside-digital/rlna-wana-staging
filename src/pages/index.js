@@ -25,6 +25,7 @@ import Section from "../components/common/Section"
 import Gallery from "../components/common/Gallery"
 import ParticipantGallery from "../components/common/ParticipantGallery"
 import ProgramElements from "../components/common/ProgramElements"
+// import SessionList from "../components/common/SessionList"
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -269,7 +270,7 @@ class HomePage extends React.Component {
             <iframe
               src={ "https://embed.tlk.io/responsible-leaders" }
               frameBorder="0"
-              height={ "300" }
+              height={ "460" }
               width={ "100%" }
               title={ "Chat" }
             />
