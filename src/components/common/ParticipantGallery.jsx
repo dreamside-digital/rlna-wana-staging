@@ -10,6 +10,8 @@ import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 import Grid from "@material-ui/core/Grid";
 import { fetchProfiles } from "../../redux/actions"
 
+const ITEM_NUMBER = 10
+
 const muiTheme = createMuiTheme({
   palette: {
     primary: {
@@ -43,6 +45,7 @@ class ParticipantGallery extends React.Component {
     this.state = {
       showModal: false,
       editingParticipant: null,
+      itemsToShow: ITEM_NUMBER,
     }
     this.props.fetchProfiles()
   }
@@ -64,8 +67,10 @@ class ParticipantGallery extends React.Component {
   }
 
   render() {
-    const { showModal, editingParticipant } = this.state;
+    const { showModal, editingParticipant, itemsToShow } = this.state;
     const { profiles } = this.props;
+    const itemsKeys = Object.keys(profiles).reverse().slice(0, itemsToShow)
+    const totalItems = Object.keys(profiles).length
 
     return (
       <div className={`collection width-100 mt-2 ${this.props.classes}`}>
@@ -76,10 +81,10 @@ class ParticipantGallery extends React.Component {
           <span className="pretty-link">Add your profile</span>
         </button>
         <Grid container className="position-relative mt-6">
-        {Object.keys(profiles).map((key,index) => {
-          const profile = profiles[key]
+          {itemsKeys.map((key,index) => {
+            const profile = profiles[key]
 
-          return (
+            return (
               <Grid item xs={6} sm={4} md={3} lg={2} key={profile.id} style={{ display: 'flex', justifyContent: 'center' }}>
                 {
                   this.props.isEditingPage &&
@@ -94,12 +99,20 @@ class ParticipantGallery extends React.Component {
                 }
                 {
                   !this.props.isEditingPage &&
-                  <ParticipantGalleryItem content={profile} />
+                  <ParticipantGalleryItem content={profile} id={profile.id} />
                 }
               </Grid>
             )
           })}
         </Grid>
+        {
+          itemsToShow < totalItems &&
+          <Grid container justify="center" className="mt-6">
+            <Grid item>
+              <Button variant="outlined" color="primary" className="btn" onClick={() => this.setState({ itemsToShow: this.state.itemsToShow + ITEM_NUMBER })}>Load more</Button>
+            </Grid>
+          </Grid>
+        }
 
         <ParticipantModal
           participant={editingParticipant}

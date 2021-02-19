@@ -211,6 +211,7 @@ class ParticipantModal extends React.Component {
             onChange={handleChange('question1')}
             variant="outlined"
             multiline
+            rows={4}
           />
           <TextField
             value={question2 || ''}
@@ -222,6 +223,7 @@ class ParticipantModal extends React.Component {
             onChange={handleChange('question2')}
             variant="outlined"
             multiline
+            rows={4}
           />
           <TextField
             value={question3 || ''}
@@ -233,6 +235,7 @@ class ParticipantModal extends React.Component {
             onChange={handleChange('question3')}
             variant="outlined"
             multiline
+            rows={4}
           />
           <FormControlLabel
             control={
