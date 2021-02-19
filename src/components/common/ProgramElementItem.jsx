@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Grid from '@material-ui/core/Grid';
 import { connect } from "react-redux";
+import slugify from "slugify";
+import { Link } from "gatsby";
 
 import {
   PlainTextEditor,
@@ -124,7 +126,7 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           <PlainTextEditor
             id="video"
             classes="mb-3 p-2"
-            content={content["program-elements-video"]}
+            content={content["program-elements-video"] || {"text": ""}}
             onContentChange={handleEditorChange("program-elements-video")}
           />
         </Grid>
@@ -140,7 +142,6 @@ const ProgramElementItem = props => {
   const content = props.content || {}
 
   const convertDate = (date, timezone) => {
-
     const dateWithTZ = date.setZone(timezone, { keepLocalTime: true })
     return dateWithTZ.toISO()
   }
@@ -152,7 +153,6 @@ const ProgramElementItem = props => {
       console.log("err getting local date", err)
       return date
     }
-
   }
 
   const handleSave = newContent => {
@@ -160,17 +160,25 @@ const ProgramElementItem = props => {
       return props.showNotification("Start date and end date are required")
     }
 
+    const startDate = convertDate(newContent['program-elements-start-date'], newContent['program-elements-timezone'])
+    const endDate = convertDate(newContent['program-elements-end-date'], newContent['program-elements-timezone'])
+
+    const slug = slugify(`${newContent['title']['text']}-${startDate}`, {
+      lower: true,
+      remove: /[$*_+~.,()'"!\-:@%^&?=]/g
+    })
+
     const data = {
       ...newContent,
-      'program-elements-start-date': convertDate(newContent['program-elements-start-date'], newContent['program-elements-timezone']),
-      'program-elements-end-date': convertDate(newContent['program-elements-end-date'], newContent['program-elements-timezone']),
+      'program-elements-start-date': startDate,
+      'program-elements-end-date': endDate,
+      slug
     }
 
     console.log({ eventData: data })
 
     props.onSave(data)
   }
-
 
   const startDate = getLocalDateTime(content["program-elements-start-date"])
   const endDate = getLocalDateTime(content["program-elements-end-date"])
@@ -225,7 +233,6 @@ const ProgramElementItem = props => {
               {content["program-elements-title"]["text"]}
             </h3>
             <div dangerouslySetInnerHTML={{__html: content["program-elements-text"]["text"]}} />
-            <div></div>
           </Grid>
         </Grid>
         <div className={`program-link ${isCurrent ? 'is-large' : ''}`}>
@@ -233,14 +240,11 @@ const ProgramElementItem = props => {
             <div className="btn btn-lg btn-gray disabled">
               {content["program-elements-link"]["anchor"]}
             </div> :
-            <a
+            <Link
               className={`btn btn-lg ${isPast ? 'btn-gray' : ''}`}
-              href={content["program-elements-link"]["link"]}
-              target={content["program-elements-link"]["link"].trim().startsWith('http') ? "_blank" : "_self"}
-              rel="noopener noreferrer"
-            >
-              {content["program-elements-link"]["anchor"]}
-            </a>
+              to={`/${content['slug']}`}>
+              Read more
+            </Link>
           }
         </div>
         <div className={`mid-dot ${isPast ? 'is-past' : ''} ${isCurrent ? 'is-large' : ''}`} />
@@ -259,7 +263,7 @@ ProgramElementItem.defaultProps = {
     "program-elements-link": { "link": "/", "anchor": "Zoom Link" },
     "program-elements-text": { "text": `<p>Description text</p>` },
     "program-elements-image": { "imageSrc": "", "title": "" },
-    "program-elements-video": { "text": "" }
+    "program-elements-host": { "text": "" }
   },
   classes: "",
   onSave: () => { console.log('implement a function to save changes') }

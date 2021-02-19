@@ -6,7 +6,7 @@ exports.createPages = ({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
       graphql(
         `
-          {
+        {
           allPages(filter: {template: { in: ["default-template.js"]}}) {
             edges {
               node {
@@ -19,6 +19,10 @@ exports.createPages = ({ graphql, actions }) => {
                 head
               }
             }
+          }
+          pages(id: { eq: "home" }) {
+            id
+            content
           }
         }
         `
@@ -43,6 +47,28 @@ exports.createPages = ({ graphql, actions }) => {
             }
           });
         });
+
+        const content = JSON.parse(result.data.pages.content)
+        const events = content['program-elements-collection']
+
+        Object.keys(events).forEach(eventId => {
+          const event = events[eventId]
+          const template = path.resolve(
+            `src/templates/event-template.js`
+          );
+
+          console.log({ event })
+
+          console.log("CREATING EVENT PAGE", event['program-elements-title']['text']);
+          createPage({
+            path: event.slug, // required
+            component: template,
+            layout: "default",
+            context: {
+              event
+            }
+          });
+        })
 
         resolve();
       })
