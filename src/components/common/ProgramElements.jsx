@@ -3,17 +3,31 @@ import Button from "@material-ui/core/Button"
 import AddIcon from "@material-ui/icons/Add"
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
+import { fetchEvents } from "../../redux/actions"
 
 import ProgramElementItem from "./ProgramElementItem"
 
 const mapStateToProps = state => {
   return {
     isEditingPage: state.adminTools.isEditingPage,
+    events: state.events.events
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchEvents: () => {
+      dispatch(fetchEvents());
+    },
   };
 };
 
 
 class ProgramElements extends React.Component {
+  constructor(props) {
+    super(props)
+    this.props.fetchProfiles()
+  }
 
   onSaveItem = itemId => itemContent => {
     const newContent = {
@@ -33,16 +47,17 @@ class ProgramElements extends React.Component {
 
   onAddItem = () => {
     let newContent = { ...this.props.content }
-    const newItemKey = `program-elements-${Date.now()}`
+    const newItemKey = `event-${Date.now()}`
     newContent[newItemKey] = {
-      "program-elements-title": { "text": "Title" },
-      "program-elements-start-date": new Date().toISOString(),
-      "program-elements-end-date": new Date().toISOString(),
-      "program-elements-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-      "program-elements-link": { "link": "/", "anchor": "Zoom Link" },
-      "program-elements-text": { "text": `<p>Description text</p>` },
-      "program-elements-image": { "imageSrc": "https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=2f0c0c6e-3595-44b0-9de7-c29de88fab81", "title": "" },
-      "program-elements-video": { "text": "" }
+      "title": { "text": "Title" },
+      "startDate": new Date().toISOString(),
+      "endDate": new Date().toISOString(),
+      "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+      "link": { "link": "/", "anchor": "Zoom Link" },
+      "description": { "text": `<p>Description text</p>` },
+      "image": { "imageSrc": "https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=2f0c0c6e-3595-44b0-9de7-c29de88fab81", "title": "" },
+      "video": { "text": "" },
+      "host": { "text": "" },
     }
 
     this.props.onSave(newContent)
@@ -50,7 +65,7 @@ class ProgramElements extends React.Component {
 
   render() {
     // show lastest item first
-    let itemsKeys = Object.keys(this.props.content).reverse()
+    let itemsKeys = Object.keys(this.props.events).reverse()
     const subject = encodeURIComponent('Session proposal')
     const body = encodeURIComponent('Please provide following information to propose a session. \n\nSession title: \nSession description: \nProposed date and time: \nAny other comments?\n')
 
@@ -73,8 +88,8 @@ class ProgramElements extends React.Component {
         {itemsKeys.filter(k => this.props.content[k]).map((key,index) => {
           const content = {
             ...this.props.content[key],
-            'program-elements-start-date': DateTime.fromISO(this.props.content[key]['program-elements-start-date']),
-            'program-elements-end-date': DateTime.fromISO(this.props.content[key]['program-elements-end-date'])
+            'start-date': DateTime.fromISO(this.props.content[key]['start-date']),
+            'end-date': DateTime.fromISO(this.props.content[key]['end-date'])
           };
           return(
             <ProgramElementItem

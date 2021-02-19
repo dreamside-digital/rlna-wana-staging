@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Grid from '@material-ui/core/Grid';
+import slugify from "slugify";
 import { connect } from "react-redux";
 
 import {
@@ -37,8 +38,8 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
     });
   }
 
-  const startDate = content["program-elements-start-date"].setZone(content["program-elements-timezone"])
-  const endDate = content["program-elements-end-date"].setZone(content["program-elements-timezone"])
+  const startDate = content["startDate"].setZone(content["timezone"])
+  const endDate = content["endDate"].setZone(content["timezone"])
 
   return(
     <div className="program-box mt-5 p-5">
@@ -46,86 +47,102 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
         <Grid item xs={12}>
           <ImageUploadEditor
             content={content["image"]}
-            onContentChange={handleEditorChange('program-elements-image')}
+            onContentChange={handleEditorChange('image')}
             uploadImage={uploadImage}
           />
           <label className="text-small mb-2" htmlFor="title">Session title</label>
           <PlainTextEditor
             id="title"
             classes="mb-3 p-2"
-            content={content["program-elements-title"]}
-            onContentChange={handleEditorChange("program-elements-title")}
+            content={content["title"]}
+            onContentChange={handleEditorChange("title")}
           />
         </Grid>
         <MuiPickersUtilsProvider utils={LuxonUtils}>
-          <Grid item xs={6}>
-            <KeyboardDateTimePicker
-              fullWidth
-              margin="dense"
-              id="date"
-              label="Start date"
-              format="MM/dd/yyyy h:mm a"
-              value={startDate}
-              KeyboardButtonProps={{
-                'aria-label': 'select date',
-              }}
-              onChange={date => {
-                onContentChange({ ...content, 'program-elements-start-date': date })
-              }}
-              inputVariant="outlined"
-              shrink
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <KeyboardDateTimePicker
-              fullWidth
-              margin="dense"
-              id="date"
-              label="End date"
-              format="MM/dd/yyyy h:mm a"
-              value={endDate}
-              KeyboardButtonProps={{
-                'aria-label': 'select date',
-              }}
-              onChange={date => {
-                onContentChange({ ...content, 'program-elements-end-date': date })
-              }}
-              inputVariant="outlined"
-              shrink
-            />
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <KeyboardDateTimePicker
+                fullWidth
+                margin="dense"
+                id="date"
+                label="Start date"
+                format="MM/dd/yyyy h:mm a"
+                value={startDate}
+                KeyboardButtonProps={{
+                  'aria-label': 'select date',
+                }}
+                onChange={date => {
+                  onContentChange({ ...content, 'startDate': date })
+                }}
+                inputVariant="outlined"
+                shrink
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <KeyboardDateTimePicker
+                fullWidth
+                margin="dense"
+                id="date"
+                label="End date"
+                format="MM/dd/yyyy h:mm a"
+                value={endDate}
+                KeyboardButtonProps={{
+                  'aria-label': 'select date',
+                }}
+                onChange={date => {
+                  onContentChange({ ...content, 'endDate': date })
+                }}
+                inputVariant="outlined"
+                shrink
+              />
+            </Grid>
           </Grid>
         </MuiPickersUtilsProvider>
         <Grid item xs={12}>
           <label className="text-small" htmlFor="timezone">Timezone</label>
           <TimezoneSelect
             handleChange={value => {
-              onContentChange({ ...content, 'program-elements-timezone': value })
+              onContentChange({ ...content, 'timezone': value })
             }}
             name="timezone"
             id="timezone"
-            value={content["program-elements-timezone"]}
+            className="mb-2"
+            value={content["timezone"]}
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <label className="text-small" htmlFor="host">Name of host (optional)</label>
+          <PlainTextEditor
+            id="host"
+            classes="mb-2 p-2"
+            content={content["host"]}
+            onContentChange={handleEditorChange("host")}
+          />
+        </Grid>
+
         <Grid item xs={12}>
           <RichTextEditor
-            classes="mb-3 mt-3"
-            content={content["program-elements-text"]}
-            onContentChange={handleEditorChange("program-elements-text")}
+            classes="mb-3 mt-2"
+            content={content["text"]}
+            onContentChange={handleEditorChange("text")}
           />
         </Grid>
         <Grid item xs={12}>
-          <LinkEditor
-            content={content["program-elements-link"]}
-            onContentChange={handleEditorChange("program-elements-link")}
-          />
+          <div className="mb-2">
+            <LinkEditor
+              content={content["link"]}
+              onContentChange={handleEditorChange("link")}
+            />
+          </div>
         </Grid>
         <Grid item xs={12}>
           <label className="text-small" htmlFor="video">Link to video (optional)</label>
           <PlainTextEditor
             id="video"
             classes="mb-3 p-2"
-            content={content["program-elements-video"]}
-            onContentChange={handleEditorChange("program-elements-video")}
+            content={content["video"]}
+            onContentChange={handleEditorChange("video")}
           />
         </Grid>
       </Grid>
@@ -156,14 +173,23 @@ const ProgramElementItem = props => {
   }
 
   const handleSave = newContent => {
-    if (!newContent['program-elements-start-date'] || !newContent['program-elements-end-date']) {
+    if (!newContent['startDate'] || !newContent['endDate']) {
       return props.showNotification("Start date and end date are required")
     }
 
+    const startDate = convertDate(newContent['startDate'], newContent['timezone'])
+    const endDate = convertDate(newContent['endDate'], newContent['timezone'])
+
+    const slug = slugify(`${newContent['title']['text']}-${startDate}`, {
+      lower: true,
+      remove: /[$*_+~.,()'"!\-:@%^&?=]/g
+    })
+
     const data = {
       ...newContent,
-      'program-elements-start-date': convertDate(newContent['program-elements-start-date'], newContent['program-elements-timezone']),
-      'program-elements-end-date': convertDate(newContent['program-elements-end-date'], newContent['program-elements-timezone']),
+      'startDate': startDate,
+      'endDate': endDate,
+      slug: slug,
     }
 
     console.log({ eventData: data })
@@ -172,8 +198,8 @@ const ProgramElementItem = props => {
   }
 
 
-  const startDate = getLocalDateTime(content["program-elements-start-date"])
-  const endDate = getLocalDateTime(content["program-elements-end-date"])
+  const startDate = getLocalDateTime(content["startDate"])
+  const endDate = getLocalDateTime(content["endDate"])
 
   if (!startDate || !endDate) {
     return null
@@ -200,7 +226,7 @@ const ProgramElementItem = props => {
       <div className={`program-box mt-5 ${isCurrent ? 'is-large' : ''}`} data-aos="fade-right">
         <Grid container className="position-relative">
           <Grid item md={4} xs={12}>
-            <div className="image-container" style={{background: `url(${content["program-elements-image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
+            <div className="image-container" style={{background: `url(${content["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
             </div>
           </Grid>
           <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
@@ -222,24 +248,24 @@ const ProgramElementItem = props => {
               {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
             </div>
             <h3 className="text-bold mt-2 mb-6">
-              {content["program-elements-title"]["text"]}
+              {content["title"]["text"]}
             </h3>
-            <div dangerouslySetInnerHTML={{__html: content["program-elements-text"]["text"]}} />
+            <div dangerouslySetInnerHTML={{__html: content["description"]["text"]}} />
             <div></div>
           </Grid>
         </Grid>
         <div className={`program-link ${isCurrent ? 'is-large' : ''}`}>
-          { isPast && (content["program-elements-link"]["link"].trim().startsWith('http') || content["program-elements-link"]["link"] === '') ?
+          { isPast && (content["link"]["link"].trim().startsWith('http') || content["link"]["link"] === '') ?
             <div className="btn btn-lg btn-gray disabled">
-              {content["program-elements-link"]["anchor"]}
+              {content["link"]["anchor"]}
             </div> :
             <a
               className={`btn btn-lg ${isPast ? 'btn-gray' : ''}`}
-              href={content["program-elements-link"]["link"]}
-              target={content["program-elements-link"]["link"].trim().startsWith('http') ? "_blank" : "_self"}
+              href={content["link"]["link"]}
+              target={content["link"]["link"].trim().startsWith('http') ? "_blank" : "_self"}
               rel="noopener noreferrer"
             >
-              {content["program-elements-link"]["anchor"]}
+              {content["link"]["anchor"]}
             </a>
           }
         </div>
@@ -252,14 +278,15 @@ const ProgramElementItem = props => {
 
 ProgramElementItem.defaultProps = {
   content: {
-    "program-elements-title": { "text": "Title" },
-    "program-elements-start-date": new Date().toISOString(),
-    "program-elements-end-date": new Date().toISOString(),
-    "program-elements-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-    "program-elements-link": { "link": "/", "anchor": "Zoom Link" },
-    "program-elements-text": { "text": `<p>Description text</p>` },
-    "program-elements-image": { "imageSrc": "", "title": "" },
-    "program-elements-video": { "text": "" }
+    "title": { "text": "Title" },
+    "startDate": new Date().toISOString(),
+    "endDate": new Date().toISOString(),
+    "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+    "link": { "link": "/", "anchor": "Zoom Link" },
+    "description": { "text": `<p>Description text</p>` },
+    "image": { "imageSrc": "", "title": "" },
+    "video": { "text": "" },
+    "host": { "text": "" },
   },
   classes: "",
   onSave: () => { console.log('implement a function to save changes') }
