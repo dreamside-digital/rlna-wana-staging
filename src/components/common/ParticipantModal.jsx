@@ -165,7 +165,7 @@ class ParticipantModal extends React.Component {
             value={country || ''}
             margin="dense"
             id="country"
-            label="Country (optional)"
+            label="Country and City (optional)"
             type="text"
             fullWidth
             onChange={handleChange('country')}
@@ -205,7 +205,7 @@ class ParticipantModal extends React.Component {
             value={question1 || ''}
             margin="dense"
             id="question1"
-            label="Question 1"
+            label="What projects/activities do you lead or are you involved in that express your Responsible Leadership?"
             type="text"
             fullWidth
             onChange={handleChange('question1')}
@@ -216,7 +216,7 @@ class ParticipantModal extends React.Component {
             value={question2 || ''}
             margin="dense"
             id="question2"
-            label="Question 2"
+            label="What SDG(s) do these projects or initiatives address?"
             type="text"
             fullWidth
             onChange={handleChange('question2')}
@@ -227,7 +227,7 @@ class ParticipantModal extends React.Component {
             value={question3 || ''}
             margin="dense"
             id="question3"
-            label="Question 3"
+            label="What are you passionate about? And/or: What are your hobbies?"
             type="text"
             fullWidth
             onChange={handleChange('question3')}

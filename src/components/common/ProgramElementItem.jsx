@@ -41,7 +41,7 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
   const endDate = content["program-elements-end-date"].setZone(content["program-elements-timezone"])
 
   return(
-    <div className="program-box mt-5">
+    <div className="program-box mt-5 p-5">
       <Grid container className="position-relative">
         <Grid item xs={12}>
           <ImageUploadEditor
