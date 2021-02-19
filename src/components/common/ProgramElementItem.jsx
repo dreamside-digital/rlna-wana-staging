@@ -185,6 +185,11 @@ const ProgramElementItem = props => {
   const isUpcoming = startDate > today;
   const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
 
+  const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
+  const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
+  const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
+  const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
+
   return (
     <Editable
       Editor={ProgramElementItemEditor}
@@ -195,7 +200,7 @@ const ProgramElementItem = props => {
       <div className={`program-box mt-5 ${isCurrent ? 'is-large' : ''}`} data-aos="fade-right">
         <Grid container className="position-relative">
           <Grid item md={4} xs={12}>
-            <div className="image-container" style={{background: `url(${content["program-elements-image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover'}}>
+            <div className="image-container" style={{background: `url(${content["program-elements-image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
             </div>
           </Grid>
           <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
@@ -213,36 +218,14 @@ const ProgramElementItem = props => {
                 </div>
               }
             </div>
-            <p className={`${isPast ? 'text-muted' : 'text-primary'} hide-on-large-only`}>
-              {
-                isPast && 'past'
-              }
-              {
-                isCurrent && 'current'
-              }
-              {
-                isUpcoming && 'upcoming'
-              }
-            </p>
+            <div className="font-size-h6 text-primary mb-6">
+              {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
+            </div>
             <h3 className="text-bold mt-2 mb-6">
               {content["program-elements-title"]["text"]}
             </h3>
-            <div className="font-size-h6">
-              {startDate.toLocaleString({ month: 'long', day: 'numeric' })} {endDate && !sameDay && `- ${endDate.toLocaleString({ day: 'numeric' })}`}
-              <div className="text-muted text-xs"><time>{startDate.toLocaleString(DateTime.TIME_SIMPLE)}</time> - <time>{endDate.toLocaleString(DateTime.TIME_SIMPLE)}</time></div>
-            </div>
-            <p className={`${isPast ? 'text-muted' : 'text-primary'} hide-on-med-and-down`}>
-              {
-                isPast && 'past'
-              }
-              {
-                isCurrent && 'current'
-              }
-              {
-                isUpcoming && 'upcoming'
-              }
-            </p>
             <div dangerouslySetInnerHTML={{__html: content["program-elements-text"]["text"]}} />
+            <div></div>
           </Grid>
         </Grid>
         <div className={`program-link ${isCurrent ? 'is-large' : ''}`}>
@@ -264,8 +247,8 @@ const ProgramElementItem = props => {
         <div className='line' />
       </div>
     </Editable>
-  );
-};
+  )
+}
 
 ProgramElementItem.defaultProps = {
   content: {

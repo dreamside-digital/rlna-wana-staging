@@ -41,7 +41,7 @@ class ProgramElements extends React.Component {
       "program-elements-timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
       "program-elements-link": { "link": "/", "anchor": "Zoom Link" },
       "program-elements-text": { "text": `<p>Description text</p>` },
-      "program-elements-image": { "imageSrc": "", "title": "" },
+      "program-elements-image": { "imageSrc": "https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=2f0c0c6e-3595-44b0-9de7-c29de88fab81", "title": "" },
       "program-elements-video": { "text": "" }
     }
 

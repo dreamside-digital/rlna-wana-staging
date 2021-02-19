@@ -6,6 +6,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
 import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
 import { saveProfile, removeProfile } from "../../redux/actions"
@@ -31,13 +34,16 @@ const emptyParticipant = {
   linkedin: '',
   instagram: '',
   website: '',
-  approved: false,
+  termsAccepted: false,
 }
 
 class ParticipantModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newParticipant: props.participant || emptyParticipant }
+    this.state = {
+      newParticipant: props.participant || emptyParticipant,
+      errors: {}
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -51,7 +57,14 @@ class ParticipantModal extends React.Component {
   }
 
   handleChange = key => event => {
+    this.setState({ errors: {} })
     const value = event.currentTarget.value
+    this.setState({ newParticipant: {...this.state.newParticipant, [key]: value} })
+  }
+
+  handleCheckboxChange = key => event => {
+    this.setState({ errors: {} })
+    const value = event.currentTarget.checked
     this.setState({ newParticipant: {...this.state.newParticipant, [key]: value} })
   }
 
@@ -66,6 +79,13 @@ class ParticipantModal extends React.Component {
   handleSaveProfile = () => {
     const { newParticipant } = this.state;
 
+    if (!newParticipant.termsAccepted) {
+      return this.setState({ errors: {
+        ...this.state.errors,
+        termsAccepted: 'You must accept the Privacy Policy to continue.'
+      }})
+    }
+
     const id = newParticipant.id ? newParticipant.id : `profile-${Date.now()}`
 
     const data = {
@@ -78,6 +98,11 @@ class ParticipantModal extends React.Component {
     this.setState({ newParticipant: emptyParticipant })
   }
 
+  handleCancel = () => {
+    this.props.closeModal()
+    this.setState({ newParticipant: emptyParticipant })
+  }
+
   handleDeleteParticipant = () => {
     this.props.removeProfile(this.state.newParticipant.id)
     this.props.closeModal()
@@ -85,7 +110,7 @@ class ParticipantModal extends React.Component {
   }
 
   render() {
-    const { handleDeleteParticipant, handleSaveProfile, handleChange, handleImageChange, handleDescChange } = this;
+    const { handleDeleteParticipant, handleSaveProfile, handleChange, handleCheckboxChange, handleImageChange, handleCancel } = this;
     const { showModal, closeModal } = this.props;
     const {
       name,
@@ -99,8 +124,11 @@ class ParticipantModal extends React.Component {
       website,
       question1,
       question2,
-      question3
+      question3,
+      termsAccepted
     } = this.state.newParticipant;
+
+    const { errors } = this.state;
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
@@ -206,6 +234,13 @@ class ParticipantModal extends React.Component {
             variant="outlined"
             multiline
           />
+          <FormControlLabel
+            control={
+              <Checkbox checked={termsAccepted} onChange={handleCheckboxChange('termsAccepted')} value="termsAccepted" required />
+            }
+            label={<p>I have read and accept the <a href="https://bmw-foundation.org/en/privacy-policy/">Privacy Policy</a></p>}
+          />
+          <FormHelperText error>{errors.termsAccepted}</FormHelperText>
         </DialogContent>
         <DialogActions>
           <div className="pr-3 pl-3 pb-2 width-100">
@@ -220,7 +255,7 @@ class ParticipantModal extends React.Component {
               </Grid>
               <Grid item>
                 <Button
-                  onClick={closeModal}
+                  onClick={handleCancel}
                   color="default"
                   variant="text"
                   style={{borderRadius:0, marginRight: '8px'}}
@@ -232,6 +267,7 @@ class ParticipantModal extends React.Component {
                   color="primary"
                   variant="contained"
                   style={{borderRadius:0}}
+                  disabled={!name || !affiliateOrganization || !termsAccepted}
                   disableElevation>
                   Save
                 </Button>
