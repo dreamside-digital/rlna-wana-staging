@@ -109,7 +109,13 @@ class ParticipantGallery extends React.Component {
           itemsToShow < totalItems &&
           <Grid container justify="center" className="mt-6">
             <Grid item>
-              <Button variant="outlined" color="primary" className="btn" onClick={() => this.setState({ itemsToShow: this.state.itemsToShow + ITEM_NUMBER })}>Load more</Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                className="btn"
+                onClick={() => this.setState({ itemsToShow: this.state.itemsToShow + ITEM_NUMBER })}>
+                Load more
+              </Button>
             </Grid>
           </Grid>
         }

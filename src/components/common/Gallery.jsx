@@ -80,7 +80,13 @@ class Gallery extends React.Component {
           this.state.itemsToShow < this.state.totalItems &&
           <Grid container justify="center" className="mt-6">
             <Grid item>
-              <button className="btn" onClick={() => this.setState({ itemsToShow: this.state.itemsToShow + ITEM_NUMBER })}>Load more</button>
+              <Button
+                className="btn"
+                variant="outlined"
+                color="primary"
+                onClick={() => this.setState({ itemsToShow: this.state.itemsToShow + ITEM_NUMBER })}>
+                Load more
+              </Button>
             </Grid>
           </Grid>
         }
