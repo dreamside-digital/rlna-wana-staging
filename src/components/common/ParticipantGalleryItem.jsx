@@ -71,13 +71,13 @@ const ParticipantGalleryItem = ({ id, content={} }) => {
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              <h3>Question 1</h3>
+              <h3>What projects/activities do you lead or are you involved in that express your Responsible Leadership?</h3>
               <div>{content.question1}</div>
 
-              <h3>Question 2</h3>
+              <h3>What SDG(s) do these projects or initiatives address?</h3>
               <div>{content.question2}</div>
 
-              <h3>Question 3</h3>
+              <h3>What are you passionate about? And/or: What are your hobbies?</h3>
               <div>{content.question3}</div>
             </Grid>
           </Grid>
