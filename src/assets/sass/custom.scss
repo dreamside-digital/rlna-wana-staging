@@ -869,4 +869,25 @@ section.highlight {
   padding-left: 30px;
 }
 
+.add-to-calendar-btn {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+
+  .add-to-calendar-dropdown {
+    position: absolute;
+    top: 52px;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid $medium-gray;
+    border-top: none;
+    width: 100%;
+
+    .pretty-link {
+      padding: 8px 16px;
+    }
+  }
+}
+
 @import "responsive";

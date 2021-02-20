@@ -6,7 +6,7 @@ import { Link } from "gatsby";
 
 import {
   PlainTextEditor,
-  RichTextEditor,
+  TextAreaEditor,
   LinkEditor,
   ImageUploadEditor,
   Editable,
@@ -15,7 +15,6 @@ import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pick
 import LuxonUtils from "@date-io/luxon";
 import {DateTime} from "luxon";
 import TimezoneSelect from "./TimezoneSelect";
-import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
 
 import { showNotification } from "../../redux/actions";
@@ -109,7 +108,7 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <RichTextEditor
+          <TextAreaEditor
             classes="mb-3 mt-3"
             content={content["program-elements-text"]}
             onContentChange={handleEditorChange("program-elements-text")}
@@ -122,12 +121,13 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           />
         </Grid>
         <Grid item xs={12}>
-          <label className="text-small" htmlFor="video">Link to video (optional)</label>
+          <label className="text-small" htmlFor="video">Link to video on YouTube or Vimeo (optional)</label>
           <PlainTextEditor
             id="video"
             classes="mb-3 p-2"
             content={content["program-elements-video"] || {"text": ""}}
             onContentChange={handleEditorChange("program-elements-video")}
+            placeholder="https://vimeo.com/511895527"
           />
         </Grid>
       </Grid>
@@ -190,11 +190,11 @@ const ProgramElementItem = props => {
   const today = DateTime.local();
   const isPast = endDate ? endDate < today : startDate < today;
   const isCurrent = endDate ? startDate < today && endDate > today  : startDate.hasSame(today, 'day');
-  const isUpcoming = startDate > today;
-  const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
+  // const isUpcoming = startDate > today;
+  // const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
 
   const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
-  const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
+  // const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
   const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
   const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
 
@@ -212,7 +212,7 @@ const ProgramElementItem = props => {
             </div>
           </Grid>
           <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
-            <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
+            <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)} role="button">
               {
                 !isOpen &&
                 <div className="display-flex align-center justify-right">
