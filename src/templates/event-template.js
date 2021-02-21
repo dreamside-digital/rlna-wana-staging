@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Helmet from "react-helmet";
 import Container from "@material-ui/core/Container"
 import Grid from '@material-ui/core/Grid';
@@ -7,12 +7,6 @@ import AddToCalendarHOC from 'react-add-to-calendar-hoc';
 import VideoEmbed from '../components/common/VideoEmbed';
 
 import Layout from "../layouts/default.js";
-
-// const convertDate = (date, timezone) => {
-//   const dateWithTZ = date.setZone(timezone, { keepLocalTime: true })
-//   return dateWithTZ.toISO()
-// }
-
 
 const Button = ({ children, onClick }) => (
   <button className="btn btn-primary" onClick={onClick}>{children}</button>
@@ -28,23 +22,21 @@ const DropDown = ({ children }) => {
 
 const AddToCalendarDropdown = AddToCalendarHOC(Button, DropDown);
 
-const getLocalDateTime = date => {
-  try {
-    return date.setZone(DateTime.local().zoneName)
-  } catch(err) {
-    console.log("err getting local date", err)
-    return date
-  }
-}
+// const getLocalDateTime = date => {
+//   try {
+//     return date.setZone(DateTime.local().zoneName)
+//   } catch(err) {
+//     console.log("err getting local date", err)
+//     return date
+//   }
+// }
 
 const EventPageTemplate = ({ pageContext: { event } }) => {
-  const [CalButton, setCalButton] = useState()
-  console.log(event)
   const startDate = DateTime.fromISO(event['program-elements-start-date'])
   const endDate = DateTime.fromISO(event['program-elements-end-date'])
 
-  const startDateLocal = getLocalDateTime(startDate)
-  const endDateLocal = getLocalDateTime(endDate)
+  const originalStartDate = DateTime.fromISO(event['program-elements-start-date']).setZone(event['program-elements-timezone'])
+  const originalEndDate = DateTime.fromISO(event['program-elements-end-date']).setZone(event['program-elements-timezone'])
 
   // const today = DateTime.local();
   // const isPast = endDateLocal ? endDateLocal < today : startDateLocal < today;
@@ -52,10 +44,11 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
   // const isUpcoming = startDateLocal > today;
   // const sameDay = startDateLocal && endDateLocal && startDateLocal.hasSame(endDateLocal, 'day')
 
-  const eventDate = startDateLocal.toLocaleString({ month: 'long', day: 'numeric' })
+  const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
   // const eventEndDate = endDateLocal && endDateLocal !== startDateLocal ? `- ${endDateLocal.toLocaleString({ day: 'numeric' })}` : ''
-  const eventStart = startDateLocal.toLocaleString(DateTime.TIME_SIMPLE)
-  const eventEnd = endDateLocal.toLocaleString(DateTime.TIME_SIMPLE)
+  const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
+  const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
+  const timezone = startDate.toFormat("z")
 
   const calendarEvent = {
     title: event['program-elements-title']['text'],
@@ -64,7 +57,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
     startDatetime: startDate.toFormat("yyyyLLdd'T'HHmmss"),
     endDatetime: endDate.toFormat("yyyyLLdd'T'HHmmss"),
     duration: endDate.diff(startDate).as('hours'),
-    timezone: startDate.toFormat("z"),
+    timezone: timezone,
   }
 
   return (
@@ -86,7 +79,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
                 <div className="font-size-h6 text-primary mb-2">
                   {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
                 </div>
-                <p className="text-muted text-small">{`Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`}</p>
+                <p className="text-muted text-small">{`Timezone: ${timezone}`}</p>
                 <AddToCalendarDropdown
                   event={calendarEvent}
                   filename={event["slug"]}
@@ -102,13 +95,17 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
         <Grid container>
           <Grid item xs={12}>
             <h2 className="mt-6 mb-2">Overview</h2>
-            <div dangerouslySetInnerHTML={{__html: event["program-elements-text"]["text"]}} />
-            <p><span className="text-bold mr-1">Host:</span>{event['program-elements-host']['text']}</p>
+            <div style={{whiteSpace: "pre-wrap"}}>{ event["program-elements-text"]["text"] }</div>
+            <p><span className="text-bold mr-1">Hosted by:</span>{event['program-elements-host']['text']}</p>
             <p>
               <span className="text-bold mr-1">Link:</span>
               <a href={event['program-elements-link']['link']} target="_blank" rel="noopener noreferrer">
                 {event['program-elements-link']['anchor']}
               </a>
+            </p>
+            <p>
+              <span className="text-bold mr-1">Original time:</span>
+              <time>{originalStartDate.toLocaleString(DateTime.DATETIME_FULL)}</time> - <time>{originalEndDate.toLocaleString(DateTime.DATETIME_FULL)}</time>
             </p>
           </Grid>
           <Grid item xs={12}>

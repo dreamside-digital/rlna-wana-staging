@@ -108,8 +108,19 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           />
         </Grid>
         <Grid item xs={12}>
+          <label className="text-small mt-3" htmlFor="host">Hosted by</label>
+          <PlainTextEditor
+            id="host"
+            classes="mb-3 p-2"
+            content={content["program-elements-host"] || {"text": "BMW Foundation"}}
+            onContentChange={handleEditorChange("program-elements-host")}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <label className="text-small mt-3" htmlFor="description">Description</label>
           <TextAreaEditor
-            classes="mb-3 mt-3"
+            id="description"
+            classes="mb-3"
             content={content["program-elements-text"]}
             onContentChange={handleEditorChange("program-elements-text")}
           />
@@ -162,10 +173,11 @@ const ProgramElementItem = props => {
 
     const startDate = convertDate(newContent['program-elements-start-date'], newContent['program-elements-timezone'])
     const endDate = convertDate(newContent['program-elements-end-date'], newContent['program-elements-timezone'])
+    const localStartDate = startDate.toLocaleString(DateTime.DATE_SHORT)
 
-    const slug = slugify(`${newContent['title']['text']}-${startDate}`, {
+    const slug = content['slug'] || slugify(`${newContent['program-elements-title']['text']}-${localStartDate}`, {
       lower: true,
-      remove: /[$*_+~.,()'"!\-:@%^&?=]/g
+      remove: /[$*_+~.,()'"!:@%^&?=]/g
     })
 
     const data = {
@@ -212,7 +224,7 @@ const ProgramElementItem = props => {
             </div>
           </Grid>
           <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
-            <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)} role="button">
+            <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
               {
                 !isOpen &&
                 <div className="display-flex align-center justify-right">
@@ -232,7 +244,7 @@ const ProgramElementItem = props => {
             <h3 className="text-bold mt-2 mb-6">
               {content["program-elements-title"]["text"]}
             </h3>
-            <div dangerouslySetInnerHTML={{__html: content["program-elements-text"]["text"]}} />
+            <p><span className="text-bold mr-1">Hosted by:</span>{content['program-elements-host']['text']}</p>
           </Grid>
         </Grid>
         <div className={`program-link ${isCurrent ? 'is-large' : ''}`}>
