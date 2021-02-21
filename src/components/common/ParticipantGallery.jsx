@@ -69,7 +69,10 @@ class ParticipantGallery extends React.Component {
   render() {
     const { showModal, editingParticipant, itemsToShow } = this.state;
     const { profiles } = this.props;
-    const itemsKeys = Object.keys(profiles).reverse().slice(0, itemsToShow)
+    const profileIds = Object.keys(profiles)
+    const profilesArr = profileIds.map(id => profiles[id])
+    const orderedProfiles = profilesArr.sort((a,b) => a.name.localeCompare(b.name))
+    const profilesToShow = orderedProfiles.slice(0, itemsToShow)
     const totalItems = Object.keys(profiles).length
 
     return (
@@ -81,9 +84,7 @@ class ParticipantGallery extends React.Component {
           <span className="pretty-link">Add your profile</span>
         </button>
         <Grid container className="position-relative mt-6">
-          {itemsKeys.map((key,index) => {
-            const profile = profiles[key]
-
+          {profilesToShow.map((profile,index) => {
             return (
               <Grid item xs={6} sm={4} md={3} lg={2} key={profile.id} style={{ display: 'flex', justifyContent: 'center' }}>
                 {

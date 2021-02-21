@@ -22,7 +22,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-
 class ProgramElements extends React.Component {
   constructor(props) {
     super(props)

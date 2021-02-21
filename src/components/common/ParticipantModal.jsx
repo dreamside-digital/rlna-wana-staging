@@ -28,12 +28,14 @@ const mapDispatchToProps = dispatch => {
 const emptyParticipant = {
   name: '',
   affiliateOrganization: '',
-  description: 'Participant bio',
   image: {},
   twitter: '',
   linkedin: '',
   instagram: '',
   website: '',
+  question1: '',
+  question2: '',
+  question3: '',
   termsAccepted: false,
 }
 
@@ -115,7 +117,6 @@ class ParticipantModal extends React.Component {
     const {
       name,
       affiliateOrganization,
-      description,
       image,
       id,
       twitter,

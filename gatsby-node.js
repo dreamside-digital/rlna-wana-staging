@@ -74,16 +74,17 @@ exports.createPages = ({ graphql, actions }) => {
 
         result.data.allEvents.edges.forEach(edge => {
           const template = path.resolve(
-            `src/templates/program-element.js`
+            `src/templates/event-template.js`
           );
 
-          console.log("CREATING EVENT PAGE", edge.node.title.text);
+          const event = edge.node
+          console.log("CREATING EVENT PAGE", event.title.text);
           createPage({
-            path: edge.node.slug, // required
+            path: event.slug, // required
             component: template,
             layout: "default",
             context: {
-              slug: edge.node.slug
+              event
             }
           });
         });

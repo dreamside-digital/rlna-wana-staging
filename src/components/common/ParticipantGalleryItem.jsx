@@ -2,20 +2,12 @@ import React, {useState} from "react";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 import TwitterIcon from '@material-ui/icons/Twitter';
-import InstagramIcon from '@material-ui/icons/Instagram';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LanguageIcon from '@material-ui/icons/Language';
-import { saveProfile, removeProfile } from "../../redux/actions"
 
 const ParticipantGalleryItem = ({ id, content={} }) => {
   const [ isOpen, setIsOpen ] = useState(false)
-
-  const publishProfile = () => {
-    console.log('publishing')
-    saveProfile(id, { ...content, approved: true })
-  }
 
   return (
     <>

@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Grid from '@material-ui/core/Grid';
 import slugify from "slugify";
 import { connect } from "react-redux";
+import slugify from "slugify";
+import { Link } from "gatsby";
 
 import {
   PlainTextEditor,
-  RichTextEditor,
+  TextAreaEditor,
   LinkEditor,
   ImageUploadEditor,
   Editable,
@@ -14,7 +16,6 @@ import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pick
 import LuxonUtils from "@date-io/luxon";
 import {DateTime} from "luxon";
 import TimezoneSelect from "./TimezoneSelect";
-import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
 
 import { showNotification } from "../../redux/actions";
@@ -120,14 +121,16 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
             onContentChange={handleEditorChange("host")}
           />
         </Grid>
-
         <Grid item xs={12}>
-          <RichTextEditor
-            classes="mb-3 mt-2"
-            content={content["text"]}
-            onContentChange={handleEditorChange("text")}
+          <label className="text-small mt-3" htmlFor="description">Description</label>
+          <TextAreaEditor
+            id="description"
+            classes="mb-3"
+            content={content["description"]}
+            onContentChange={handleEditorChange("description")}
           />
         </Grid>
+
         <Grid item xs={12}>
           <div className="mb-2">
             <LinkEditor
@@ -137,12 +140,13 @@ const ProgramElementItemEditor = ({ content, onContentChange }) => {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <label className="text-small" htmlFor="video">Link to video (optional)</label>
+          <label className="text-small" htmlFor="video">Link to video on YouTube or Vimeo (optional)</label>
           <PlainTextEditor
             id="video"
             classes="mb-3 p-2"
             content={content["video"]}
             onContentChange={handleEditorChange("video")}
+            placeholder="https://vimeo.com/511895527"
           />
         </Grid>
       </Grid>
@@ -157,7 +161,6 @@ const ProgramElementItem = props => {
   const content = props.content || {}
 
   const convertDate = (date, timezone) => {
-
     const dateWithTZ = date.setZone(timezone, { keepLocalTime: true })
     return dateWithTZ.toISO()
   }
@@ -169,7 +172,6 @@ const ProgramElementItem = props => {
       console.log("err getting local date", err)
       return date
     }
-
   }
 
   const handleSave = newContent => {
@@ -179,10 +181,11 @@ const ProgramElementItem = props => {
 
     const startDate = convertDate(newContent['startDate'], newContent['timezone'])
     const endDate = convertDate(newContent['endDate'], newContent['timezone'])
+    const localStartDate = startDate.toLocaleString(DateTime.DATE_SHORT)
 
-    const slug = slugify(`${newContent['title']['text']}-${startDate}`, {
+    const slug = content['slug'] || slugify(`${newContent['title']['text']}-${localStartDate}`, {
       lower: true,
-      remove: /[$*_+~.,()'"!\-:@%^&?=]/g
+      remove: /[$*_+~.,()'"!:@%^&?=]/g
     })
 
     const data = {
@@ -197,9 +200,9 @@ const ProgramElementItem = props => {
     props.onSave(data)
   }
 
-
   const startDate = getLocalDateTime(content["startDate"])
   const endDate = getLocalDateTime(content["endDate"])
+
 
   if (!startDate || !endDate) {
     return null
@@ -208,11 +211,11 @@ const ProgramElementItem = props => {
   const today = DateTime.local();
   const isPast = endDate ? endDate < today : startDate < today;
   const isCurrent = endDate ? startDate < today && endDate > today  : startDate.hasSame(today, 'day');
-  const isUpcoming = startDate > today;
-  const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
+  // const isUpcoming = startDate > today;
+  // const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
 
   const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
-  const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
+  // const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
   const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
   const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
 
@@ -250,24 +253,15 @@ const ProgramElementItem = props => {
             <h3 className="text-bold mt-2 mb-6">
               {content["title"]["text"]}
             </h3>
-            <div dangerouslySetInnerHTML={{__html: content["description"]["text"]}} />
-            <div></div>
+            <p><span className="text-bold mr-1">Hosted by:</span>{content['host']['text']}</p>
           </Grid>
         </Grid>
         <div className={`program-link ${isCurrent ? 'is-large' : ''}`}>
-          { isPast && (content["link"]["link"].trim().startsWith('http') || content["link"]["link"] === '') ?
-            <div className="btn btn-lg btn-gray disabled">
-              {content["link"]["anchor"]}
-            </div> :
-            <a
-              className={`btn btn-lg ${isPast ? 'btn-gray' : ''}`}
-              href={content["link"]["link"]}
-              target={content["link"]["link"].trim().startsWith('http') ? "_blank" : "_self"}
-              rel="noopener noreferrer"
-            >
-              {content["link"]["anchor"]}
-            </a>
-          }
+          <Link
+            className={`btn btn-lg ${isPast ? 'btn-gray' : ''}`}
+            to={`/${content['slug']}`}>
+            Read more
+          </Link>
         </div>
         <div className={`mid-dot ${isPast ? 'is-past' : ''} ${isCurrent ? 'is-large' : ''}`} />
         <div className='line' />
