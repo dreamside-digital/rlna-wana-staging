@@ -38,16 +38,12 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
   const originalStartDate = DateTime.fromISO(event['startDate']).setZone(event['timezone'])
   const originalEndDate = DateTime.fromISO(event['endDate']).setZone(event['timezone'])
 
-  // const today = DateTime.local();
-  // const isPast = endDateLocal ? endDateLocal < today : startDateLocal < today;
-  // const isCurrent = endDateLocal ? startDateLocal < today && endDateLocal > today  : startDateLocal.hasSame(today, 'day');
-  // const isUpcoming = startDateLocal > today;
-  // const sameDay = startDateLocal && endDateLocal && startDateLocal.hasSame(endDateLocal, 'day')
-
-  const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
-  // const eventEndDate = endDateLocal && endDateLocal !== startDateLocal ? `- ${endDateLocal.toLocaleString({ day: 'numeric' })}` : ''
+  const formattedStartDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
+  const eventEndDate = endDate.toLocaleString({ month: 'long', day: 'numeric' })
+  const formattedEndDate = eventEndDate && eventEndDate !== formattedStartDate ? `${eventEndDate}, ` : ''
   const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
   const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
+
   const timezone = startDate.toFormat("z")
 
   const calendarEvent = {
@@ -60,6 +56,8 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
     timezone: timezone,
   }
 
+  const bgStyle = event["image"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px' } : {}
+
   return (
     <Layout>
       <Helmet>
@@ -70,14 +68,14 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
         <header>
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
-              <div className="" style={{background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
+              <div className="" style={bgStyle}>
               </div>
             </Grid>
             <Grid item xs={12} md={8}>
               <div className="event-page-title">
                 <h1 className="underline">{event['title']}</h1>
                 <div className="font-size-h6 text-primary mb-2">
-                  {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
+                  {formattedStartDate}, <time>{eventStart}</time> - {formattedEndDate} <time>{eventEnd}</time>
                 </div>
                 <p className="text-muted text-small">{`Timezone: ${timezone}`}</p>
                 <AddToCalendarDropdown
@@ -96,7 +94,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
           <Grid item xs={12}>
             <h2 className="mt-6 mb-2">Overview</h2>
             <div style={{whiteSpace: "pre-wrap"}}>{ event["description"] }</div>
-            <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>
+            {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
             <p>
               <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
               <a href={event['url']} target="_blank" rel="noopener noreferrer">

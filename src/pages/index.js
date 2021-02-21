@@ -25,7 +25,7 @@ import Section from "../components/common/Section"
 import Gallery from "../components/common/Gallery"
 import ParticipantGallery from "../components/common/ParticipantGallery"
 import ProgramElements from "../components/common/ProgramElements"
-// import SessionList from "../components/common/SessionList"
+import PastProgramElements from "../components/common/PastProgramElements"
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -224,10 +224,7 @@ class HomePage extends React.Component {
               </h2>
               <p className="text-small text-bold">{`Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`}</p>
             </Grid>
-            <ProgramElements
-              content={content["program-elements-collection"]}
-              onSave={this.onSave("program-elements-collection")}
-            />
+            <ProgramElements />
           </Grid>
         </Section>
 
@@ -285,7 +282,7 @@ class HomePage extends React.Component {
               </h2>
               <EditableParagraph classes="font-size-h4" content={content["gallery-description"]} onSave={this.onSave("gallery-description")} />
             </Grid>
-            <Gallery content={content["gallery-collection"]} onSave={this.onSave("gallery-collection")} />
+            <PastProgramElements />
           </Grid>
         </Section>
       </Layout>

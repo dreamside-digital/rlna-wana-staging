@@ -370,10 +370,7 @@ export function removeEvent(eventId) {
         );
       }
 
-      let allEvents = { ...state.page.data.events };
-      delete allEvents[eventId];
-
-      dispatch(setEvents(allEvents));
+      dispatch(fetchEvents());
       dispatch(
         showNotification(
           "Your changes have been saved. Publish your changes to make them public.",

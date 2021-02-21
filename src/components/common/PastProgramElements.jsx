@@ -9,6 +9,8 @@ import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 
 import ProgramElementItem from "./ProgramElementItem"
 import ProgramElementModal from "./ProgramElementModal"
+import PastProgramElementItem from "./PastProgramElementItem"
+import BreakpointMasonry from "./BreakpointMasonry"
 
 const muiTheme = createMuiTheme({
   palette: {
@@ -79,26 +81,13 @@ class ProgramElements extends React.Component {
       }
     })
     console.log({eventsArr})
-    const orderedEvents = eventsArr.sort((a,b) => a.startDate - b.startDate).filter(e => e.endDate > DateTime.local())
+    const orderedEvents = eventsArr.sort((a,b) => a.startDate - b.startDate).filter(e => e.endDate <= DateTime.local())
     const subject = encodeURIComponent('Session proposal')
     const body = encodeURIComponent('Please provide following information to propose a session. \n\nSession title: \nSession description: \nProposed date and time: \nAny other comments?\n')
 
     return (
       <div className={`collection width-100 mt-2 ${this.props.classes}`}>
-        <a href={`mailto:wana@bmw-foundation.org?subject=${subject}&body=${body}`} className="add-item-btn">
-          <div className="icon-btn">
-            <AddIcon />
-          </div>
-          <span className="pretty-link">Host a session</span>
-        </a>
-        {
-          this.props.isEditingPage &&
-          <div className="row mt-6 mb-4">
-            <div className="col-12">
-              <Button onClick={() => this.setState({ showModal: true })} color="default" variant="contained">Add event</Button>
-            </div>
-          </div>
-        }
+        <BreakpointMasonry>
         {orderedEvents.map((content,index) => {
           if (this.props.isEditingPage) {
             return (
@@ -107,27 +96,20 @@ class ProgramElements extends React.Component {
                   theme={this.context.theme}
                   startEditing={() => this.setState({ showModal: true, editingEvent: content })}
                 >
-                  <ProgramElementItem content={content} id={content.id} />
+                  <PastProgramElementItem content={content} id={content.id} />
                 </EditorWrapper>
               </ThemeProvider>
             )
           }
           return(
-            <ProgramElementItem
+            <PastProgramElementItem
               key={content.id}
               index={index}
               content={content}
             />
           )
         })}
-        {
-          this.props.isEditingPage &&
-          <ProgramElementModal
-            event={editingEvent}
-            showModal={showModal}
-            closeModal={() => this.setState({ showModal: false, editingEvent: null })}
-          />
-        }
+        </BreakpointMasonry>
       </div>
     );
   }

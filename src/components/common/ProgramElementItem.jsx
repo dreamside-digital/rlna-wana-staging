@@ -85,35 +85,23 @@ const ProgramElementItem = props => {
   // const isUpcoming = startDate > today;
   // const sameDay = startDate && endDate && startDate.hasSame(endDate, 'day')
 
-  const eventDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
-  // const eventEndDate = endDate && endDate !== startDate ? `- ${endDate.toLocaleString({ day: 'numeric' })}` : ''
+  const formattedStartDate = startDate.toLocaleString({ month: 'long', day: 'numeric' })
+  const eventEndDate = endDate.toLocaleString({ month: 'long', day: 'numeric' })
+  const formattedEndDate = eventEndDate && eventEndDate !== formattedStartDate ? `${eventEndDate}, ` : ''
   const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
   const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
+  const bgStyle = content["image"] ? {background: `url(${content["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' } : {}
 
   return (
     <div className={`program-box mt-5 ${isCurrent ? 'is-large' : ''}`} data-aos="fade-right">
       <Grid container className="position-relative">
         <Grid item md={4} xs={12}>
-          <div className="image-container" style={{background: `url(${content["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
+          <div className="image-container" style={bgStyle}>
           </div>
         </Grid>
-        <Grid item md={8} xs={11} className={isOpen ? 'content-box' : 'content-box hide-on-med-and-down'}>
-          <div className="hide-on-large-only text-bold text-right cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-            {
-              !isOpen &&
-              <div className="display-flex align-center justify-right">
-                Read More <svg className="ml-2" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M11 11v-11h1v11h11v1h-11v11h-1v-11h-11v-1h11z"/></svg>
-              </div>
-            }
-            {
-              isOpen &&
-              <div className="display-flex align-center justify-right">
-                Show less <svg className="ml-2" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd"><path d="M0 12v1h23v-1h-23z"/></svg>
-              </div>
-            }
-          </div>
-          <div className="font-size-h6 text-primary mb-6">
-            {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
+        <Grid item md={8} xs={11} className={'content-box'}>
+          <div className="text-small text-primary mb-6">
+            {formattedStartDate}, <time>{eventStart}</time> - {formattedEndDate} <time>{eventEnd}</time>
           </div>
           <h3 className="text-bold mt-2 mb-6">
             {content["title"]}
@@ -144,6 +132,7 @@ ProgramElementItem.defaultProps = {
   "description": "",
   "video": "",
   "host": "",
+  "image": { "imageSrc": "", "title": "" },
   classes: "",
   onSave: () => { console.log('implement a function to save changes') }
 }

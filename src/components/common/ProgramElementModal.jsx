@@ -31,11 +31,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 const emptyEvent = {
-  "title": "Title",
-  "startDate": new Date().toISOString(),
-  "endDate": new Date().toISOString(),
+  "title": "",
+  "startDate": DateTime.local(),
+  "endDate": DateTime.local(),
   "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-  "url": "/",
+  "url": "",
   "linkText": "Event link",
   "description": "",
   "video": "",
@@ -95,6 +95,7 @@ class ProgramElementModal extends React.Component {
 
   handleSaveEvent = () => {
     const { newEvent } = this.state;
+    console.log({newEvent})
 
     if (!newEvent['startDate'] || !newEvent['endDate']) {
       return this.props.showNotification("Start date and end date are required")
@@ -102,11 +103,11 @@ class ProgramElementModal extends React.Component {
 
     const startDate = this.convertDate(newEvent['startDate'], newEvent['timezone'])
     const endDate = this.convertDate(newEvent['endDate'], newEvent['timezone'])
-    const localStartDate = startDate.toLocaleString(DateTime.DATE_SHORT)
+    const dateForUrl = startDate.toFormat('ddLLyyyy')
 
     const id = newEvent.id ? newEvent.id : `event-${Date.now()}`
 
-    const slug = newEvent.slug ? newEvent.slug : slugify(`${newEvent['title']}-${localStartDate}`, {
+    const slug = newEvent.slug ? newEvent.slug : slugify(`${newEvent['title']}-${dateForUrl}`, {
       lower: true,
       remove: /[$*_+~.,()'"!:@%^&?=]/g
     })
@@ -159,12 +160,6 @@ class ProgramElementModal extends React.Component {
       id
     } = this.state.newEvent;
 
-    const startDateTime = DateTime.fromISO(startDate)
-    const endDateTime = DateTime.fromISO(endDate)
-
-    const formattedStartDate = startDateTime.setZone(timezone)
-    const formattedEndDate = endDateTime.setZone(timezone)
-
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
         <DialogTitle id="form-dialog-title">{id ? 'Edit Event' : 'Create a Event' }</DialogTitle>
@@ -187,45 +182,6 @@ class ProgramElementModal extends React.Component {
             required
           />
 
-          <MuiPickersUtilsProvider utils={LuxonUtils}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <KeyboardDateTimePicker
-                  fullWidth
-                  margin="dense"
-                  id="date"
-                  label="Start date"
-                  format="MM/dd/yyyy h:mm a"
-                  value={formattedStartDate}
-                  KeyboardButtonProps={{
-                    'aria-label': 'select date',
-                  }}
-                  onChange={handleValueChange('startDate')}
-                  inputVariant="outlined"
-                  shrink
-                  required
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <KeyboardDateTimePicker
-                  fullWidth
-                  margin="dense"
-                  id="date"
-                  label="End date"
-                  format="MM/dd/yyyy h:mm a"
-                  value={formattedEndDate}
-                  KeyboardButtonProps={{
-                    'aria-label': 'select date',
-                  }}
-                  onChange={handleValueChange('endDate')}
-                  inputVariant="outlined"
-                  shrink
-                  required
-                />
-              </Grid>
-            </Grid>
-          </MuiPickersUtilsProvider>
-
           <Grid item xs={12}>
             <label className="text-small" htmlFor="timezone">Timezone</label>
             <TimezoneSelect
@@ -238,6 +194,44 @@ class ProgramElementModal extends React.Component {
             />
           </Grid>
 
+
+          <MuiPickersUtilsProvider utils={LuxonUtils}>
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <KeyboardDateTimePicker
+                  fullWidth
+                  margin="dense"
+                  id="date"
+                  label="Start date"
+                  format="MM/dd/yyyy h:mm a"
+                  value={startDate}
+                  KeyboardButtonProps={{
+                    'aria-label': 'select date',
+                  }}
+                  onChange={handleValueChange('startDate')}
+                  inputVariant="outlined"
+                  required
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <KeyboardDateTimePicker
+                  fullWidth
+                  margin="dense"
+                  id="date"
+                  label="End date"
+                  format="MM/dd/yyyy h:mm a"
+                  value={endDate}
+                  KeyboardButtonProps={{
+                    'aria-label': 'select date',
+                  }}
+                  onChange={handleValueChange('endDate')}
+                  inputVariant="outlined"
+                  required
+                />
+              </Grid>
+            </Grid>
+          </MuiPickersUtilsProvider>
+
           <TextField
             value={host}
             margin="dense"
@@ -247,7 +241,6 @@ class ProgramElementModal extends React.Component {
             fullWidth
             onChange={handleChange('host')}
             variant="outlined"
-            required
           />
           <TextField
             value={description}
