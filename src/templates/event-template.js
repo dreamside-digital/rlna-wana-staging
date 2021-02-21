@@ -52,7 +52,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
 
   const calendarEvent = {
     title: event['title'],
-    description: `${event["description"]}\n${event['linkText']}: ${event['url']}`,
+    description: `${event["description"]}\n\n${event['linkText']}: ${event['url']}`,
     location: event['url'],
     startDatetime: startDate.toFormat("yyyyLLdd'T'HHmmss"),
     endDatetime: endDate.toFormat("yyyyLLdd'T'HHmmss"),

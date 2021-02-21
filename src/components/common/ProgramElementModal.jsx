@@ -162,8 +162,8 @@ class ProgramElementModal extends React.Component {
     const startDateTime = DateTime.fromISO(startDate)
     const endDateTime = DateTime.fromISO(endDate)
 
-    const formattedStartDate = startDateTime.toFormat('')
-    const formattedEndDate = endDateTime.toFormat('')
+    const formattedStartDate = startDateTime.setZone(timezone)
+    const formattedEndDate = endDateTime.setZone(timezone)
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
@@ -196,7 +196,7 @@ class ProgramElementModal extends React.Component {
                   id="date"
                   label="Start date"
                   format="MM/dd/yyyy h:mm a"
-                  value={startDate}
+                  value={formattedStartDate}
                   KeyboardButtonProps={{
                     'aria-label': 'select date',
                   }}
@@ -213,7 +213,7 @@ class ProgramElementModal extends React.Component {
                   id="date"
                   label="End date"
                   format="MM/dd/yyyy h:mm a"
-                  value={endDate}
+                  value={formattedEndDate}
                   KeyboardButtonProps={{
                     'aria-label': 'select date',
                   }}

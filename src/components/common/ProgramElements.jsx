@@ -85,10 +85,18 @@ class ProgramElements extends React.Component {
 
   render() {
     // show lastest item first
-    console.log({'this.props': this.props})
     const { showModal, editingEvent } = this.state;
     let itemsKeys = Object.keys(this.props.events).reverse()
-    const eventsArr = itemsKeys.map(key => this.props.events[key])
+    const eventsArr = itemsKeys.map(key => {
+      const event = this.props.events[key]
+      return {
+        ...event,
+        startDate: DateTime.fromISO(event.startDate),
+        endDate: DateTime.fromISO(event.endDate)
+      }
+    })
+    console.log({eventsArr})
+    const orderedEvents = eventsArr.sort((a,b) => a.startDate - b.startDate)
     const subject = encodeURIComponent('Session proposal')
     const body = encodeURIComponent('Please provide following information to propose a session. \n\nSession title: \nSession description: \nProposed date and time: \nAny other comments?\n')
 
@@ -108,12 +116,7 @@ class ProgramElements extends React.Component {
             </div>
           </div>
         }
-        {eventsArr.map((event,index) => {
-          const content = {
-            ...event,
-            startDate: DateTime.fromISO(event.startDate),
-            endDate: DateTime.fromISO(event.endDate)
-          };
+        {orderedEvents.map((content,index) => {
           if (this.props.isEditingPage) {
             return (
               <ThemeProvider theme={muiTheme}>
