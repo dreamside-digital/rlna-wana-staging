@@ -25,26 +25,19 @@ exports.createPages = ({ graphql, actions }) => {
               node {
                 id
                 slug
-                title {
-                  text
-                }
+                title
                 startDate
                 endDate
                 timezone
-                link
-                description {
-                  text
-                }
+                linkText
+                url
+                description
                 image {
                   imageSrc
                   title
                 }
-                video {
-                  text
-                }
-                host {
-                  text
-                }
+                video
+                host
               }
             }
           }

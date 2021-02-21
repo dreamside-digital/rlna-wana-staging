@@ -388,20 +388,20 @@ export const profiles = (state={profiles: {}}, action) => {
 }
 
 
-export const sessions = (state={sessions: {}}, action) => {
+export const events = (state={events: {}}, action) => {
   switch (action.type) {
-    case 'SET_SESSIONS':
+    case 'SET_EVENTS':
       return {
         ...state,
-        sessions: action.sessions
+        events: action.events
       }
 
-    case 'UPDATE_SESSION':
+    case 'UPDATE_EVENT':
       return {
         ...state,
-        sessions: {
-          ...state.sessions,
-          [action.session.id]: action.session
+        events: {
+          ...state.events,
+          [action.event.id]: action.event
         }
       }
     default:
@@ -518,7 +518,7 @@ export const appReducers = (state = {}, action) => {
     navigation: navigation(state.navigation, action),
     page: page(state.page, action),
     profiles: profiles(state.profiles, action),
-    sessions: sessions(state.sessions, action),
+    events: events(state.events, action),
     categories: categories(state.categories, action),
     pages: pages(state.pages, action),
     translations: translations(state.translations, action),

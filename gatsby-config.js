@@ -45,6 +45,10 @@ module.exports = {
 
               return node
             },
+          },
+          {
+            type: "Events",
+            path: "events"
           }
         ]
       }

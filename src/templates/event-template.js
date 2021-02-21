@@ -32,11 +32,11 @@ const AddToCalendarDropdown = AddToCalendarHOC(Button, DropDown);
 // }
 
 const EventPageTemplate = ({ pageContext: { event } }) => {
-  const startDate = DateTime.fromISO(event['program-elements-start-date'])
-  const endDate = DateTime.fromISO(event['program-elements-end-date'])
+  const startDate = DateTime.fromISO(event['startDate'])
+  const endDate = DateTime.fromISO(event['endDate'])
 
-  const originalStartDate = DateTime.fromISO(event['program-elements-start-date']).setZone(event['program-elements-timezone'])
-  const originalEndDate = DateTime.fromISO(event['program-elements-end-date']).setZone(event['program-elements-timezone'])
+  const originalStartDate = DateTime.fromISO(event['startDate']).setZone(event['timezone'])
+  const originalEndDate = DateTime.fromISO(event['endDate']).setZone(event['timezone'])
 
   // const today = DateTime.local();
   // const isPast = endDateLocal ? endDateLocal < today : startDateLocal < today;
@@ -51,9 +51,9 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
   const timezone = startDate.toFormat("z")
 
   const calendarEvent = {
-    title: event['program-elements-title']['text'],
-    description: `${event["program-elements-text"]["text"]}\n\n${event['program-elements-link']['anchor']}: ${event['program-elements-link']['link']}`,
-    location: event['program-elements-link']['link'],
+    title: event['title'],
+    description: `${event["description"]}\n${event['linkText']}: ${event['url']}`,
+    location: event['url'],
     startDatetime: startDate.toFormat("yyyyLLdd'T'HHmmss"),
     endDatetime: endDate.toFormat("yyyyLLdd'T'HHmmss"),
     duration: endDate.diff(startDate).as('hours'),
@@ -63,19 +63,19 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
   return (
     <Layout>
       <Helmet>
-        <title>{event['program-elements-title']['text']}</title>
+        <title>{event['title']}</title>
       </Helmet>
 
       <Container maxWidth="md" className="pb-10 pt-10">
         <header>
           <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
-              <div className="" style={{background: `url(${event["program-elements-image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
+              <div className="" style={{background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' }}>
               </div>
             </Grid>
             <Grid item xs={12} md={8}>
               <div className="event-page-title">
-                <h1 className="underline">{event['program-elements-title']['text']}</h1>
+                <h1 className="underline">{event['title']}</h1>
                 <div className="font-size-h6 text-primary mb-2">
                   {eventDate}, <time>{eventStart}</time> - <time>{eventEnd}</time>
                 </div>
@@ -95,12 +95,12 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
         <Grid container>
           <Grid item xs={12}>
             <h2 className="mt-6 mb-2">Overview</h2>
-            <div style={{whiteSpace: "pre-wrap"}}>{ event["program-elements-text"]["text"] }</div>
-            <p><span className="text-bold mr-1">Hosted by:</span>{event['program-elements-host']['text']}</p>
+            <div style={{whiteSpace: "pre-wrap"}}>{ event["description"] }</div>
+            <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>
             <p>
-              <span className="text-bold mr-1">Link:</span>
-              <a href={event['program-elements-link']['link']} target="_blank" rel="noopener noreferrer">
-                {event['program-elements-link']['anchor']}
+              <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
+              <a href={event['url']} target="_blank" rel="noopener noreferrer">
+                {event['url']}
               </a>
             </p>
             <p>
@@ -109,7 +109,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
             </p>
           </Grid>
           <Grid item xs={12}>
-            <VideoEmbed url={event['program-elements-video'] ? event['program-elements-video']['text'] : null} />
+            <VideoEmbed url={event['video']} />
           </Grid>
         </Grid>
       </Container>

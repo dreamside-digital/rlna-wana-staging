@@ -136,7 +136,7 @@ class ImageUploadEditor extends React.Component {
   }
 
   render() {
-    const { EditorProps } = this.props;
+    const { EditorProps, label } = this.props;
     const previewImage = this.state.preview || DEFAULT_BACKGROUND_IMAGE
 
     return (
@@ -149,7 +149,7 @@ class ImageUploadEditor extends React.Component {
                   <div className="loader-container">
                     <div className="loader">loading...</div>
                   </div>) :
-                  this.state.preview ? '' : 'Add a Profile Photo'
+                  this.state.preview ? '' : label
                 }
                 <input
                   className="hidden"

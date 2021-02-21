@@ -139,6 +139,7 @@ class ParticipantModal extends React.Component {
             content={image}
             onContentChange={handleImageChange('image')}
             uploadImage={uploadImage}
+            label="Add a profile photo"
           />
           <TextField
             value={name || ''}

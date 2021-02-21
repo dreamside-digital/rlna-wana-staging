@@ -4,8 +4,24 @@ import AddIcon from "@material-ui/icons/Add"
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 import { fetchEvents } from "../../redux/actions"
+import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
+import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 
 import ProgramElementItem from "./ProgramElementItem"
+import ProgramElementModal from "./ProgramElementModal"
+
+const muiTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: theme.primaryColor,
+    }
+  },
+  typography: {
+    fontFamily: theme.fontFamily,
+    fontSize: theme.fontSize
+  }
+})
+
 
 const mapStateToProps = state => {
   return {
@@ -25,7 +41,11 @@ const mapDispatchToProps = dispatch => {
 class ProgramElements extends React.Component {
   constructor(props) {
     super(props)
-    this.props.fetchProfiles()
+    this.state = {
+      showModal: false,
+      editingEvent: null,
+    }
+    this.props.fetchEvents()
   }
 
   onSaveItem = itemId => itemContent => {
@@ -48,15 +68,16 @@ class ProgramElements extends React.Component {
     let newContent = { ...this.props.content }
     const newItemKey = `event-${Date.now()}`
     newContent[newItemKey] = {
-      "title": { "text": "Title" },
+      "title": "Title",
       "startDate": new Date().toISOString(),
       "endDate": new Date().toISOString(),
       "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-      "link": { "link": "/", "anchor": "Zoom Link" },
-      "description": { "text": `<p>Description text</p>` },
-      "image": { "imageSrc": "https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=2f0c0c6e-3595-44b0-9de7-c29de88fab81", "title": "" },
-      "video": { "text": "" },
-      "host": { "text": "" },
+      "url": "/",
+      "linkText": "Event link",
+      "description": "",
+      "video": "",
+      "host": "",
+      image: {}
     }
 
     this.props.onSave(newContent)
@@ -64,7 +85,10 @@ class ProgramElements extends React.Component {
 
   render() {
     // show lastest item first
+    console.log({'this.props': this.props})
+    const { showModal, editingEvent } = this.state;
     let itemsKeys = Object.keys(this.props.events).reverse()
+    const eventsArr = itemsKeys.map(key => this.props.events[key])
     const subject = encodeURIComponent('Session proposal')
     const body = encodeURIComponent('Please provide following information to propose a session. \n\nSession title: \nSession description: \nProposed date and time: \nAny other comments?\n')
 
@@ -80,30 +104,51 @@ class ProgramElements extends React.Component {
           this.props.isEditingPage &&
           <div className="row mt-6 mb-4">
             <div className="col-12">
-              <Button onClick={this.onAddItem} color="default" variant="contained">Add event</Button>
+              <Button onClick={() => this.setState({ showModal: true })} color="default" variant="contained">Add event</Button>
             </div>
           </div>
         }
-        {itemsKeys.filter(k => this.props.content[k]).map((key,index) => {
+        {eventsArr.map((event,index) => {
           const content = {
-            ...this.props.content[key],
-            'start-date': DateTime.fromISO(this.props.content[key]['start-date']),
-            'end-date': DateTime.fromISO(this.props.content[key]['end-date'])
+            ...event,
+            startDate: DateTime.fromISO(event.startDate),
+            endDate: DateTime.fromISO(event.endDate)
           };
+          if (this.props.isEditingPage) {
+            return (
+              <ThemeProvider theme={muiTheme}>
+                <EditorWrapper
+                  theme={this.context.theme}
+                  startEditing={() => this.setState({ showModal: true, editingEvent: content })}
+                >
+                  <ProgramElementItem content={content} id={content.id} />
+                </EditorWrapper>
+              </ThemeProvider>
+            )
+          }
           return(
             <ProgramElementItem
               index={index}
               content={content}
-              onSave={this.onSaveItem(key)}
-              onDelete={this.onDeleteItem(key)}
-              key={key}
             />
           )
         })}
+        {
+          this.props.isEditingPage &&
+          <ProgramElementModal
+            event={editingEvent}
+            onSaveItem={this.onSaveItem}
+            showModal={showModal}
+            closeModal={() => this.setState({ showModal: false, editingEvent: null })}
+            onDeleteItem={this.onDeleteItem}
+          />
+        }
       </div>
     );
   }
 }
+
+ProgramElements.contextType = EditablesContext;
 
 ProgramElements.defaultProps = {
   content: {},
@@ -111,5 +156,5 @@ ProgramElements.defaultProps = {
   onSave: () => { console.log('Implement a function to save changes') }
 }
 
-export default connect(mapStateToProps)(ProgramElements)
+export default connect(mapStateToProps, mapDispatchToProps)(ProgramElements)
 

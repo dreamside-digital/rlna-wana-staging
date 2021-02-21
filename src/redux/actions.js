@@ -304,37 +304,37 @@ export function removeProfile(profileId) {
   };
 }
 
-// ---------- Sessions
+// ---------- Events
 
-export function fetchSessions() {
+export function fetchEvents() {
   return (dispatch, getState) => {
     const db = firebase.database();
 
-    db.ref(`sessions`)
+    db.ref(`events`)
       .once('value')
       .then(snap => {
-        dispatch(setSessions(snap.val()));
+        dispatch(setEvents(snap.val()));
       })
       .catch(error => {
-        console.log("Error fetching sessions", error)
+        console.log("Error fetching events", error)
       })
   };
 }
 
-export function updateSession(id, session) {
-  return { type: "UPDATE_SESSION", id, session }
+export function updateEvent(id, event) {
+  return { type: "UPDATE_EVENT", id, event }
 }
 
-export function setSessions(sessions) {
-  console.log({sessions})
-  return { type: "SET_SESSIONS", sessions }
+export function setEvents(events) {
+  console.log({events})
+  return { type: "SET_EVENTS", events }
 }
 
-export function saveSession(sessionId, session) {
+export function saveEvent(eventId, event) {
   return (dispatch, getState) => {
     const db = firebase.database();
 
-    db.ref(`sessions/${sessionId}`).update(session, error => {
+    db.ref(`events/${eventId}`).update(event, error => {
       if (error) {
         return dispatch(
           showNotification(
@@ -344,7 +344,7 @@ export function saveSession(sessionId, session) {
         );
       }
 
-      dispatch(updateSession(sessionId, session));
+      dispatch(updateEvent(eventId, event));
       dispatch(
         showNotification(
           "Your changes have been saved.",
@@ -355,12 +355,12 @@ export function saveSession(sessionId, session) {
   };
 }
 
-export function removeSession(sessionId) {
+export function removeEvent(eventId) {
   return (dispatch, getState) => {
     const db = firebase.database();
     const state = getState();
 
-    db.ref(`sessions/`).update({[sessionId]: null}, error => {
+    db.ref(`events/`).update({[eventId]: null}, error => {
       if (error) {
         return dispatch(
           showNotification(
@@ -370,10 +370,10 @@ export function removeSession(sessionId) {
         );
       }
 
-      let allSessions = { ...state.page.data.sessions };
-      delete allSessions[sessionId];
+      let allEvents = { ...state.page.data.events };
+      delete allEvents[eventId];
 
-      dispatch(setSessions(allSessions));
+      dispatch(setEvents(allEvents));
       dispatch(
         showNotification(
           "Your changes have been saved. Publish your changes to make them public.",

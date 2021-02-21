@@ -2,10 +2,10 @@ import React from "react"
 
 const parseUrl = url => {
   if (url.indexOf('youtube') >= 0) {
-    const id = /youtube\.com\/watch\?v=(.*)/gm.exec(url)
+    const [match, id] = /youtube\.com\/watch\?v=(.*)/gm.exec(url)
     return { id, platform: 'youtube' }
   } else if (url.indexOf('vimeo') >= 0) {
-    const id = /vimeo\.com\/(.*)/gm.exec(url)
+    const [match, id] = /vimeo\.com\/(.*)/gm.exec(url)
     return { id, platform: 'vimeo' }
   } else {
     return {}
@@ -42,7 +42,7 @@ const VideoEmbed = ({ url }) => {
 
   return (
     <div style={styles.iframeContainer}>
-      <iframe style={styles.iframe} title="Embedded video" src={embedUrl} width="640" height="268" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <iframe style={styles.iframe} title="Embedded video" src={embedUrl} width="640" height="268" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" allowFullScreen></iframe>
     </div>
   );
 };
