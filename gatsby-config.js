@@ -49,6 +49,10 @@ module.exports = {
           {
             type: "Events",
             path: "events"
+          },
+          {
+            type: "Materials",
+            path: "materials"
           }
         ]
       }

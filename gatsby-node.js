@@ -41,6 +41,17 @@ exports.createPages = ({ graphql, actions }) => {
               }
             }
           }
+          allMaterials {
+            edges {
+              node {
+                id
+                title
+                author
+                details
+                event
+              }
+            }
+          }
         }
         `
       ).then(result => {

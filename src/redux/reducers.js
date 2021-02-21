@@ -409,6 +409,27 @@ export const events = (state={events: {}}, action) => {
   }
 }
 
+export const materials = (state={materials: {}}, action) => {
+  switch (action.type) {
+    case 'SET_MATERIALS':
+      return {
+        ...state,
+        materials: action.materials
+      }
+
+    case 'UPDATE_MATERIAL':
+      return {
+        ...state,
+        materials: {
+          ...state.materials,
+          [action.material.id]: action.material
+        }
+      }
+    default:
+      return state
+  }
+}
+
 
 export const categories = (state={ categories: {}}, action) => {
   switch (action.type) {
@@ -519,10 +540,8 @@ export const appReducers = (state = {}, action) => {
     page: page(state.page, action),
     profiles: profiles(state.profiles, action),
     events: events(state.events, action),
-    categories: categories(state.categories, action),
+    materials: materials(state.materials, action),
     pages: pages(state.pages, action),
-    translations: translations(state.translations, action),
-    tags: tags(state.tags, action)
   }
 }
 

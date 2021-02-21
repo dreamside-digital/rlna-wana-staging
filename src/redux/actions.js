@@ -383,6 +383,85 @@ export function removeEvent(eventId) {
 
 // -----------------
 
+// ---------- Session Materials
+
+export function fetchMaterials() {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`materials`)
+      .once('value')
+      .then(snap => {
+        dispatch(setMaterials(snap.val()));
+      })
+      .catch(error => {
+        console.log("Error fetching session materials", error)
+      })
+  };
+}
+
+export function updateMaterial(id, material) {
+  return { type: "UPDATE_MATERIAL", id, material }
+}
+
+export function setMaterials(materials) {
+  console.log({materials})
+  return { type: "SET_MATERIALS", materials }
+}
+
+export function saveMaterial(materialId, material) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`materials/${materialId}`).update(material, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "error"
+          )
+        );
+      }
+
+      dispatch(updateEvent(materialId, material));
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function removeMaterial(materialId) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+    const state = getState();
+
+    db.ref(`materials/`).update({[materialId]: null}, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "success"
+          )
+        );
+      }
+
+      dispatch(fetchMaterials());
+      dispatch(
+        showNotification(
+          "Your changes have been saved. Publish your changes to make them public.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+// -----------------
+
 export function savePage(pageData, pageId) {
   return dispatch => {
     const db = firebase.database();

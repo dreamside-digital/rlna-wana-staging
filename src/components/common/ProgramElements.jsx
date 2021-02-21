@@ -64,8 +64,6 @@ class ProgramElements extends React.Component {
     this.props.onSave(newContent)
   }
 
-
-
   render() {
     // show lastest item first
     const { showModal, editingEvent } = this.state;
