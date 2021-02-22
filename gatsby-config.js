@@ -14,7 +14,7 @@ module.exports = {
   siteMetadata: {
     title: `Responsible Leaders Network Activation West Asia North Africa`,
     description: `Responsible Leaders Network Activation`,
-    url: `https://rlna-wana-staging.firebaseapp.com/`
+    url: `https://connect-wana.online`
   },
   pathPrefix: `/`,
   plugins: [
@@ -23,7 +23,7 @@ module.exports = {
       options: {
         name: "Responsible Leaders Network Activation",
         short_name: "Responsible Leaders Network Activation",
-        start_url: "https://rlna-wana-staging.firebaseapp.com/",
+        start_url: "https://connect-wana.online",
         background_color: "#000",
         theme_color: "#00A6CE", // blue
         display: "minimal-ui",

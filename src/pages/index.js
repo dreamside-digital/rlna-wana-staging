@@ -107,8 +107,7 @@ class HomePage extends React.Component {
 
     // ---------- LOCK SCREEN ------------
 
-    // if (!this.props.accessGranted) {
-    if (false) {
+    if (!this.props.accessGranted) {
       return(
         <Layout theme="gray" location={this.props.location}>
           <EditableBackgroundImage
