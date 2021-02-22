@@ -18,6 +18,7 @@ import {
 
 import {
   setPages,
+  fetchBrowserNotifications
 } from "../redux/actions"
 
 import "../assets/sass/less-cms/base.scss";
@@ -26,6 +27,7 @@ import "aos/dist/aos.css"
 import "animate.css/animate.css"
 
 import favicon from '../assets/images/icon.png'
+
 
 export const editorTheme = {
   ...theme,
@@ -61,6 +63,7 @@ const mapStateToProps = state => {
     pageData: state.pages.data,
     pages: state.pages.pages,
     accessGranted: state.adminTools.accessGranted,
+    browserNotifications: state.adminTools.browserNotifications,
   };
 };
 
@@ -68,6 +71,9 @@ const mapDispatchToProps = dispatch => {
   return {
     setPages: pages => {
       dispatch(setPages(pages));
+    },
+    fetchBrowserNotifications: () => {
+      dispatch(fetchBrowserNotifications());
     }
   };
 };
@@ -76,26 +82,41 @@ const mapDispatchToProps = dispatch => {
 class DefaultLayout extends React.Component {
   componentDidMount() {
     this.props.setPages(this.props.allPages)
+    this.props.fetchBrowserNotifications()
     AOS.init()
   }
 
-  // requestPermission = async () => {
-  //   const permission = await window.Notification.requestPermission()
-  //   if (permission === "granted") {
-  //     var n = new window.Notification("Hi Sharon!");
-  //   }
-  //   return permission
-  // }
+  requestPermissionForNotifications = async () => {
+    const permission = await window.Notification.requestPermission()
+    if (permission === "granted") {
+      var n = new window.Notification("Hi Sharon!");
+    }
+    return permission
+  }
 
-  // componentDidUpdate(prevProps) {
-  //   if (!prevProps.accessGranted && this.props.accessGranted) {
-  //     console.log("let's try notifications!")
-  //     const isNotificationsSupported = Boolean('Notification' in window)
-  //     if (isNotificationsSupported) {
-  //       const permission = this.requestPermission()
-  //     }
-  //   }
-  // }
+  playNotifications = () => {
+    const notifArr = Object.keys(this.props.browserNotifications).map(k => this.props.browserNotifications[k])
+    notifArr.forEach(notif => {
+      const n = new window.Notification(notif.message, { image: notif.image, icon: "https://connect-wana.online/icon.png" });
+      n.addEventListener('click', () => {
+        window.open(notif.url);
+      })
+    })
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.accessGranted && this.props.accessGranted) {
+      const isNotificationsSupported = Boolean('Notification' in window)
+      if (isNotificationsSupported) {
+        const permission = this.requestPermissionForNotifications()
+      }
+      this.playNotifications()
+    }
+
+    if (prevProps.browserNotifications !== this.props.browserNotifications) {
+      this.playNotifications()
+    }
+  }
 
   render() {
     const { props } = this;

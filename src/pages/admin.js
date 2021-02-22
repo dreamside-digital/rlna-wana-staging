@@ -8,6 +8,7 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import BrowserNotifications from '../components/notifications/BrowserNotifications'
 import { push, Link } from 'gatsby'
 
 import Layout from '../layouts/default';
@@ -63,6 +64,7 @@ const mapStateToProps = state => {
     pages: state.pages.pages,
     users: state.adminTools.users,
     accessCode: state.adminTools.accessCode,
+    browserNotifications: state.adminTools.browserNotifications,
   };
 };
 
@@ -243,6 +245,10 @@ class AdminPage extends React.Component {
                 <input type="submit" value="Update access code" className="btn ml-2" />
               </form>
             </div>
+          </Container>
+
+          <Container>
+            <BrowserNotifications />
           </Container>
 
           <Container>

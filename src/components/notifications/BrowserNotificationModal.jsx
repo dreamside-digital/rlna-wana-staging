@@ -7,102 +7,96 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import {
-  KeyboardDateTimePicker,
-  MuiPickersUtilsProvider
-} from "@material-ui/pickers";
 import ImageUpload from '../editing/ImageUpload';
 import {uploadImage} from "../../firebase/operations";
-import { saveSession, removeSession } from "../../redux/actions"
+import { saveBrowserNotification, removeBrowserNotification } from '../../redux/actions'
 
 const mapDispatchToProps = dispatch => {
   return {
-    saveSession: (id, data) => {
-      dispatch(saveSession(id, data));
+    saveBrowserNotification: (id, data) => {
+      dispatch(saveBrowserNotification(id, data));
     },
-    removeSession: (id) => {
-      dispatch(removeSession(id));
+    removeBrowserNotification: (id) => {
+      dispatch(removeBrowserNotification(id));
     },
   };
 };
 
-const emptySession = {
-    image: "",
-    title: { "text": "Title" },
-    startDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    link: { "link": "/", "anchor": "Zoom Link" },
-    description: { "text": `<p>Description text</p>` },
-
+const emptyItem = {
+    image: {},
+    message: "",
+    url: ""
   }
 
-class SessionModal extends React.Component {
+class BrowserNotificationModal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { newSession: props.session || emptySession }
+    this.state = { newItem: props.notification || emptyItem }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.session !== this.props.session && !Boolean(this.props.session)) {
-      this.setState({ newSession: emptySession })
+    if (prevProps.notification !== this.props.notification && !Boolean(this.props.notification)) {
+      this.setState({ newItem: emptyItem })
     }
 
-    if (prevProps.session !== this.props.session && this.props.session?.id) {
-      this.setState({ newSession: this.props.session })
+    if (prevProps.notification !== this.props.notification && this.props.notification?.id) {
+      this.setState({ newItem: this.props.notification })
     }
   }
 
   handleChange = key => event => {
     const value = event.currentTarget.value
-    this.setState({ newSession: {...this.state.newSession, [key]: value} })
+    this.setState({ newItem: {...this.state.newItem, [key]: value} })
   }
 
   handleImageChange = key => image => {
-    this.setState({ newSession: {...this.state.newSession, [key]: image} })
+    this.setState({ newItem: {...this.state.newItem, [key]: image} })
   }
 
   handleDescChange = key => desc => {
-    this.setState({ newSession: {...this.state.newSession, [key]: desc.text} })
+    this.setState({ newItem: {...this.state.newItem, [key]: desc.text} })
   }
 
-  handleSaveSession = () => {
-    const { newSession } = this.state;
+  handleSave = () => {
+    const { newItem } = this.state;
 
-    const id = newSession.id ? newSession.id : `session-${Date.now()}`
+    const id = newItem.id ? newItem.id : `notification-${Date.now()}`
 
     const data = {
-      ...newSession,
+      ...newItem,
       id
     }
 
-    this.props.saveProfile(id, data)
+    this.props.saveBrowserNotification(id, data)
     this.props.closeModal()
-    this.setState({ newSession: emptySession })
+    this.setState({ newItem: emptyItem })
   }
 
-  handleDeleteParticipant = () => {
-    this.props.removeProfile(this.state.newSession.id)
+  handleDelete = () => {
+    this.props.removeBrowserNotification(this.state.newItem.id)
     this.props.closeModal()
-    this.setState({ newSession: emptySession })
+    this.setState({ newItem: emptyItem })
   }
 
   render() {
+    const {handleChange, handleImageChange, handleSave, handleDelete} = this;
     const { showModal, closeModal } = this.props;
     const {
       image,
       message,
       url,
-    } = this.state.newSession;
+      id
+    } = this.state.newItem;
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
-        <DialogTitle id="form-dialog-title">{id ? 'Edit Participant' : 'Create a Profile' }</DialogTitle>
+        <DialogTitle id="form-dialog-title">{id ? 'Edit Notification' : 'Create a Notification' }</DialogTitle>
         <DialogContent>
           <ImageUpload
             content={image}
             onContentChange={handleImageChange('image')}
             uploadImage={uploadImage}
+            label={'Upload image (optional)'}
           />
           <TextField
             value={message || ''}
@@ -131,6 +125,14 @@ class SessionModal extends React.Component {
           <div className="pr-3 pl-3 pb-2 width-100">
             <Grid container justify="space-between">
               <Grid item>
+                {
+                  id &&
+                  <Button onClick={handleDelete} color="secondary">
+                    Delete
+                  </Button>
+                }
+              </Grid>
+              <Grid item>
                 <Button
                   onClick={closeModal}
                   color="default"
@@ -140,7 +142,7 @@ class SessionModal extends React.Component {
                   Cancel
                 </Button>
                 <Button
-                  onClick={handleSaveProfile}
+                  onClick={handleSave}
                   color="primary"
                   variant="contained"
                   style={{borderRadius:0}}
@@ -157,11 +159,11 @@ class SessionModal extends React.Component {
 
 }
 
-SessionModal.defaultProps = {
+BrowserNotificationModal.defaultProps = {
   onSaveItem: () => console.log("uh oh you're missing onSaveItem"),
-  session: emptyEvent,
+  notification: emptyItem,
   showModal: false
 }
 
-export default connect(null, mapDispatchToProps)(SessionModal)
+export default connect(null, mapDispatchToProps)(BrowserNotificationModal)
 

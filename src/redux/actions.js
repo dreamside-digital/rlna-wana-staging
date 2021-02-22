@@ -466,6 +466,82 @@ export function removeMaterial(materialId) {
 
 // -----------------
 
+// ------------- NOTIFICATIONS
+
+export function fetchBrowserNotifications() {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications`)
+      .once('value')
+      .then(snap => {
+        const notifs = snap.val()
+        if (notifs) {
+          dispatch(setBrowserNotifications(notifs));
+        }
+      })
+      .catch(error => {
+        console.log("Error fetching browser notifications", error)
+      })
+  };
+}
+
+export function saveBrowserNotification(id, data) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications/${id}`).update(data, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "error"
+          )
+        );
+      }
+
+      dispatch(fetchBrowserNotifications())
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function removeBrowserNotification(id) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications/`).update({[id]: null}, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "success"
+          )
+        );
+      }
+
+      dispatch(fetchBrowserNotifications())
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function setBrowserNotifications(notifications) {
+  return { type: "SET_BROWSER_NOTIFICATIONS", notifications }
+}
+
+// ---------------------------
+
 export function savePage(pageData, pageId) {
   return dispatch => {
     const db = firebase.database();
