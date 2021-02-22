@@ -1,21 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Grid from '@material-ui/core/Grid';
-import slugify from "slugify";
 import { connect } from "react-redux";
 import { Link } from "gatsby";
 
-import {
-  PlainTextEditor,
-  TextAreaEditor,
-  LinkEditor,
-  ImageUploadEditor,
-  Editable,
-} from 'react-easy-editables';
-import {KeyboardDateTimePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
-import LuxonUtils from "@date-io/luxon";
 import {DateTime} from "luxon";
-import TimezoneSelect from "./TimezoneSelect";
-import {uploadImage} from "../../firebase/operations";
 
 import { showNotification } from "../../redux/actions";
 
@@ -28,13 +16,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 const ProgramElementItem = props => {
-  const [ isOpen, setIsOpen ] = useState(false)
   const content = props.content || {}
 
-  const convertDate = (date, timezone) => {
-    const dateWithTZ = date.setZone(timezone, { keepLocalTime: true })
-    return dateWithTZ.toISO()
-  }
+  // const convertDate = (date, timezone) => {
+  //   const dateWithTZ = date.setZone(timezone, { keepLocalTime: true })
+  //   return dateWithTZ.toISO()
+  // }
 
   const getLocalDateTime = date => {
     try {
@@ -43,32 +30,6 @@ const ProgramElementItem = props => {
       console.log("err getting local date", err)
       return date
     }
-  }
-
-  const handleSave = newContent => {
-    if (!newContent['startDate'] || !newContent['endDate']) {
-      return props.showNotification("Start date and end date are required")
-    }
-
-    const startDate = convertDate(newContent['startDate'], newContent['timezone'])
-    const endDate = convertDate(newContent['endDate'], newContent['timezone'])
-    const localStartDate = startDate.toLocaleString(DateTime.DATE_SHORT)
-
-    const slug = content['slug'] || slugify(`${newContent['title']}-${localStartDate}`, {
-      lower: true,
-      remove: /[$*_+~.,()'"!:@%^&?=]/g
-    })
-
-    const data = {
-      ...newContent,
-      'startDate': startDate,
-      'endDate': endDate,
-      slug: slug,
-    }
-
-    console.log({ eventData: data })
-
-    props.onSave(data)
   }
 
   const startDate = getLocalDateTime(content["startDate"])

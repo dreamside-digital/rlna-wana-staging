@@ -1,13 +1,10 @@
 import React from "react";
-import Button from "@material-ui/core/Button"
-import AddIcon from "@material-ui/icons/Add"
 import { connect } from "react-redux";
 import { DateTime } from "luxon";
 import { fetchEvents } from "../../redux/actions"
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 
-import ProgramElementItem from "./ProgramElementItem"
 import ProgramElementModal from "./ProgramElementModal"
 import PastProgramElementItem from "./PastProgramElementItem"
 import BreakpointMasonry from "./BreakpointMasonry"
@@ -80,10 +77,8 @@ class ProgramElements extends React.Component {
         endDate: DateTime.fromISO(event.endDate)
       }
     })
-    console.log({eventsArr})
+
     const orderedEvents = eventsArr.sort((a,b) => a.startDate - b.startDate).filter(e => e.endDate <= DateTime.local())
-    const subject = encodeURIComponent('Session proposal')
-    const body = encodeURIComponent('Please provide following information to propose a session. \n\nSession title: \nSession description: \nProposed date and time: \nAny other comments?\n')
 
     return (
       <div className={`collection width-100 mt-2 ${this.props.classes}`}>

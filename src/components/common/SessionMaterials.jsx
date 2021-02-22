@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
 import { connect } from "react-redux";
 import { fetchMaterials, saveMaterial, removeMaterial } from "../../redux/actions"
 
@@ -60,7 +59,7 @@ class SessionMaterials extends React.Component {
     const itemsKeys = Object.keys(this.props.materials).reverse()
     const materialsArr = itemsKeys.map(key => this.props.materials[key]).filter(m => m.event === this.props.eventId)
 
-    if (!materialsArr.length) {
+    if (!materialsArr.length && !this.props.isEditingPage) {
       return null
     }
 

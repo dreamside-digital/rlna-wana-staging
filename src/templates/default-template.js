@@ -11,8 +11,7 @@ import {
   updatePage,
   loadPageData,
   updateTitle,
-  updateHeaderImage,
-  saveSelectedTag,
+  updateHeaderImage
 } from "../redux/actions";
 
 import Layout from "../layouts/default.js";
@@ -32,9 +31,6 @@ const mapDispatchToProps = dispatch => {
     },
     onUpdateHeaderImage: image => {
       dispatch(updateHeaderImage(image));
-    },
-    onSelectTag: selection => {
-      dispatch(saveSelectedTag(selection))
     }
   };
 };
@@ -44,8 +40,7 @@ const mapStateToProps = state => {
     pageData: state.page.data,
     orderedPages: state.pages.orderedPages,
     pages: state.pages.pages,
-    currentLang: state.navigation.currentLang,
-    tags: state.tags.tags
+    currentLang: state.navigation.currentLang
   };
 };
 
@@ -112,7 +107,6 @@ class DefaultTemplate extends React.Component {
                 sectionIndex={index}
                 key={index}
                 type={ section.type }
-                sectionTag={ section.tag }
               />
             )
           })

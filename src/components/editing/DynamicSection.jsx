@@ -85,12 +85,11 @@ const mapStateToProps = state => {
   return {
     pageData: state.page.data,
     isEditingPage: state.adminTools.isEditingPage,
-    selectedTag: state.tags.selectedTag,
   };
 };
 
 
-const DynamicSection = ({ content, type="default", sectionIndex, pageData, isEditingPage, onUpdatePageData, savePageContent, addSection, deleteSection, duplicateSection, addContentItem, updateContentItem, deleteContentItem, sectionTag, selectedTag, editSectionTag }) => {
+const DynamicSection = ({ content, type="default", sectionIndex, pageData, isEditingPage, onUpdatePageData, savePageContent, addSection, deleteSection, duplicateSection, addContentItem, updateContentItem, deleteContentItem, sectionTag, editSectionTag }) => {
 
   const onAddSection = (sectionType) => {
     savePageContent(() => addSection(sectionIndex, sectionType))
@@ -118,12 +117,6 @@ const DynamicSection = ({ content, type="default", sectionIndex, pageData, isEdi
 
   const onEditSectionTag = (tag) => {
     savePageContent(() => editSectionTag(sectionIndex, tag))
-  }
-
-  if (selectedTag) {
-    if (sectionTag && sectionTag.id !== selectedTag.id) {
-      return <div></div>
-    }
   }
 
   return(

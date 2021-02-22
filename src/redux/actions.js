@@ -278,7 +278,6 @@ export function saveProfile(profileId, profile) {
 export function removeProfile(profileId) {
   return (dispatch, getState) => {
     const db = firebase.database();
-    const state = getState();
 
     db.ref(`profiles/`).update({[profileId]: null}, error => {
       if (error) {
@@ -290,13 +289,10 @@ export function removeProfile(profileId) {
         );
       }
 
-      let allProfiles = { ...state.page.data.profiles };
-      delete allProfiles[profileId];
-
-      dispatch(setProfiles(allProfiles));
+      dispatch(fetchProfiles());
       dispatch(
         showNotification(
-          "Your changes have been saved. Publish your changes to make them public.",
+          "Your changes have been saved.",
           "success"
         )
       );
@@ -358,7 +354,6 @@ export function saveEvent(eventId, event) {
 export function removeEvent(eventId) {
   return (dispatch, getState) => {
     const db = firebase.database();
-    const state = getState();
 
     db.ref(`events/`).update({[eventId]: null}, error => {
       if (error) {
@@ -373,7 +368,7 @@ export function removeEvent(eventId) {
       dispatch(fetchEvents());
       dispatch(
         showNotification(
-          "Your changes have been saved. Publish your changes to make them public.",
+          "Your changes have been saved.",
           "success"
         )
       );
@@ -438,7 +433,6 @@ export function saveMaterial(materialId, material) {
 export function removeMaterial(materialId) {
   return (dispatch, getState) => {
     const db = firebase.database();
-    const state = getState();
 
     db.ref(`materials/`).update({[materialId]: null}, error => {
       if (error) {
@@ -453,7 +447,7 @@ export function removeMaterial(materialId) {
       dispatch(fetchMaterials());
       dispatch(
         showNotification(
-          "Your changes have been saved. Publish your changes to make them public.",
+          "Your changes have been saved.",
           "success"
         )
       );

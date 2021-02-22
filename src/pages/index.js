@@ -22,7 +22,6 @@ import { uploadImage } from '../firebase/operations';
 
 import Layout from "../layouts/default.js";
 import Section from "../components/common/Section"
-import Gallery from "../components/common/Gallery"
 import ParticipantGallery from "../components/common/ParticipantGallery"
 import ProgramElements from "../components/common/ProgramElements"
 import PastProgramElements from "../components/common/PastProgramElements"
@@ -137,9 +136,9 @@ class HomePage extends React.Component {
                   <Grid item xs={12} md={8}>
                     <form onSubmit={this.onAccessCodeSubmit} autoComplete="off" className="login-form mt-10 mb-6 display-flex align-center justify-right">
                       <div className="help-text text-white text-bold">
-                        <label id="access-code-label"><EditableText id="access-code" content={content["access-code"]} onSave={this.onSave("access-code")} /></label>
+                        <label htmlFor="access-code"><EditableText content={content["access-code"]} onSave={this.onSave("access-code")} /></label>
                       </div>
-                      <input aria-labelledby="access-code-label" type="text" className="ml-2" id="access-code" onChange={e => this.setState({ accessCode: e.currentTarget.value })} />
+                      <input type="text" className="ml-2" id="access-code" name="access-code" onChange={e => this.setState({ accessCode: e.currentTarget.value })} />
                       <input type="submit" value="Enter site" className="btn ml-2" />
                     </form>
                   </Grid>
@@ -155,9 +154,9 @@ class HomePage extends React.Component {
                   <Grid item xs={12}>
                     <form onSubmit={this.onAccessCodeSubmit} autoComplete="off" className="login-form mt-10 mb-6 display-flex flex-column">
                       <div className="help-text text-white text-bold mb-2">
-                        <label id="access-code-label"><EditableText id="access-code" content={content["access-code"]} onSave={this.onSave("access-code")} /></label>
+                        <label htmlFor="access-code"><EditableText content={content["access-code"]} onSave={this.onSave("access-code")} /></label>
                       </div>
-                      <input aria-labelledby="access-code-label" type="text" className="ml-2" id="access-code" onChange={e => this.setState({ accessCode: e.currentTarget.value })} />
+                      <input type="text" className="ml-2" id="access-code" name="access-code" onChange={e => this.setState({ accessCode: e.currentTarget.value })} />
                       <input type="submit" value="Enter site" className="btn ml-2" />
                     </form>
                   </Grid>

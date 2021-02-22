@@ -57,7 +57,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
     timezone: timezone,
   }
 
-  const bgStyle = event["image"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px' } : {}
+  const bgStyle = event["image"] && event["image"]["imageSrc"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px', paddingRight: '20px' } : null
 
   return (
     <Layout>
@@ -68,10 +68,12 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
       <Container maxWidth="md" className="pb-10 pt-10">
         <header>
           <Grid container spacing={2}>
+            {bgStyle &&
             <Grid item xs={12} md={4}>
-              <div className="" style={bgStyle}>
+              <div className="event-image" style={bgStyle}>
               </div>
             </Grid>
+            }
             <Grid item xs={12} md={8}>
               <div className="event-page-title">
                 <h1 className="underline">{event['title']}</h1>
