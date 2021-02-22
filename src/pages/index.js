@@ -281,6 +281,8 @@ class HomePage extends React.Component {
                 <EditableText content={content["gallery-title"]} onSave={this.onSave("gallery-title")} />
               </h2>
               <EditableParagraph classes="font-size-h4" content={content["gallery-description"]} onSave={this.onSave("gallery-description")} />
+              <p className="text-small text-bold">{`Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`}</p>
+
             </Grid>
             <PastProgramElements />
           </Grid>

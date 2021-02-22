@@ -20,9 +20,18 @@ import { uploadImage } from "../../firebase/operations"
 const SessionMaterialsItemEditor = ({ content, onContentChange, classes }) => {
 
   const handleEditorChange = field => item => {
+    console.log({item})
     onContentChange({
       ...content,
-      [field]: item.text ? item.text : item
+      [field]: item
+    });
+  }
+
+  const handleTextEditorChange = field => item => {
+    console.log({item})
+    onContentChange({
+      ...content,
+      [field]: item.text
     });
   }
 
@@ -43,7 +52,7 @@ const SessionMaterialsItemEditor = ({ content, onContentChange, classes }) => {
               <h4 className="text-dark mb-0 mt-0">
                 <PlainTextEditor
                   content={{ text: content["title"]}}
-                  onContentChange={handleEditorChange("title")}
+                  onContentChange={handleTextEditorChange("title")}
                   placeholder="Title"
                 />
               </h4>
@@ -52,7 +61,7 @@ const SessionMaterialsItemEditor = ({ content, onContentChange, classes }) => {
             <div className="author m-2">
               <PlainTextEditor
                 content={{ text: content["author"]}}
-                onContentChange={handleEditorChange("author")}
+                onContentChange={handleTextEditorChange("author")}
                 placeholder="Author"
               />
             </div>
@@ -60,15 +69,15 @@ const SessionMaterialsItemEditor = ({ content, onContentChange, classes }) => {
              <div className="details m-2">
               <PlainTextEditor
                 content={{text: content["details"]}}
-                onContentChange={handleEditorChange("details")}
+                onContentChange={handleTextEditorChange("details")}
                 placeholder="Details"
               />
             </div>
 
             <div className="tag m-2">
               <PlainTextEditor
-                content={content["tag"]}
-                onContentChange={handleEditorChange("tag")}
+                content={{text: content["tag"] || ""}}
+                onContentChange={handleTextEditorChange("tag")}
                 placeholder="Item tag, i.e. Blog post"
               />
             </div>
@@ -97,7 +106,7 @@ const SessionMaterialsItem = props => {
   }
 
   const handleClick = (e) => {
-    if (!content["link"]) {
+    if (!content.link?.link) {
       e.preventDefault()
       if (content["image"]) {
         setIsOpen(true)
@@ -110,6 +119,7 @@ const SessionMaterialsItem = props => {
       Editor={SessionMaterialsItemEditor}
       handleSave={handleSave}
       content={content}
+      isContentClickTarget={false}
       {...props}
     >
       <Card
@@ -121,7 +131,7 @@ const SessionMaterialsItem = props => {
         component="a"
         target="_blank"
         rel="noopener noreferrer"
-        href={content["link"] ? content["link"]["link"] : "#"}
+        href={content["link"] ? content["link"]["link"] : ""}
         onClick={handleClick}
       >
         <div className="position-relative img-container bg-gradient">

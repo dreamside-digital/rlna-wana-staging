@@ -103,7 +103,7 @@ class ProgramElementModal extends React.Component {
 
     const startDate = this.convertDate(newEvent['startDate'], newEvent['timezone'])
     const endDate = this.convertDate(newEvent['endDate'], newEvent['timezone'])
-    const dateForUrl = startDate.toFormat('ddLLyyyy')
+    const dateForUrl = newEvent['startDate'].toFormat('ddLLyyyy')
 
     const id = newEvent.id ? newEvent.id : `event-${Date.now()}`
 

@@ -114,7 +114,6 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
 
         <Grid container>
           <Grid item xs={12}>
-            <h2>Session Materials</h2>
             <SessionMaterials eventId={event.id} />
           </Grid>
         </Grid>

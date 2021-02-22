@@ -110,6 +110,14 @@ class ProgramElements extends React.Component {
           )
         })}
         </BreakpointMasonry>
+        {
+          this.props.isEditingPage &&
+          <ProgramElementModal
+            event={editingEvent}
+            showModal={showModal}
+            closeModal={() => this.setState({ showModal: false, editingEvent: null })}
+          />
+        }
       </div>
     );
   }

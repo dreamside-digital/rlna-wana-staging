@@ -424,6 +424,7 @@ export function saveMaterial(materialId, material) {
       }
 
       dispatch(updateEvent(materialId, material));
+      dispatch(fetchMaterials())
       dispatch(
         showNotification(
           "Your changes have been saved.",
@@ -795,7 +796,11 @@ export function fetchPages() {
 export function toggleEditing() {
   return (dispatch, getState) => {
     const db = firebase.database();
-    const pageId = getState().page.data.id;
+    const pageId = getState().page?.data?.id;
+
+    if (!pageId) {
+      return dispatch(toggleEditingState())
+    }
 
     db.ref(`pages/${pageId}`)
       .once('value')

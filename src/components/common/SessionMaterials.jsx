@@ -44,9 +44,8 @@ class SessionMaterials extends React.Component {
   }
 
   onAddItem = () => {
-    let newContent = { ...this.props.materials }
     const newItemKey = `material-${Date.now()}`
-    newContent[newItemKey] = {
+    const newItem = {
       "title": "",
       "author": "",
       "details": "",
@@ -54,38 +53,45 @@ class SessionMaterials extends React.Component {
       event: this.props.eventId
     }
 
-    this.props.saveMaterial(newItemKey, newContent)
+    this.props.saveMaterial(newItemKey, newItem)
   }
 
   render() {
     const itemsKeys = Object.keys(this.props.materials).reverse()
-    const materialsArr = itemsKeys.map(key => this.props.materials[key])
+    const materialsArr = itemsKeys.map(key => this.props.materials[key]).filter(m => m.event === this.props.eventId)
+
+    if (!materialsArr.length) {
+      return null
+    }
 
     return (
-      <div className={`collection width-100 mt-6 ${this.props.classes}`}>
-        {
-          this.props.isEditingPage &&
-          <div className="row mb-4">
-            <div className="col-12">
-              <Button onClick={this.onAddItem} color="default" variant="contained">Add item</Button>
+      <>
+        <h2>Session Materials</h2>
+        <div className={`collection width-100 mt-6 ${this.props.classes}`}>
+          {
+            this.props.isEditingPage &&
+            <div className="row mb-4">
+              <div className="col-12">
+                <Button onClick={this.onAddItem} color="default" variant="contained">Add item</Button>
+              </div>
             </div>
-          </div>
-        }
-        <BreakpointMasonry>
-          {materialsArr.map((material,index) => {
-            const content = material;
-            return(
-              <SessionMaterialsItem
-                index={index}
-                content={content}
-                onSave={this.onSaveItem(material.id)}
-                onDelete={this.onDeleteItem(material.id)}
-                key={material.id}
-              />
-            )
-          })}
-        </BreakpointMasonry>
-      </div>
+          }
+          <BreakpointMasonry>
+            {materialsArr.map((material,index) => {
+              const content = material;
+              return(
+                <SessionMaterialsItem
+                  index={index}
+                  content={content}
+                  onSave={this.onSaveItem(material.id)}
+                  onDelete={this.onDeleteItem(material.id)}
+                  key={material.id}
+                />
+              )
+            })}
+          </BreakpointMasonry>
+        </div>
+      </>
     );
   }
 }
