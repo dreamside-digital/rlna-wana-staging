@@ -63,33 +63,6 @@ class HomePage extends React.Component {
     this.props.onLoadPageData(initialPageData);
   }
 
-  // componentDidMount() {
-  //   this.loadTwitterFeed()
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.pageData?.content?.hashtags !== prevProps.pageData?.content?.hashtags) {
-  //     this.loadTwitterFeed()
-  //   }
-  // }
-
-  loadTwitterFeed = () => {
-    const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
-    const hashtags = Object.values(content["hashtags"]).filter(t => t?.text)
-    const query = hashtags
-                    .map(t => `tweets[]=${encodeURIComponent(t.text)}`)
-                    .join('&')
-
-    console.log(`Loading Twitter feed for query: ${query}`)
-    fetch(`https://us-central1-rlgna-staging.cloudfunctions.net/tweets?${query}`, {
-      headers: {
-        'Accept': 'application/json'
-      },
-    }).then(response => response.json())
-      .then(data => this.setState({ tweets: data.statuses.filter(t => !t.retweeted_status) }))
-      .catch(e => console.error(e));
-  }
-
   onSave = id => content => {
     this.props.onUpdatePageData("home", id, content);
   };

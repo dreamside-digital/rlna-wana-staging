@@ -60,6 +60,7 @@ const mapStateToProps = state => {
     isEditingPage: state.adminTools.isEditingPage,
     pageData: state.pages.data,
     pages: state.pages.pages,
+    accessGranted: state.adminTools.accessGranted,
   };
 };
 
@@ -77,6 +78,24 @@ class DefaultLayout extends React.Component {
     this.props.setPages(this.props.allPages)
     AOS.init()
   }
+
+  // requestPermission = async () => {
+  //   const permission = await window.Notification.requestPermission()
+  //   if (permission === "granted") {
+  //     var n = new window.Notification("Hi Sharon!");
+  //   }
+  //   return permission
+  // }
+
+  // componentDidUpdate(prevProps) {
+  //   if (!prevProps.accessGranted && this.props.accessGranted) {
+  //     console.log("let's try notifications!")
+  //     const isNotificationsSupported = Boolean('Notification' in window)
+  //     if (isNotificationsSupported) {
+  //       const permission = this.requestPermission()
+  //     }
+  //   }
+  // }
 
   render() {
     const { props } = this;

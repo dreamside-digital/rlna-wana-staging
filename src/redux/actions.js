@@ -233,7 +233,10 @@ export function fetchProfiles() {
     db.ref(`profiles`)
       .once('value')
       .then(snap => {
-        dispatch(setProfiles(snap.val()));
+        const profiles = snap.val()
+        if (profiles) {
+          dispatch(setProfiles(profiles));
+        }
       })
       .catch(error => {
         console.log("Error fetching profiles", error)
@@ -309,7 +312,10 @@ export function fetchEvents() {
     db.ref(`events`)
       .once('value')
       .then(snap => {
-        dispatch(setEvents(snap.val()));
+        const events = snap.val()
+        if (events) {
+          dispatch(setEvents(events));
+        }
       })
       .catch(error => {
         console.log("Error fetching events", error)
@@ -387,7 +393,10 @@ export function fetchMaterials() {
     db.ref(`materials`)
       .once('value')
       .then(snap => {
-        dispatch(setMaterials(snap.val()));
+        const materials = snap.val()
+        if (materials) {
+          dispatch(setMaterials(materials));
+        }
       })
       .catch(error => {
         console.log("Error fetching session materials", error)
