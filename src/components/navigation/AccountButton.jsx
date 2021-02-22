@@ -167,19 +167,6 @@ class AccountButton extends React.Component {
               </MenuItem>
             )}
 
-            {props.allowEditing && stagingFirebase && (
-              <MenuItem
-                divider
-                disabled={process.env.GATSBY_FIREBASE_ENVIRONMENT !== 'production'}
-                onClick={() => {
-                  props.deployWithStagingContent();
-                  closeMenu();
-                }}
-              >
-                Publish from staging
-              </MenuItem>
-            )}
-
             <MenuItem
               onClick={() => {
                 logout();
