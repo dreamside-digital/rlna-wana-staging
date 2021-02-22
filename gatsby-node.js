@@ -37,6 +37,7 @@ exports.createPages = ({ graphql, actions }) => {
                   title
                 }
                 video
+                iframe
                 host
               }
             }

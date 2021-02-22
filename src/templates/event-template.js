@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import { DateTime } from "luxon";
 import AddToCalendarHOC from 'react-add-to-calendar-hoc';
 import VideoEmbed from '../components/common/VideoEmbed';
+import IframeEmbed from '../components/common/IframeEmbed';
 import SessionMaterials from '../components/common/SessionMaterials';
 
 import Layout from "../layouts/default.js";
@@ -111,6 +112,10 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
           </Grid>
           <Grid item xs={12}>
             <VideoEmbed url={event['video']} />
+          </Grid>
+
+          <Grid item xs={12}>
+            <IframeEmbed src={event['iframe']} />
           </Grid>
         </Grid>
 

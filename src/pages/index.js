@@ -9,7 +9,6 @@ import {
   EditableParagraph,
   EditableBackgroundImage,
   EditableEmbeddedIframe,
-  EditableLink
 } from "react-easy-editables";
 
 import {
@@ -205,11 +204,6 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
-              <EditableLink
-                classes="btn btn-primary btn-lg mt-3"
-                content={content["intro-link"]}
-                onSave={this.onSave("intro-link")}
-              />
             </Grid>
           </Grid>
         </Section>
@@ -226,7 +220,7 @@ class HomePage extends React.Component {
           </Grid>
         </Section>
 
-        <Section id="connecting-tree" className="bg-white text-black">
+{/*        <Section id="connecting-tree" className="bg-white text-black">
           <Grid container>
             <Grid item xs={12} md={8}>
               <div className="mb-4">
@@ -240,7 +234,7 @@ class HomePage extends React.Component {
             </Grid>
             <EditableEmbeddedIframe content={content["connecting-tree"]} onSave={this.onSave("connecting-tree")} />
           </Grid>
-        </Section>
+        </Section>*/}
 
         <Section id="participants">
           <Grid container>

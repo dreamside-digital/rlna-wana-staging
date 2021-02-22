@@ -28,6 +28,8 @@ const VideoEmbed = ({ url }) => {
       width: "100%",
       maxWidth: "100%",
       marginTop: "20px",
+      marginBottom: "30px",
+      background: "linear-gradient(100deg, rgba(195, 69, 128, 0.5) 0%, rgba(236, 102, 104, 0.5) 100%)",
     },
     iframe: {
       position: "absolute",

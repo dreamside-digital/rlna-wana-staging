@@ -39,6 +39,7 @@ const emptyEvent = {
   "linkText": "Event link",
   "description": "",
   "video": "",
+  "iframe": "",
   "host": "",
   image: {},
 }
@@ -147,6 +148,7 @@ class ProgramElementModal extends React.Component {
     } = this;
     const { showModal, closeModal } = this.props;
     const {
+      id,
       title,
       startDate,
       endDate,
@@ -157,7 +159,7 @@ class ProgramElementModal extends React.Component {
       image,
       video,
       host,
-      id
+      iframe
     } = this.state.newEvent;
 
     return (
@@ -285,6 +287,18 @@ class ProgramElementModal extends React.Component {
             onChange={handleChange('video')}
             variant="outlined"
             placeholder="https://vimeo.com/511895527"
+          />
+          <TextField
+            value={iframe}
+            margin="dense"
+            id="iframe"
+            label="Alternate iframe source (optional)"
+            helperText="In the iframe embed code, look for the 'src' attribute and copy the URL."
+            type="text"
+            fullWidth
+            onChange={handleChange('iframe')}
+            variant="outlined"
+            placeholder="https://embed.tlk.io/responsible-leaders"
           />
         </DialogContent>
         <DialogActions>
