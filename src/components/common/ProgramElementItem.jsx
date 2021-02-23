@@ -51,7 +51,7 @@ const ProgramElementItem = props => {
   const formattedEndDate = eventEndDate && eventEndDate !== formattedStartDate ? `${eventEndDate}, ` : ''
   const eventStart = startDate.toLocaleString(DateTime.TIME_SIMPLE)
   const eventEnd = endDate.toLocaleString(DateTime.TIME_SIMPLE)
-  const bgStyle = content["image"] ? {background: `url(${content["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%' } : {}
+  const bgStyle = content["image"] ? {background: `url(${content["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', filter: 'grayscale(1)' } : {}
 
   return (
     <div className={`program-box mt-5 ${isCurrent ? 'is-large' : ''}`} data-aos="fade-right">
@@ -88,7 +88,7 @@ ProgramElementItem.defaultProps = {
   "startDate": new Date().toISOString(),
   "endDate": new Date().toISOString(),
   "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-  "url": "/",
+  "url": "",
   "linkText": "Event link",
   "description": "",
   "video": "",
