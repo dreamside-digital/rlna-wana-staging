@@ -58,7 +58,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
     timezone: timezone,
   }
 
-  const bgStyle = event["image"] && event["image"]["imageSrc"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px', paddingRight: '20px', filter: 'grayscale(1)' } : null
+  const bgStyle = event["image"] && event["image"]["imageSrc"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px', paddingRight: '20px' } : null
 
   return (
     <Layout>
