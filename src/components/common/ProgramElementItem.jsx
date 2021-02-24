@@ -88,7 +88,7 @@ ProgramElementItem.defaultProps = {
   "startDate": new Date().toISOString(),
   "endDate": new Date().toISOString(),
   "timezone": Intl.DateTimeFormat().resolvedOptions().timeZone,
-  "url": "/",
+  "url": "",
   "linkText": "Event link",
   "description": "",
   "video": "",

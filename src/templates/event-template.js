@@ -101,9 +101,15 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
             {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
             <p>
               <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
-              <a href={event['url']} target="_blank" rel="noopener noreferrer">
-                {event['url']}
-              </a>
+              {
+                Boolean(event['url']) ? (
+                <a href={event['url']} target="_blank" rel="noopener noreferrer">
+                  {event['url']}
+                </a>
+                ) : (
+                  <span>More information will follow</span>
+                )
+              }
             </p>
             <p>
               <span className="text-bold mr-1">Original time:</span>

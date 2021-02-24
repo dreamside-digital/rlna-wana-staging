@@ -265,7 +265,6 @@ class ProgramElementModal extends React.Component {
             fullWidth
             onChange={handleChange('url')}
             variant="outlined"
-            required
           />
           <TextField
             value={linkText}
@@ -326,7 +325,7 @@ class ProgramElementModal extends React.Component {
                   color="primary"
                   variant="contained"
                   style={{borderRadius:0}}
-                  disabled={!title || !url || !startDate || !endDate || !timezone}
+                  disabled={!title || !startDate || !endDate || !timezone}
                   disableElevation>
                   Save
                 </Button>
