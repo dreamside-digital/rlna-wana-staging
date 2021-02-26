@@ -5,16 +5,22 @@ import Grid from "@material-ui/core/Grid";
 import TwitterIcon from '@material-ui/icons/Twitter';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LanguageIcon from '@material-ui/icons/Language';
+import ensureAbsoluteUrl from '../../utils/ensureAbsoluteUrl';
+
+const DEFAULT_IMAGE = 'https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=b9e6b31e-c763-497f-aec9-73e768ddf8c5'
 
 const ParticipantGalleryItem = ({ id, content={} }) => {
   const [ isOpen, setIsOpen ] = useState(false)
+  const profileImage = content.image?.imageSrc || DEFAULT_IMAGE
+  console.log('content.image', content.image)
+  console.log({profileImage})
 
   return (
     <>
       <button className="participant" onClick={() => setIsOpen(true)}>
         <div className="participant-image">
           <div className="participant-image-container">
-            <img src={content.image?.imageSrc} alt={content.image?.title}/>
+            <img src={profileImage} alt={content.image?.title}/>
           </div>
         </div>
         <div className="participant-name pretty-link">
@@ -29,7 +35,7 @@ const ParticipantGalleryItem = ({ id, content={} }) => {
           <Grid container className="position-relative" alignItems="center">
             <Grid item xs={12} sm={4}>
               <div className="participant-image-lg">
-                <img src={content.image?.imageSrc} alt={content.image?.title}/>
+                <img src={profileImage} alt={content.image?.title}/>
               </div>
             </Grid>
             <Grid item xs={12} sm={8}>
@@ -41,19 +47,19 @@ const ParticipantGalleryItem = ({ id, content={} }) => {
                 <div className="links">
                   {
                     content.linkedin &&
-                    <a href={content.linkedin} target="_blank" rel="noopener noreferrer">
+                    <a href={ensureAbsoluteUrl(content.linkedin)} target="_blank" rel="noopener noreferrer">
                       <LinkedInIcon />
                     </a>
                   }
                   {
                     content.twitter &&
-                    <a href={content.twitter} target="_blank" rel="noopener noreferrer">
+                    <a href={ensureAbsoluteUrl(content.twitter)} target="_blank" rel="noopener noreferrer">
                       <TwitterIcon />
                     </a>
                   }
                   {
                     content.website &&
-                    <a href={content.website} target="_blank" rel="noopener noreferrer">
+                    <a href={ensureAbsoluteUrl(content.website)} target="_blank" rel="noopener noreferrer">
                       <LanguageIcon />
                     </a>
                   }
@@ -63,14 +69,28 @@ const ParticipantGalleryItem = ({ id, content={} }) => {
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              <h4>What projects/activities do you lead or are you involved in that express your Responsible Leadership?</h4>
-              <div>{content.question1}</div>
+              {content.question1 &&
+                <>
+                  <h4>What projects/activities do you lead or are you involved in that express your Responsible Leadership?</h4>
+                  <div>{content.question1}</div>
+                </>
+              }
 
-              <h4>What SDG(s) do these projects or initiatives address?</h4>
-              <div>{content.question2}</div>
+              {
+                content.question2 &&
+                <>
+                  <h4>What SDG(s) do these projects or initiatives address?</h4>
+                  <div>{content.question2}</div>
+                </>
+              }
 
-              <h4>What are you passionate about? And/or: What are your hobbies?</h4>
-              <div>{content.question3}</div>
+              {
+                content.question3 &&
+                <>
+                  <h4>What are you passionate about? And/or: What are your hobbies?</h4>
+                  <div>{content.question3}</div>
+                </>
+              }
             </Grid>
           </Grid>
 

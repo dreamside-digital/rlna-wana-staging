@@ -609,6 +609,31 @@ body .nl-page {
     height: 190px;
     margin: 0 auto 20px;
 
+    .participant-image-container {
+      width: 180px;
+      height: 180px;
+      border-radius: 100px;
+      object-fit: cover;
+      margin: 0 auto;
+      display: block;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      overflow: hidden;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        min-height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+        filter: grayscale(100%);
+      }
+    }
+
     &:after {
       content: '';
       position: absolute;
@@ -622,7 +647,6 @@ body .nl-page {
       z-index: 2;
       filter: opacity(100%);
       transition: all 0.3s ease;
-      /*background: linear-gradient(100deg, transparentize($primary-color, 0.5) 0%, transparentize($secondary-color, 0.5) 100%);*/
     }
 
     &:before {
@@ -639,21 +663,6 @@ body .nl-page {
     }
   }
 
-  .participant-image img {
-    width: 180px;
-    height: 180px;
-    border-radius: 100px;
-    object-fit: cover;
-    margin: 0 auto;
-    display: block;
-    position: absolute;
-    transition: all 0.5s ease-in-out;
-    filter: grayscale(100%);
-    top: 0;
-    left: 0;
-    z-index: 2;
-    /*background: linear-gradient(100deg, transparentize($primary-color, 0.5) 0%, transparentize($secondary-color, 0.5) 100%);*/
-  }
 
   &:hover, &:focus {
     .participant-image {
@@ -679,20 +688,6 @@ body .nl-page {
       width: 100%;
       background-color: $secondary-color;
     }
-  }
-
-  .participant-image-container {
-    width: 180px;
-    height: 180px;
-    border-radius: 100px;
-    object-fit: cover;
-    margin: 0 auto;
-    display: block;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    overflow: hidden;
-
   }
 
   .participant-name {
