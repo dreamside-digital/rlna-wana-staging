@@ -183,6 +183,7 @@ class ParticipantModal extends React.Component {
             fullWidth
             onChange={handleChange('twitter')}
             variant="outlined"
+            placeholder="https://twitter.com/bmwfoundation"
           />
           <TextField
             value={linkedin || ''}
@@ -193,6 +194,7 @@ class ParticipantModal extends React.Component {
             fullWidth
             onChange={handleChange('linkedin')}
             variant="outlined"
+            placeholder="https://www.linkedin.com/company/bmw-foundation"
           />
           <TextField
             value={website || ''}
@@ -203,6 +205,7 @@ class ParticipantModal extends React.Component {
             fullWidth
             onChange={handleChange('website')}
             variant="outlined"
+            placeholder="https://bmw-foundation.org"
           />
           <TextField
             value={question1 || ''}

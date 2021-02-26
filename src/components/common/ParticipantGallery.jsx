@@ -10,7 +10,7 @@ import {EditablesContext, EditorWrapper, theme} from "react-easy-editables";
 import Grid from "@material-ui/core/Grid";
 import { fetchProfiles } from "../../redux/actions"
 
-const ITEM_NUMBER = 10
+const ITEM_NUMBER = 12
 
 const muiTheme = createMuiTheme({
   palette: {
