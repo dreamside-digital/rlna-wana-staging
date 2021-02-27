@@ -23,7 +23,6 @@ export function deleteAccount(user) {
 
       const db = firebase.database();
       const user = firebase.auth().currentUser;
-      console.log("user", user)
 
       db.ref(`users/${user.uid}`).set(null, error => {
         if (error) {
@@ -249,7 +248,6 @@ export function updateProfile(id, profile) {
 }
 
 export function setProfiles(profiles) {
-  console.log({profiles})
   return { type: "SET_PROFILES", profiles }
 }
 
@@ -328,7 +326,6 @@ export function updateEvent(id, event) {
 }
 
 export function setEvents(events) {
-  console.log({events})
   return { type: "SET_EVENTS", events }
 }
 
@@ -409,7 +406,6 @@ export function updateMaterial(id, material) {
 }
 
 export function setMaterials(materials) {
-  console.log({materials})
   return { type: "SET_MATERIALS", materials }
 }
 

@@ -10,6 +10,11 @@ import AccountButton from "../components/navigation/AccountButton"
 import Footer from "../components/navigation/Footer"
 import Header from "../components/navigation/Header"
 import CreatePageModal from "../components/editing/CreatePageModal";
+import {
+  requestPermissionForNotifications,
+  playNotifications,
+  notificationPermission
+} from '../utils/notifications';
 
 import {
   EditablesContext,
@@ -82,39 +87,21 @@ const mapDispatchToProps = dispatch => {
 class DefaultLayout extends React.Component {
   componentDidMount() {
     this.props.setPages(this.props.allPages)
-    this.props.fetchBrowserNotifications()
     AOS.init()
-  }
-
-  requestPermissionForNotifications = async () => {
-    const permission = await window.Notification.requestPermission()
-    if (permission === "granted") {
-      var n = new window.Notification("Hi Sharon!");
+    if (notificationPermission() !== "denied") {
+      this.props.fetchBrowserNotifications()
     }
-    return permission
-  }
-
-  playNotifications = () => {
-    const notifArr = Object.keys(this.props.browserNotifications).map(k => this.props.browserNotifications[k])
-    notifArr.forEach(notif => {
-      const n = new window.Notification(notif.message, { image: notif.image, icon: "https://connect-wana.online/icon.png" });
-      n.addEventListener('click', () => {
-        window.open(notif.url);
-      })
-    })
   }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.accessGranted && this.props.accessGranted) {
-      const isNotificationsSupported = Boolean('Notification' in window)
-      if (isNotificationsSupported) {
-        const permission = this.requestPermissionForNotifications()
-      }
-      this.playNotifications()
-    }
+      const permission = notificationPermission()
 
-    if (prevProps.browserNotifications !== this.props.browserNotifications) {
-      this.playNotifications()
+      if (permission === "granted") {
+        playNotifications()
+      } else if (permission === "default") {
+        setTimeout(requestPermissionForNotifications, 4000)
+      }
     }
   }
 

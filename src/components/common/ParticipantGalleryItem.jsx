@@ -12,8 +12,6 @@ const DEFAULT_IMAGE = 'https://firebasestorage.googleapis.com/v0/b/rlna-wana-sta
 const ParticipantGalleryItem = ({ id, content={} }) => {
   const [ isOpen, setIsOpen ] = useState(false)
   const profileImage = content.image?.imageSrc || DEFAULT_IMAGE
-  console.log('content.image', content.image)
-  console.log({profileImage})
 
   return (
     <>
