@@ -472,6 +472,7 @@ export function fetchBrowserNotifications() {
       .once('value')
       .then(snap => {
         const notifs = snap.val()
+        console.log({ notifs })
         if (notifs) {
           dispatch(setBrowserNotifications(notifs));
         }

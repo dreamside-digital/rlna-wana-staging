@@ -1,6 +1,6 @@
 import firebase from "../firebase/init";
 
-const MAX_NOTIFICATION_VIEWS = 3
+const MAX_NOTIFICATION_VIEWS = 100
 
 const isNotificationsSupported = () => Boolean('Notification' in window)
 
@@ -28,52 +28,64 @@ const requestPermissionForNotifications = async () => {
   }
 }
 
-const handleClose = (id) => {
-  const storedQueue = window.localStorage.getItem('connect-wana-notifications')
-  let notificationQueue = storedQueue ? JSON.parse(storedQueue) : {}
-  const newQueue = {
-    ...notificationQueue,
-    [id]: {
-      ...notificationQueue[id],
-      closed: true
+const playNotification = (index, notificationsToPlay, queue) => {
+  console.log({index})
+  if (index === notificationsToPlay.length) {
+    console.log("queue to save", queue)
+    return window.localStorage.setItem('connect-wana-notifications', JSON.stringify(queue))
+  }
+
+  const notification = notificationsToPlay[index];
+
+  if (queue[notification.id]) {
+    queue[notification.id].displayCount++
+  } else {
+    queue[notification.id] = {
+      displayCount: 1,
+      closed: false
     }
   }
-  window.localStorage.setItem('connect-wana-notifications', JSON.stringify(newQueue))
+
+  window.localStorage.setItem('connect-wana-notifications', JSON.stringify(queue))
+
+  const n = new window.Notification(notification.title, {
+    icon: "https://connect-wana.online/icon.png",
+    body: notification.message,
+    // requireInteraction: true,
+  });
+
+  n.addEventListener('click', () => {
+    window.open(notification.url);
+    n.close()
+  })
+
+  n.addEventListener('close', () => {
+    queue[notification.id] = {
+      ...queue[notification.id],
+      closed: true
+    }
+    playNotification(index+1, notificationsToPlay, queue)
+  })
 }
 
 const playNotifications = async () => {
   const allNotifications = await fetchBrowserNotifications()
-  const notifArr = Object.keys(allNotifications).map(k => allNotifications[k])
+
+  if (!allNotifications) return false;
+
   const storedQueue = window.localStorage.getItem('connect-wana-notifications')
   let notificationQueue = storedQueue ? JSON.parse(storedQueue) : {}
 
-  notifArr.forEach(notif => {
-    const notificationStatus = notificationQueue[notif.id]
-    if (!notificationStatus || (notificationStatus.displayCount <= MAX_NOTIFICATION_VIEWS && !notificationStatus.closed)) {
-      const n = new window.Notification(notif.message, { image: notif.image, icon: "https://connect-wana.online/icon.png" });
+  const notificationsToPlay = Object.keys(allNotifications)
+    .map(k => allNotifications[k])
+    .filter(n => {
+      const notificationStatus = notificationQueue[n.id]
+      return (n.active && (!notificationStatus || (notificationStatus.displayCount <= MAX_NOTIFICATION_VIEWS && !notificationStatus.closed)))
+    })
 
-      n.addEventListener('click', () => {
-        window.open(notif.url);
-      })
+  console.log({notificationsToPlay})
 
-      n.addEventListener('close', () => {
-        handleClose(notif.id)
-      })
-
-      if (notificationQueue[notif.id]) {
-        notificationQueue[notif.id].displayCount++
-      } else {
-        notificationQueue[notif.id] = {
-          displayCount: 1,
-          closed: false
-        }
-      }
-    }
-  })
-
-  console.log("notificationQueue", notificationQueue)
-
-  window.localStorage.setItem('connect-wana-notifications', JSON.stringify(notificationQueue))
+  playNotification(0, notificationsToPlay, notificationQueue)
 }
 
 

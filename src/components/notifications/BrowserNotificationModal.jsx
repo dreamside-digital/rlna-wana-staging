@@ -7,7 +7,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import ImageUpload from '../editing/ImageUpload';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Checkbox from '@material-ui/core/Checkbox';
 import {uploadImage} from "../../firebase/operations";
 import { saveBrowserNotification, removeBrowserNotification } from '../../redux/actions'
 
@@ -23,9 +25,10 @@ const mapDispatchToProps = dispatch => {
 };
 
 const emptyItem = {
-    image: {},
+    title: "",
     message: "",
-    url: ""
+    url: "",
+    active: false
   }
 
 class BrowserNotificationModal extends React.Component {
@@ -49,8 +52,9 @@ class BrowserNotificationModal extends React.Component {
     this.setState({ newItem: {...this.state.newItem, [key]: value} })
   }
 
-  handleImageChange = key => image => {
-    this.setState({ newItem: {...this.state.newItem, [key]: image} })
+  handleCheckboxChange = key => event => {
+    const value = event.currentTarget.checked
+    this.setState({ newItem: {...this.state.newItem, [key]: value} })
   }
 
   handleDescChange = key => desc => {
@@ -79,24 +83,30 @@ class BrowserNotificationModal extends React.Component {
   }
 
   render() {
-    const {handleChange, handleImageChange, handleSave, handleDelete} = this;
+    const {handleChange, handleCheckboxChange, handleSave, handleDelete} = this;
     const { showModal, closeModal } = this.props;
     const {
-      image,
+      title,
       message,
       url,
-      id
+      id,
+      active
     } = this.state.newItem;
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
         <DialogTitle id="form-dialog-title">{id ? 'Edit Notification' : 'Create a Notification' }</DialogTitle>
         <DialogContent>
-          <ImageUpload
-            content={image}
-            onContentChange={handleImageChange('image')}
-            uploadImage={uploadImage}
-            label={'Upload image (optional)'}
+          <TextField
+            value={title || ''}
+            margin="dense"
+            id="title"
+            label="Title"
+            type="text"
+            fullWidth
+            onChange={handleChange('title')}
+            variant="outlined"
+            required
           />
           <TextField
             value={message || ''}
@@ -118,7 +128,12 @@ class BrowserNotificationModal extends React.Component {
             fullWidth
             onChange={handleChange('url')}
             variant="outlined"
-            required
+          />
+          <FormControlLabel
+            control={
+              <Checkbox checked={active} onChange={handleCheckboxChange('active')} value="active" required />
+            }
+            label={<p>Show notification</p>}
           />
         </DialogContent>
         <DialogActions>
@@ -146,6 +161,7 @@ class BrowserNotificationModal extends React.Component {
                   color="primary"
                   variant="contained"
                   style={{borderRadius:0}}
+                  disabled={!title || !message}
                   disableElevation>
                   Save
                 </Button>

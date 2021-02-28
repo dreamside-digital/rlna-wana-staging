@@ -4,12 +4,18 @@ import { appReducers } from './reducers'
 import thunk from 'redux-thunk';
 
 const initialState = {
-  adminTools: { isLoggedIn: false, isEditingPage: false, accessGranted: false, users: [], browserNotifications: {} },
+  adminTools: {
+    isLoggedIn: false,
+    isEditingPage: false,
+    accessGranted: false,
+    users: [],
+    browserNotifications: {}
+  },
   navigation: {},
   pages: { pages: {}, orderedPages: [] },
   profiles: { profiles: {} },
   events: { events: {} },
-  materials: { materials: {} },
+  materials: { materials: {} }
 }
 
 const createStore = () => reduxCreateStore(appReducers, initialState, applyMiddleware(thunk))
