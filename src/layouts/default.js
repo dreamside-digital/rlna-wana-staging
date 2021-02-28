@@ -100,7 +100,7 @@ class DefaultLayout extends React.Component {
       if (permission === "granted") {
         playNotifications()
       } else if (permission === "default") {
-        setTimeout(requestPermissionForNotifications, 4000)
+        setTimeout(requestPermissionForNotifications, 5000)
       }
     }
   }

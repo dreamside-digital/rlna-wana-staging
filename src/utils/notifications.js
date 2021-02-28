@@ -1,6 +1,6 @@
 import firebase from "../firebase/init";
 
-const MAX_NOTIFICATION_VIEWS = 100
+const MAX_NOTIFICATION_VIEWS = 3
 
 const isNotificationsSupported = () => Boolean('Notification' in window)
 

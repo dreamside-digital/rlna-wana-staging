@@ -17,6 +17,12 @@ import {
   validateAccessCode,
 } from "../redux/actions";
 
+import {
+  requestPermissionForNotifications,
+  playNotifications,
+  notificationPermission
+} from '../utils/notifications';
+
 import { uploadImage } from '../firebase/operations';
 
 import Layout from "../layouts/default.js";
@@ -75,7 +81,6 @@ class HomePage extends React.Component {
 
   render() {
     const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
-
     // ---------- LOCK SCREEN ------------
 
     if (!this.props.accessGranted) {
@@ -177,6 +182,10 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
+              {
+                notificationPermission() === 'default' &&
+                <button className="btn btn-primary mt-2 mb-2" onClick={requestPermissionForNotifications}>Get notified about community activity</button>
+              }
             </Grid>
           </Grid>
         </Section>
