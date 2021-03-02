@@ -67,7 +67,7 @@ class Header extends React.Component {
       <div className={`menu animate__animated animate__slideInDown ${this.state.menuIsOpen ? 'is-active' : ''}`}>
         <a className='menu-item' href="#intro" onClick={this.handleClick}><EditableText content={content["nav-link-text-1"]} onSave={this.onSave("nav-link-text-1")} /></a>
         <a className='menu-item' href="#program-elements" onClick={this.handleClick}><EditableText content={content["nav-link-text-2"]} onSave={this.onSave("nav-link-text-2")} /></a>
-        {/*<a className='menu-item' href="#connecting-tree" onClick={this.handleClick}><EditableText content={content["nav-link-text-3"]} onSave={this.onSave("nav-link-text-3")} /></a>*/}
+        <a className='menu-item' href="#connecting-tree" onClick={this.handleClick}><EditableText content={content["nav-link-text-3"]} onSave={this.onSave("nav-link-text-3")} /></a>
         <a className='menu-item' href="#participants" onClick={this.handleClick}><EditableText content={content["nav-link-text-4"]} onSave={this.onSave("nav-link-text-4")} /></a>
         <a className='menu-item' href="#connect" onClick={this.handleClick}><EditableText content={content["nav-link-text-5"]} onSave={this.onSave("nav-link-text-5")} /></a>
         <a className='menu-item' href="#session-materials" onClick={this.handleClick}><EditableText content={content["nav-link-text-6"]} onSave={this.onSave("nav-link-text-6")} /></a>
@@ -90,7 +90,7 @@ class Header extends React.Component {
             <a className='navbar-item menu-item' href="#menu" onClick={this.toggleMenu}>{this.state.menuIsOpen ? 'Close' : 'Menu'}</a>
             <a className='navbar-item' href="#intro" onClick={this.handleClick}><EditableText content={content["nav-link-text-1"]} onSave={this.onSave("nav-link-text-1")} /></a>
             <a className='navbar-item' href="#program-elements" onClick={this.handleClick}><EditableText content={content["nav-link-text-2"]} onSave={this.onSave("nav-link-text-2")} /></a>
-            {/*<a className='navbar-item' href="#connecting-tree" onClick={this.handleClick}><EditableText content={content["nav-link-text-3"]} onSave={this.onSave("nav-link-text-3")} /></a>*/}
+            <a className='navbar-item' href="#connecting-tree" onClick={this.handleClick}><EditableText content={content["nav-link-text-3"]} onSave={this.onSave("nav-link-text-3")} /></a>
             <a className='navbar-item' href="#participants" onClick={this.handleClick}><EditableText content={content["nav-link-text-4"]} onSave={this.onSave("nav-link-text-4")} /></a>
             <a className='navbar-item' href="#connect" onClick={this.handleClick}><EditableText content={content["nav-link-text-5"]} onSave={this.onSave("nav-link-text-5")} /></a>
             <a className='navbar-item' href="#session-materials" onClick={this.handleClick}><EditableText content={content["nav-link-text-6"]} onSave={this.onSave("nav-link-text-6")} /></a>
