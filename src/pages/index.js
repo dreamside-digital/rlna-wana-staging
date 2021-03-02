@@ -198,8 +198,7 @@ class HomePage extends React.Component {
             <ProgramElements />
           </Grid>
         </Section>
-
-{/*        <Section id="connecting-tree" className="bg-white text-black">
+        <Section id="connecting-tree" className="bg-white text-black">
           <Grid container>
             <Grid item xs={12} md={8}>
               <div className="mb-4">
@@ -213,7 +212,7 @@ class HomePage extends React.Component {
             </Grid>
             <EditableEmbeddedIframe content={content["connecting-tree"]} onSave={this.onSave("connecting-tree")} />
           </Grid>
-        </Section>*/}
+        </Section>
 
         <Section id="participants">
           <Grid container>

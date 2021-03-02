@@ -86,7 +86,7 @@ class ParticipantGallery extends React.Component {
         <Grid container className="position-relative mt-6">
           {profilesToShow.map((profile,index) => {
             return (
-              <Grid item xs={6} sm={4} md={3} lg={2} key={profile.id} style={{ display: 'flex', justifyContent: 'center' }}>
+              <Grid item xs={6} sm={4} md={3} lg={2} key={profile.id} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', }}>
                 {
                   this.props.isEditingPage &&
                   <ThemeProvider theme={muiTheme}>
