@@ -182,10 +182,7 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
-              {
-                notificationPermission() === 'default' &&
                 <button className="btn btn-primary mt-2 mb-2" onClick={requestPermissionForNotifications}>Get notified about community activity</button>
-              }
             </Grid>
           </Grid>
         </Section>

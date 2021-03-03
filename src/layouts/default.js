@@ -13,8 +13,11 @@ import CreatePageModal from "../components/editing/CreatePageModal";
 import {
   requestPermissionForNotifications,
   playNotifications,
-  notificationPermission
+  notificationPermission,
+  initializeFirebaseMessaging
 } from '../utils/notifications';
+
+import firebase from '../firebase/init'
 
 import {
   EditablesContext,
@@ -95,13 +98,7 @@ class DefaultLayout extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.accessGranted && this.props.accessGranted) {
-      const permission = notificationPermission()
-
-      if (permission === "granted") {
-        playNotifications()
-      } else if (permission === "default") {
-        setTimeout(requestPermissionForNotifications, 5000)
-      }
+      initializeFirebaseMessaging()
     }
   }
 

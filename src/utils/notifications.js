@@ -8,6 +8,41 @@ const notificationPermission = () => {
   return window.localStorage.getItem('connect-wana-notifications-permission') || "default"
 }
 
+const createNotification = (notification) => {
+  if (!notification) return;
+  const n = new window.Notification(notification.title, {
+    icon: notification.icon,
+    body: notification.body,
+    // requireInteraction: true,
+  });
+
+  n.addEventListener('click', () => {
+    window.open(notification.click_action);
+    n.close()
+  })
+}
+
+const initializeFirebaseMessaging = () => {
+  console.log("initializeing firebase messaging in browser")
+  firebase.messaging().getToken().then((currentToken) => {
+    if (currentToken) {
+      console.log(currentToken)
+      firebase.messaging().onMessage((payload) => {
+        console.log(payload)
+        if (payload.notification) {
+          createNotification(payload.notification)
+        }
+      }, e => {
+        console.log(e)
+      })
+    } else {
+      // Show permission request.
+      console.log(
+        'No Instance ID token available. Request permission to generate one.')
+    }
+  })
+}
+
 const fetchBrowserNotifications = async() => {
   const db = firebase.database();
 
@@ -16,15 +51,14 @@ const fetchBrowserNotifications = async() => {
 }
 
 const requestPermissionForNotifications = async () => {
-  if (!isNotificationsSupported()) {
-    return
-  }
+  try {
+    const messaging = firebase.messaging();
+    const token = await messaging.getToken();
+    console.log({token});
 
-  const permission = await window.Notification.requestPermission()
-  window.localStorage.setItem('connect-wana-notifications-permission', permission)
-
-  if (permission === "granted") {
-    playNotifications()
+    return token;
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -88,9 +122,29 @@ const playNotifications = async () => {
   playNotification(0, notificationsToPlay, notificationQueue)
 }
 
+const getRegistrationToken = () => {
+  console.log("getting registration token")
+  const messaging = firebase.messaging();
+  messaging.getToken({ vapidKey: 'BFETNTM1gtRZcwkneelR_kfi1L1iIRC65KSVisO1s8mqvGGgXc0dPwTrJZUXZHZ28IvuZ0wVcKQRZ-5heeFtCwQ' }).then((currentToken) => {
+    if (currentToken) {
+      console.log({currentToken})
+      // Send the token to your server and update the UI if necessary
+      // ...
+    } else {
+      // Show permission request UI
+      console.log('No registration token available. Request permission to generate one.');
+      // ...
+    }
+  }).catch((err) => {
+    console.log('An error occurred while retrieving token. ', err);
+    // ...
+  });
+}
+
 
 export {
   requestPermissionForNotifications,
   playNotifications,
-  notificationPermission
+  notificationPermission,
+  initializeFirebaseMessaging
 }

@@ -6692,6 +6692,11 @@ gatsby-page-utils@^0.0.35:
     lodash "^4.17.15"
     micromatch "^3.1.10"
 
+gatsby-plugin-firebase-messaging@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-firebase-messaging/-/gatsby-plugin-firebase-messaging-1.1.0.tgz#39bcf8dc6c2abce83ec8c432e7b73597104f7911"
+  integrity sha512-DFvGFrvGV+uhJMDVC3ufb/COfjC/d5enPK5SgIiYARM9X5VocihlIKhy1OzKGI+fNxbsxO+b4y1XaG4JWtuxRQ==
+
 gatsby-plugin-manifest@^2.2.31:
   version "2.2.33"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.2.33.tgz#4c9dafaffef8df452f863bc0af56f36c99b15388"

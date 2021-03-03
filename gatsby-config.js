@@ -62,6 +62,24 @@ module.exports = {
       options: {
         precision: 8,
       },
-    }
+    },
+    {
+    resolve: `gatsby-plugin-firebase-messaging`,
+      options: {
+        //required unless removeFirebaseServiceWorker == true
+        config: {
+          apiKey: firebaseConfig.apiKey,
+          appId: firebaseConfig.appId,
+          messagingSenderId: firebaseConfig.messagingSenderId,
+          projectId: firebaseConfig.projectId,
+        },
+        //optionally override the firebase version used by the service worker
+        firebaseVersion: '7.5.2', //e.g., '8.1.1'
+        //optionally disables development service worker
+        // disableDevelopment: true,
+        //optionally tells plugin to help unregistering/removing service worker
+        // removeFirebaseServiceWorker: true,
+      },
+    },
   ]
 };
