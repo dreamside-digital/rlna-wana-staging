@@ -12,9 +12,8 @@ import Header from "../components/navigation/Header"
 import CreatePageModal from "../components/editing/CreatePageModal";
 import {
   requestPermissionForNotifications,
-  playNotifications,
+  initializeFirebaseMessaging,
   notificationPermission,
-  initializeFirebaseMessaging
 } from '../utils/notifications';
 
 import firebase from '../firebase/init'
@@ -25,8 +24,7 @@ import {
 } from 'react-easy-editables';
 
 import {
-  setPages,
-  fetchBrowserNotifications
+  setPages
 } from "../redux/actions"
 
 import "../assets/sass/less-cms/base.scss";
@@ -71,7 +69,6 @@ const mapStateToProps = state => {
     pageData: state.pages.data,
     pages: state.pages.pages,
     accessGranted: state.adminTools.accessGranted,
-    browserNotifications: state.adminTools.browserNotifications,
   };
 };
 
@@ -79,9 +76,6 @@ const mapDispatchToProps = dispatch => {
   return {
     setPages: pages => {
       dispatch(setPages(pages));
-    },
-    fetchBrowserNotifications: () => {
-      dispatch(fetchBrowserNotifications());
     }
   };
 };
@@ -91,14 +85,13 @@ class DefaultLayout extends React.Component {
   componentDidMount() {
     this.props.setPages(this.props.allPages)
     AOS.init()
-    if (notificationPermission() !== "denied") {
-      this.props.fetchBrowserNotifications()
-    }
   }
 
   componentDidUpdate(prevProps) {
     if (!prevProps.accessGranted && this.props.accessGranted) {
-      initializeFirebaseMessaging()
+      if (notificationPermission() === "granted") {
+        initializeFirebaseMessaging()
+      }
     }
   }
 

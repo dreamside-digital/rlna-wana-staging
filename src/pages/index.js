@@ -4,6 +4,12 @@ import { connect } from "react-redux";
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import {
   EditableText,
   EditableParagraph,
@@ -15,6 +21,7 @@ import {
   updatePage,
   loadPageData,
   validateAccessCode,
+  showNotification
 } from "../redux/actions";
 
 import {
@@ -42,6 +49,9 @@ const mapDispatchToProps = dispatch => {
     validateAccessCode: (code) => {
       dispatch(validateAccessCode(code));
     },
+    showNotification: (msg) => {
+      dispatch(showNotification(msg));
+    },
   };
 };
 
@@ -63,10 +73,20 @@ class HomePage extends React.Component {
     };
     this.state = {
       tweets: [],
-      tweetCount: 2
+      tweetCount: 2,
+      isModalOpen: false
     }
 
     this.props.onLoadPageData(initialPageData);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.accessGranted && this.props.accessGranted) {
+      console.log(notificationPermission())
+      if (notificationPermission() === "default") {
+        setTimeout(this.openModal, 4000)
+      }
+    }
   }
 
   onSave = id => content => {
@@ -79,8 +99,17 @@ class HomePage extends React.Component {
     this.setState({ accessCode: '' })
   }
 
+  closeModal = () => {
+    this.setState({ isModalOpen: false })
+  }
+
+  openModal = () => {
+    this.setState({ isModalOpen: true })
+  }
+
   render() {
     const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
+
     // ---------- LOCK SCREEN ------------
 
     if (!this.props.accessGranted) {
@@ -182,7 +211,16 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
-                <button className="btn btn-primary mt-2 mb-2" onClick={requestPermissionForNotifications}>Get notified about community activity</button>
+                <button
+                  className="btn btn-primary mt-2 mb-2"
+                  onClick={() => {
+                    requestPermissionForNotifications(() => {
+                      this.props.showNotification('Success! You have been subscribed to our community notifications.')
+                    })
+                  }}
+                  >
+                  Get notifications about community activity
+                </button>
             </Grid>
           </Grid>
         </Section>
@@ -257,6 +295,31 @@ class HomePage extends React.Component {
             <PastProgramElements />
           </Grid>
         </Section>
+
+        <Dialog open={this.state.isModalOpen} onClose={this.closeModal} aria-labelledby="form-dialog-title" scroll="body">
+            <DialogTitle id="form-dialog-title">
+              <span className="text-bold font-size-h3">
+                Would you like to get notifications about activity within this community?
+              </span>
+            </DialogTitle>
+            <DialogContent>
+              <p>We'd like to keep you informed about upcoming events, new content, and other opportunities to participate in this community as we grow and develop our regional network.</p>
+              <p>This is completely optional and you can turn the notifications off at any time in your browser settings.</p>
+            </DialogContent>
+            <DialogActions>
+              <button
+                className="btn btn-primary mt-2 mb-2"
+                onClick={() => {
+                  requestPermissionForNotifications(() => {
+                    this.closeModal()
+                    this.props.showNotification('Success! You have been subscribed to our community notifications.')
+                  })
+                }}
+                >
+                Get notifications
+              </button>
+            </DialogActions>
+          </Dialog>
       </Layout>
     );
   }

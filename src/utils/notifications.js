@@ -5,7 +5,11 @@ const MAX_NOTIFICATION_VIEWS = 3
 const isNotificationsSupported = () => Boolean('Notification' in window)
 
 const notificationPermission = () => {
-  return window.localStorage.getItem('connect-wana-notifications-permission') || "default"
+  if (isNotificationsSupported()) {
+    return window.Notification.permission
+  } else {
+    return "not supported"
+  }
 }
 
 const createNotification = (notification) => {
@@ -50,11 +54,15 @@ const fetchBrowserNotifications = async() => {
   return firebaseQuery.val()
 }
 
-const requestPermissionForNotifications = async () => {
+const requestPermissionForNotifications = async (callback) => {
   try {
     const messaging = firebase.messaging();
     const token = await messaging.getToken();
     console.log({token});
+    if (token) {
+      initializeFirebaseMessaging()
+      callback()
+    }
 
     return token;
   } catch (error) {
