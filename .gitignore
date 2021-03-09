@@ -19,3 +19,6 @@ firebase-debug.log
 
 # static files
 # image
+
+functions/service-account-key.json
+functions

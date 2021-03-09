@@ -28,7 +28,6 @@ const emptyItem = {
     title: "",
     message: "",
     url: "",
-    active: false
   }
 
 class BrowserNotificationModal extends React.Component {
@@ -65,9 +64,10 @@ class BrowserNotificationModal extends React.Component {
     const { newItem } = this.state;
 
     const id = newItem.id ? newItem.id : `notification-${Date.now()}`
-
+    const date = new Date()
     const data = {
       ...newItem,
+      timestamp: date.toString(),
       id
     }
 
@@ -129,12 +129,6 @@ class BrowserNotificationModal extends React.Component {
             onChange={handleChange('url')}
             variant="outlined"
           />
-          <FormControlLabel
-            control={
-              <Checkbox checked={active} onChange={handleCheckboxChange('active')} value="active" required />
-            }
-            label={<p>Show notification</p>}
-          />
         </DialogContent>
         <DialogActions>
           <div className="pr-3 pl-3 pb-2 width-100">
@@ -163,7 +157,7 @@ class BrowserNotificationModal extends React.Component {
                   style={{borderRadius:0}}
                   disabled={!title || !message}
                   disableElevation>
-                  Save
+                  Send notification!
                 </Button>
               </Grid>
             </Grid>

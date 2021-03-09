@@ -19,6 +19,7 @@ import { PERMANENT_PAGES } from "../utils/constants"
 import {
   fetchPages,
   fetchUsers,
+  fetchBrowserNotifications,
   fetchAccessCode,
   updateFirebaseData,
   deploy,
@@ -38,6 +39,9 @@ const mapDispatchToProps = dispatch => {
     },
     fetchUsers: () => {
       dispatch(fetchUsers())
+    },
+    fetchBrowserNotifications: () => {
+      dispatch(fetchBrowserNotifications())
     },
     fetchAccessCode: () => {
       dispatch(fetchAccessCode())
@@ -74,6 +78,7 @@ class AdminPage extends React.Component {
   componentDidMount() {
     this.props.fetchPages()
     this.props.fetchAccessCode()
+    this.props.fetchBrowserNotifications()
     if (this.props.user?.isAdmin) {
       this.props.fetchUsers()
     }

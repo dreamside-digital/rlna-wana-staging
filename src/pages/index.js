@@ -26,7 +26,6 @@ import {
 
 import {
   requestPermissionForNotifications,
-  playNotifications,
   notificationPermission
 } from '../utils/notifications';
 
@@ -63,6 +62,8 @@ const mapStateToProps = state => {
   };
 };
 
+const isClient = typeof window !== 'undefined';
+
 class HomePage extends React.Component {
 
   constructor(props) {
@@ -82,9 +83,10 @@ class HomePage extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.accessGranted && this.props.accessGranted) {
-      console.log(notificationPermission())
-      if (notificationPermission() === "default") {
-        setTimeout(this.openModal, 4000)
+      if (isClient) {
+        if (notificationPermission() === "default") {
+          setTimeout(this.openModal, 4000)
+        }
       }
     }
   }
@@ -109,6 +111,7 @@ class HomePage extends React.Component {
 
   render() {
     const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
+    const showModalPrompt = isClient && notificationPermission() === "default"
 
     // ---------- LOCK SCREEN ------------
 
@@ -211,16 +214,14 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
+              {showModalPrompt &&
                 <button
                   className="btn btn-primary mt-2 mb-2"
-                  onClick={() => {
-                    requestPermissionForNotifications(() => {
-                      this.props.showNotification('Success! You have been subscribed to our community notifications.')
-                    })
-                  }}
+                  onClick={this.openModal}
                   >
                   Get notifications about community activity
                 </button>
+              }
             </Grid>
           </Grid>
         </Section>
@@ -310,10 +311,10 @@ class HomePage extends React.Component {
               <button
                 className="btn btn-primary mt-2 mb-2"
                 onClick={() => {
-                  requestPermissionForNotifications(() => {
-                    this.closeModal()
-                    this.props.showNotification('Success! You have been subscribed to our community notifications.')
-                  })
+                  this.closeModal()
+                  if (isClient) {
+                    requestPermissionForNotifications(this.props.showNotification)
+                  }
                 }}
                 >
                 Get notifications

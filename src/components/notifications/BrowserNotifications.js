@@ -55,7 +55,8 @@ const BrowserNotifications = ({ browserNotifications={} }) => {
               <CardContent>
                 <p className="mt-0 mb-1 text-bold">{`${notif.title}`}</p>
                 <p className="mt-0 mb-0 text-small">{notif.message}</p>
-                <p className="mt-0 mb-0 text-small">{notif.url}</p>
+                <p className="mt-0 mb-3 text-small">{notif.url}</p>
+                <p className="mt-0 mb-0 text-muted text-xs">{`Sent at: ${notif.timestamp}`}</p>
               </CardContent>
             </Card>
           ))

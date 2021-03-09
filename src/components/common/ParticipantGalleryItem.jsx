@@ -7,7 +7,7 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import LanguageIcon from '@material-ui/icons/Language';
 import ensureAbsoluteUrl from '../../utils/ensureAbsoluteUrl';
 
-const DEFAULT_IMAGE = 'https://firebasestorage.googleapis.com/v0/b/rlna-wana-staging.appspot.com/o/images%2Fcactus.jpg?alt=media&token=b9e6b31e-c763-497f-aec9-73e768ddf8c5'
+const DEFAULT_IMAGE = '/default-profile-image.jpg'
 
 const ParticipantGalleryItem = ({ id, content={} }) => {
   const [ isOpen, setIsOpen ] = useState(false)

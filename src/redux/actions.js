@@ -475,6 +475,8 @@ export function fetchBrowserNotifications() {
         console.log({ notifs })
         if (notifs) {
           dispatch(setBrowserNotifications(notifs));
+        } else {
+          dispatch(setBrowserNotifications({}));
         }
       })
       .catch(error => {
