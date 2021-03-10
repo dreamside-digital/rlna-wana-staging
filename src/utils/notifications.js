@@ -2,19 +2,22 @@ import firebase from "../firebase/init";
 
 const MAX_NOTIFICATION_VIEWS = 3
 const SUBSCRIBE_ENDPOINT = 'https://us-central1-rlna-wana-staging.cloudfunctions.net/subscribeToNotifications'
-const isClient = typeof window !== 'undefined';
+// const isClient = typeof window !== 'undefined';
+const isClient = true;
 
 const isNotificationsSupported = () => {
-  if (isClient) {
-    return Boolean('Notification' in window)
-  } else {
-    return false
-  }
+  // if (isClient) {
+  //   return Boolean('Notification' in window)
+  // } else {
+  //   return false
+  // }
+  return true
 }
 
 const notificationPermission = () => {
   if (isClient && isNotificationsSupported()) {
-    return window.Notification.permission
+    // return window.Notification.permission
+    return "default"
   } else {
     return "not supported"
   }
@@ -24,16 +27,16 @@ const createNotification = (notification) => {
   if (!notification) return;
 
   if (isClient) {
-    const n = new window.Notification(notification.title, {
-      icon: notification.icon,
-      body: notification.body,
-      // requireInteraction: true,
-    });
+    // const n = new window.Notification(notification.title, {
+    //   icon: notification.icon,
+    //   body: notification.body,
+    //   // requireInteraction: true,
+    // });
 
-    n.addEventListener('click', () => {
-      window.open(notification.click_action);
-      n.close()
-    })
+    // n.addEventListener('click', () => {
+    //   window.open(notification.click_action);
+    //   n.close()
+    // })
   }
 }
 

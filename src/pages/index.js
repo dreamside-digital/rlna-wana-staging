@@ -73,8 +73,6 @@ class HomePage extends React.Component {
       content: JSON.parse(this.props.data.pages.content)
     };
     this.state = {
-      tweets: [],
-      tweetCount: 2,
       isModalOpen: false
     }
 

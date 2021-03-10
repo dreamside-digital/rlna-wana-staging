@@ -11,12 +11,9 @@ import Footer from "../components/navigation/Footer"
 import Header from "../components/navigation/Header"
 import CreatePageModal from "../components/editing/CreatePageModal";
 import {
-  requestPermissionForNotifications,
   initializeFirebaseMessaging,
   notificationPermission,
 } from '../utils/notifications';
-
-import firebase from '../firebase/init'
 
 import {
   EditablesContext,
@@ -80,6 +77,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const isClient = typeof window !== 'undefined';
 
 class DefaultLayout extends React.Component {
   componentDidMount() {
@@ -89,8 +87,10 @@ class DefaultLayout extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (!prevProps.accessGranted && this.props.accessGranted) {
-      if (notificationPermission() === "granted") {
-        initializeFirebaseMessaging()
+      if (isClient) {
+        if (notificationPermission() === "granted") {
+          initializeFirebaseMessaging()
+        }
       }
     }
   }
