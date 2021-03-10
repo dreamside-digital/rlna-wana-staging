@@ -4,6 +4,11 @@ import { connect } from "react-redux";
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import {
   EditableText,
   EditableParagraph,
@@ -15,7 +20,13 @@ import {
   updatePage,
   loadPageData,
   validateAccessCode,
+  showNotification
 } from "../redux/actions";
+
+import {
+  requestPermissionForNotifications,
+  notificationPermission
+} from '../utils/notifications';
 
 import { uploadImage } from '../firebase/operations';
 
@@ -36,6 +47,9 @@ const mapDispatchToProps = dispatch => {
     validateAccessCode: (code) => {
       dispatch(validateAccessCode(code));
     },
+    showNotification: (msg) => {
+      dispatch(showNotification(msg));
+    },
   };
 };
 
@@ -47,6 +61,8 @@ const mapStateToProps = state => {
   };
 };
 
+const isClient = typeof window !== 'undefined';
+
 class HomePage extends React.Component {
 
   constructor(props) {
@@ -56,11 +72,20 @@ class HomePage extends React.Component {
       content: JSON.parse(this.props.data.pages.content)
     };
     this.state = {
-      tweets: [],
-      tweetCount: 2
+      isModalOpen: false
     }
 
     this.props.onLoadPageData(initialPageData);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.accessGranted && this.props.accessGranted) {
+      if (isClient) {
+        if (notificationPermission() === "default") {
+          setTimeout(this.openModal, 4000)
+        }
+      }
+    }
   }
 
   onSave = id => content => {
@@ -73,8 +98,17 @@ class HomePage extends React.Component {
     this.setState({ accessCode: '' })
   }
 
+  closeModal = () => {
+    this.setState({ isModalOpen: false })
+  }
+
+  openModal = () => {
+    this.setState({ isModalOpen: true })
+  }
+
   render() {
     const content = this.props.pageData ? this.props.pageData.content : JSON.parse(this.props.data.pages.content);
+    const showModalPrompt = isClient && notificationPermission() === "default"
 
     // ---------- LOCK SCREEN ------------
 
@@ -177,6 +211,14 @@ class HomePage extends React.Component {
                 <EditableText content={content["intro-title"]} onSave={this.onSave("intro-title")} />
               </h2>
               <EditableParagraph classes="text-dark mb-3" content={content["intro-text"]} onSave={this.onSave("intro-text")} />
+              {showModalPrompt &&
+                <button
+                  className="btn btn-primary mt-2 mb-2"
+                  onClick={this.openModal}
+                  >
+                  Get notifications about community activity
+                </button>
+              }
             </Grid>
           </Grid>
         </Section>
@@ -251,6 +293,31 @@ class HomePage extends React.Component {
             <PastProgramElements />
           </Grid>
         </Section>
+
+        <Dialog open={this.state.isModalOpen} onClose={this.closeModal} aria-labelledby="form-dialog-title" scroll="body">
+            <DialogTitle id="form-dialog-title">
+              <span className="text-bold font-size-h3">
+                Would you like to get notifications about activity within this community?
+              </span>
+            </DialogTitle>
+            <DialogContent>
+              <p>We'd like to keep you informed about upcoming events, new content, and other opportunities to participate in this community as we grow and develop our regional network.</p>
+              <p>This is completely optional and you can turn the notifications off at any time in your browser settings.</p>
+            </DialogContent>
+            <DialogActions>
+              <button
+                className="btn btn-primary mt-2 mb-2"
+                onClick={() => {
+                  this.closeModal()
+                  if (isClient) {
+                    requestPermissionForNotifications(this.props.showNotification)
+                  }
+                }}
+                >
+                Get notifications
+              </button>
+            </DialogActions>
+          </Dialog>
       </Layout>
     );
   }

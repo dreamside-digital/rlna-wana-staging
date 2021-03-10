@@ -26,13 +26,16 @@ const styles = {
     fontFamily: `'BMW', 'Helvetica', 'Arial', sans-serif`,
     height: '100%',
     width: '100%',
-    borderRadius: '180px',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
     "&:hover, &:focus": {
       background: '#C34580',
     },
+  },
+  round: {
+    borderRadius: '180px',
   },
   hidden: {
     display: "none !important"
@@ -136,15 +139,17 @@ class ImageUploadEditor extends React.Component {
   }
 
   render() {
-    const { EditorProps, label } = this.props;
+    const { EditorProps, label, round } = this.props;
     const previewImage = this.state.preview || DEFAULT_BACKGROUND_IMAGE
+    const btnType = this.state.preview ? {...styles.button, background: 'transparent' } : styles.button
+    const btnStyle = round ? {...btnType, ...styles.round} : btnType
 
     return (
       <Container maxWidth="sm">
         <Grid container spacing={1} style={styles.container}>
           <Grid item xs={12}>
             <div className="image-preview gradient-overlay" style={{ ...styles.preview, backgroundImage: `url(${previewImage})` }}>
-              <label style={this.state.preview ? {...styles.button, background: 'transparent' } : styles.button}>
+              <label style={btnStyle}>
                 {this.state.loading ? (
                   <div className="loader-container">
                     <div className="loader">loading...</div>

@@ -2,10 +2,10 @@ import React from "react"
 
 const parseUrl = url => {
   if (url.indexOf('youtube') >= 0) {
-    const [match, id] = /youtube\.com\/watch\?v=(.*)/gm.exec(url)
+    const [match, id] = /youtube\.com\/watch\?v=(.*?)(?=&|\/|$)/gm.exec(url)
     return { id, platform: 'youtube' }
   } else if (url.indexOf('vimeo') >= 0) {
-    const [match, id] = /vimeo\.com\/(.*)/gm.exec(url)
+    const [match, id] = /vimeo\.com\/(.*?)(?=&|\/|$)/gm.exec(url)
     return { id, platform: 'vimeo' }
   } else {
     return {}

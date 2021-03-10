@@ -31,7 +31,7 @@ const PastProgramElementItem = ({ content }) => {
       raised={false}
       elevation={0}
       component={Link}
-      to={content["slug"]}
+      to={`/${content["slug"]}`}
     >
       <div className="position-relative img-container bg-gradient">
         {
@@ -57,7 +57,7 @@ const PastProgramElementItem = ({ content }) => {
 
           <Grid item xs={12}>
             <div className="card-title">
-              <h4 className="text-dark mt-2 mb-0">
+              <h4 className="text-dark mt-2 mb-2">
                 { content["title"] }
               </h4>
             </div>

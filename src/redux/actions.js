@@ -23,7 +23,6 @@ export function deleteAccount(user) {
 
       const db = firebase.database();
       const user = firebase.auth().currentUser;
-      console.log("user", user)
 
       db.ref(`users/${user.uid}`).set(null, error => {
         if (error) {
@@ -249,7 +248,6 @@ export function updateProfile(id, profile) {
 }
 
 export function setProfiles(profiles) {
-  console.log({profiles})
   return { type: "SET_PROFILES", profiles }
 }
 
@@ -328,7 +326,6 @@ export function updateEvent(id, event) {
 }
 
 export function setEvents(events) {
-  console.log({events})
   return { type: "SET_EVENTS", events }
 }
 
@@ -409,7 +406,6 @@ export function updateMaterial(id, material) {
 }
 
 export function setMaterials(materials) {
-  console.log({materials})
   return { type: "SET_MATERIALS", materials }
 }
 
@@ -465,6 +461,85 @@ export function removeMaterial(materialId) {
 }
 
 // -----------------
+
+// ------------- NOTIFICATIONS
+
+export function fetchBrowserNotifications() {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications`)
+      .once('value')
+      .then(snap => {
+        const notifs = snap.val()
+        console.log({ notifs })
+        if (notifs) {
+          dispatch(setBrowserNotifications(notifs));
+        } else {
+          dispatch(setBrowserNotifications({}));
+        }
+      })
+      .catch(error => {
+        console.log("Error fetching browser notifications", error)
+      })
+  };
+}
+
+export function saveBrowserNotification(id, data) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications/${id}`).update(data, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "error"
+          )
+        );
+      }
+
+      dispatch(fetchBrowserNotifications())
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function removeBrowserNotification(id) {
+  return (dispatch, getState) => {
+    const db = firebase.database();
+
+    db.ref(`notifications/`).update({[id]: null}, error => {
+      if (error) {
+        return dispatch(
+          showNotification(
+            `There was an error saving your changes: ${error}`,
+            "success"
+          )
+        );
+      }
+
+      dispatch(fetchBrowserNotifications())
+      dispatch(
+        showNotification(
+          "Your changes have been saved.",
+          "success"
+        )
+      );
+    })
+  };
+}
+
+export function setBrowserNotifications(notifications) {
+  return { type: "SET_BROWSER_NOTIFICATIONS", notifications }
+}
+
+// ---------------------------
 
 export function savePage(pageData, pageId) {
   return dispatch => {

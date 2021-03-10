@@ -10,6 +10,10 @@ import AccountButton from "../components/navigation/AccountButton"
 import Footer from "../components/navigation/Footer"
 import Header from "../components/navigation/Header"
 import CreatePageModal from "../components/editing/CreatePageModal";
+import {
+  initializeFirebaseMessaging,
+  notificationPermission,
+} from '../utils/notifications';
 
 import {
   EditablesContext,
@@ -17,7 +21,7 @@ import {
 } from 'react-easy-editables';
 
 import {
-  setPages,
+  setPages
 } from "../redux/actions"
 
 import "../assets/sass/less-cms/base.scss";
@@ -26,6 +30,7 @@ import "aos/dist/aos.css"
 import "animate.css/animate.css"
 
 import favicon from '../assets/images/icon.png'
+
 
 export const editorTheme = {
   ...theme,
@@ -72,6 +77,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const isClient = typeof window !== 'undefined';
 
 class DefaultLayout extends React.Component {
   componentDidMount() {
@@ -79,23 +85,15 @@ class DefaultLayout extends React.Component {
     AOS.init()
   }
 
-  // requestPermission = async () => {
-  //   const permission = await window.Notification.requestPermission()
-  //   if (permission === "granted") {
-  //     var n = new window.Notification("Hi Sharon!");
-  //   }
-  //   return permission
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (!prevProps.accessGranted && this.props.accessGranted) {
-  //     console.log("let's try notifications!")
-  //     const isNotificationsSupported = Boolean('Notification' in window)
-  //     if (isNotificationsSupported) {
-  //       const permission = this.requestPermission()
-  //     }
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (!prevProps.accessGranted && this.props.accessGranted) {
+      if (isClient) {
+        if (notificationPermission() === "granted") {
+          initializeFirebaseMessaging()
+        }
+      }
+    }
+  }
 
   render() {
     const { props } = this;
