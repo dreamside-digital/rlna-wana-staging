@@ -2,7 +2,6 @@ import firebase from "firebase/app"
 import "firebase/auth"
 import "firebase/database"
 import "firebase/storage"
-import "firebase/messaging"
 
 const activeEnv = process.env.GATSBY_FIREBASE_ENVIRONMENT || process.env.NODE_ENV || "development"
 const config = require(`../../config/firebase-config.${activeEnv}.json`)

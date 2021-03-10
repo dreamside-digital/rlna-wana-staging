@@ -7,10 +7,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
-import {uploadImage} from "../../firebase/operations";
 import { saveBrowserNotification, removeBrowserNotification } from '../../redux/actions'
 
 const mapDispatchToProps = dispatch => {
@@ -51,15 +47,6 @@ class BrowserNotificationModal extends React.Component {
     this.setState({ newItem: {...this.state.newItem, [key]: value} })
   }
 
-  handleCheckboxChange = key => event => {
-    const value = event.currentTarget.checked
-    this.setState({ newItem: {...this.state.newItem, [key]: value} })
-  }
-
-  handleDescChange = key => desc => {
-    this.setState({ newItem: {...this.state.newItem, [key]: desc.text} })
-  }
-
   handleSave = () => {
     const { newItem } = this.state;
 
@@ -83,14 +70,13 @@ class BrowserNotificationModal extends React.Component {
   }
 
   render() {
-    const {handleChange, handleCheckboxChange, handleSave, handleDelete} = this;
+    const {handleChange, handleSave, handleDelete} = this;
     const { showModal, closeModal } = this.props;
     const {
       title,
       message,
       url,
-      id,
-      active
+      id
     } = this.state.newItem;
 
     return (

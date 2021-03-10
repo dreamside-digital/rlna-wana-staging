@@ -1,23 +1,19 @@
 import firebase from "../firebase/init";
 
-const MAX_NOTIFICATION_VIEWS = 3
 const SUBSCRIBE_ENDPOINT = 'https://us-central1-rlna-wana-staging.cloudfunctions.net/subscribeToNotifications'
-// const isClient = typeof window !== 'undefined';
-const isClient = true;
+const isClient = typeof window !== 'undefined';
 
 const isNotificationsSupported = () => {
-  // if (isClient) {
-  //   return Boolean('Notification' in window)
-  // } else {
-  //   return false
-  // }
-  return true
+  if (isClient) {
+    return Boolean('Notification' in window)
+  } else {
+    return false
+  }
 }
 
 const notificationPermission = () => {
   if (isClient && isNotificationsSupported()) {
-    // return window.Notification.permission
-    return "default"
+    return window.Notification.permission
   } else {
     return "not supported"
   }
@@ -27,47 +23,42 @@ const createNotification = (notification) => {
   if (!notification) return;
 
   if (isClient) {
-    // const n = new window.Notification(notification.title, {
-    //   icon: notification.icon,
-    //   body: notification.body,
-    //   // requireInteraction: true,
-    // });
+    const n = new window.Notification(notification.title, {
+      icon: notification.icon,
+      body: notification.body,
+      // requireInteraction: true,
+    });
 
-    // n.addEventListener('click', () => {
-    //   window.open(notification.click_action);
-    //   n.close()
-    // })
+    n.addEventListener('click', () => {
+      window.open(notification.click_action);
+      n.close()
+    })
   }
 }
 
 const initializeFirebaseMessaging = () => {
-  console.log("initializing firebase messaging in browser")
-  firebase.messaging().getToken().then((currentToken) => {
-    if (currentToken) {
-      console.log(currentToken)
+  console.log("Initializing firebase messaging in browser")
+  import('firebase/messaging').then(() => {
+    firebase.messaging().getToken().then((currentToken) => {
+      if (currentToken) {
+        console.log(currentToken)
 
-      firebase.messaging().onMessage((payload) => {
-        console.log(payload)
-        if (payload.notification) {
-          createNotification(payload.notification)
-        }
-      }, e => {
-        console.log(e)
-      })
+        firebase.messaging().onMessage((payload) => {
+          console.log(payload)
+          if (payload.notification) {
+            createNotification(payload.notification)
+          }
+        }, e => {
+          console.log(e)
+        })
 
-    } else {
-      // Show permission request.
-      console.log(
-        'No Instance ID token available. Request permission to generate one.')
-    }
+      } else {
+        // Show permission request.
+        console.log(
+          'No Instance ID token available. Request permission to generate one.')
+      }
+    })
   })
-}
-
-const fetchBrowserNotifications = async() => {
-  const db = firebase.database();
-
-  const firebaseQuery = await db.ref(`notifications`).once('value')
-  return firebaseQuery.val()
 }
 
 const subscribeToTopic = async (token) => {
@@ -77,6 +68,7 @@ const subscribeToTopic = async (token) => {
 
 const requestPermissionForNotifications = async (showNotification) => {
   try {
+    await import('firebase/messaging')
     const messaging = firebase.messaging();
     const token = await messaging.getToken();
     console.log({token});
