@@ -15,6 +15,7 @@ import LuxonUtils from "@date-io/luxon";
 import TimezoneSelect from "./TimezoneSelect";
 import slugify from "slugify";
 import {DateTime} from "luxon";
+import {RichTextEditor} from 'react-easy-editables'
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -70,6 +71,10 @@ class ProgramElementModal extends React.Component {
 
   handleValueChange = key => value => {
     this.setState({ newEvent: {...this.state.newEvent, [key]: value} })
+  }
+
+  handleContentChange = key => input => {
+    this.setState({ newEvent: {...this.state.newEvent, [key]: input.text } })
   }
 
   handleImageChange = key => image => {
@@ -144,6 +149,7 @@ class ProgramElementModal extends React.Component {
       handleChange,
       handleImageChange,
       handleValueChange,
+      handleContentChange,
       handleCancel
     } = this;
     const { showModal, closeModal } = this.props;
@@ -155,12 +161,14 @@ class ProgramElementModal extends React.Component {
       timezone,
       url,
       linkText,
-      description,
+      description='',
       image,
       video,
       host,
       iframe
     } = this.state.newEvent;
+
+    console.log({description})
 
     return (
       <Dialog open={showModal} onClose={closeModal} aria-labelledby="form-dialog-title" scroll="body">
@@ -244,18 +252,12 @@ class ProgramElementModal extends React.Component {
             onChange={handleChange('host')}
             variant="outlined"
           />
-          <TextField
-            value={description}
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            onChange={handleChange('description')}
-            variant="outlined"
-            multiline
-            rows={4}
+
+          <RichTextEditor
+            content={{ text: description }}
+            onContentChange={handleContentChange('description')}
           />
+
           <TextField
             value={url}
             margin="dense"

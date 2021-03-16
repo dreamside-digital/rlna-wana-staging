@@ -81,7 +81,7 @@ const requestPermissionForNotifications = async (showNotification) => {
     return token;
   } catch (error) {
     console.error(error);
-    showNotification('Sorry, we were not able to subscribe you to our notifications. Please try again.')
+    showNotification('Sorry, we were not able to subscribe you to our notifications. Please try a different browser.')
   }
 }
 

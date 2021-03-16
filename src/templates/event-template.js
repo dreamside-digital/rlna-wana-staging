@@ -97,7 +97,7 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
         <Grid container>
           <Grid item xs={12}>
             <h2 className="mt-6 mb-2">Overview</h2>
-            <div style={{whiteSpace: "pre-wrap"}}>{ event["description"] }</div>
+            <div dangerouslySetInnerHTML={{__html: event["description"]}} />
             {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
             <p>
               <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
