@@ -9,6 +9,7 @@ import IframeEmbed from '../components/common/IframeEmbed';
 import SessionMaterials from '../components/common/SessionMaterials';
 
 import Layout from "../layouts/default.js";
+import PasswordPage from "../layouts/password-page.js"
 
 const Button = ({ children, onClick }) => (
   <button className="btn btn-primary" onClick={onClick}>{children}</button>
@@ -61,77 +62,79 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
   const bgStyle = event["image"] && event["image"]["imageSrc"] ? {background: `url(${event["image"]["imageSrc"]}) no-repeat center center`, backgroundSize: 'cover', width: '100%', height: '100%', minHeight: '200px', paddingRight: '20px' } : null
 
   return (
-    <Layout>
-      <Helmet>
-        <title>{event['title']}</title>
-      </Helmet>
+    <PasswordPage>
+      <Layout>
+        <Helmet>
+          <title>{event['title']}</title>
+        </Helmet>
 
-      <Container maxWidth="md" className="pb-10 pt-10">
-        <header>
-          <Grid container spacing={2}>
-            {bgStyle &&
-            <Grid item xs={12} md={4}>
-              <div className="event-image" style={bgStyle}>
-              </div>
-            </Grid>
-            }
-            <Grid item xs={12} md={8}>
-              <div className="event-page-title">
-                <h1 className="underline">{event['title']}</h1>
-                <div className="font-size-h6 text-primary mb-2">
-                  {formattedStartDate}, <time>{eventStart}</time> - {formattedEndDate} <time>{eventEnd}</time>
+        <Container maxWidth="md" className="pb-10 pt-10">
+          <header>
+            <Grid container spacing={2}>
+              {bgStyle &&
+              <Grid item xs={12} md={4}>
+                <div className="event-image" style={bgStyle}>
                 </div>
-                <p className="text-muted text-small">{`Timezone: ${timezone}`}</p>
-                <AddToCalendarDropdown
-                  event={calendarEvent}
-                  filename={event["slug"]}
-                  className="add-to-calendar-btn"
-                  linkProps={{
-                    className: "pretty-link",
-                  }}
-                />
-              </div>
+              </Grid>
+              }
+              <Grid item xs={12} md={8}>
+                <div className="event-page-title">
+                  <h1 className="underline">{event['title']}</h1>
+                  <div className="font-size-h6 text-primary mb-2">
+                    {formattedStartDate}, <time>{eventStart}</time> - {formattedEndDate} <time>{eventEnd}</time>
+                  </div>
+                  <p className="text-muted text-small">{`Timezone: ${timezone}`}</p>
+                  <AddToCalendarDropdown
+                    event={calendarEvent}
+                    filename={event["slug"]}
+                    className="add-to-calendar-btn"
+                    linkProps={{
+                      className: "pretty-link",
+                    }}
+                  />
+                </div>
+              </Grid>
+            </Grid>
+          </header>
+          <Grid container>
+            <Grid item xs={12}>
+              <h2 className="mt-6 mb-2">Overview</h2>
+              <div dangerouslySetInnerHTML={{__html: event["description"]}} />
+              {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
+              <p>
+                <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
+                {
+                  Boolean(event['url']) ? (
+                  <a href={event['url']} target="_blank" rel="noopener noreferrer">
+                    {event['url']}
+                  </a>
+                  ) : (
+                    <span>More information will follow</span>
+                  )
+                }
+              </p>
+              <p>
+                <span className="text-bold mr-1">Original time:</span>
+                <time>{originalStartDate.toLocaleString(DateTime.DATETIME_FULL)}</time> - <time>{originalEndDate.toLocaleString(DateTime.DATETIME_FULL)}</time>
+              </p>
+            </Grid>
+            <Grid item xs={12}>
+              <VideoEmbed url={event['video']} />
+            </Grid>
+
+            <Grid item xs={12}>
+              <IframeEmbed src={event['iframe']} />
             </Grid>
           </Grid>
-        </header>
-        <Grid container>
-          <Grid item xs={12}>
-            <h2 className="mt-6 mb-2">Overview</h2>
-            <div dangerouslySetInnerHTML={{__html: event["description"]}} />
-            {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
-            <p>
-              <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
-              {
-                Boolean(event['url']) ? (
-                <a href={event['url']} target="_blank" rel="noopener noreferrer">
-                  {event['url']}
-                </a>
-                ) : (
-                  <span>More information will follow</span>
-                )
-              }
-            </p>
-            <p>
-              <span className="text-bold mr-1">Original time:</span>
-              <time>{originalStartDate.toLocaleString(DateTime.DATETIME_FULL)}</time> - <time>{originalEndDate.toLocaleString(DateTime.DATETIME_FULL)}</time>
-            </p>
-          </Grid>
-          <Grid item xs={12}>
-            <VideoEmbed url={event['video']} />
-          </Grid>
 
-          <Grid item xs={12}>
-            <IframeEmbed src={event['iframe']} />
+          <Grid container>
+            <Grid item xs={12}>
+              <SessionMaterials eventId={event.id} />
+            </Grid>
           </Grid>
-        </Grid>
-
-        <Grid container>
-          <Grid item xs={12}>
-            <SessionMaterials eventId={event.id} />
-          </Grid>
-        </Grid>
-      </Container>
-    </Layout>
+        </Container>
+      </Layout>
+    </PasswordPage>
   );
 }
 
