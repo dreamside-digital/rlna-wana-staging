@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import { Link } from 'gatsby'
+import { Link, navigate } from 'gatsby'
 import { connect } from "react-redux";
 import logo from "../../assets/images/logo_bmwf.svg"
 import {EditableText} from "react-easy-editables";
@@ -44,11 +44,16 @@ class Header extends React.Component {
 
   handleClick = (e) => {
     e.preventDefault();
-    document.querySelector(e.target.getAttribute('href')).scrollIntoView({
-      behavior: 'smooth',
-      block: 'start'
-    })
     this.setState({ menuIsOpen: false })
+
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+      navigate(`/${e.target.getAttribute('href')}`)
+    } else {
+      document.querySelector(e.target.getAttribute('href')).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
   }
 
   toggleMenu = (e) => {
