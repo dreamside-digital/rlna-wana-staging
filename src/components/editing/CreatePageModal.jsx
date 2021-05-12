@@ -101,7 +101,7 @@ class CreatePageModal extends React.Component {
   newPage = () => {
     const pageId = slugify(this.state.page.title, {
       lower: true,
-      remove: /[$*_+~.,()'"!\-:@%^&?=]/g
+      remove: /[$*_+~.,()'"!\-:@%^&?=#]/g
     })
 
     if (!this.isUniqueSlug(pageId)) {

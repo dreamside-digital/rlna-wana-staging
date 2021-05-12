@@ -83,7 +83,7 @@ exports.createPages = ({ graphql, actions }) => {
           );
 
           const event = edge.node
-          console.log("CREATING EVENT PAGE", event.title.text);
+          console.log("CREATING EVENT PAGE", event.slug);
           createPage({
             path: event.slug, // required
             component: template,

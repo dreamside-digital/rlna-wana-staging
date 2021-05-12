@@ -101,18 +101,18 @@ const EventPageTemplate = ({ pageContext: { event } }) => {
               <h2 className="mt-6 mb-2">Overview</h2>
               <div dangerouslySetInnerHTML={{__html: event["description"]}} />
               {event['host'] && <p><span className="text-bold mr-1">Hosted by:</span>{event['host']}</p>}
-              <p>
-                <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
-                {
-                  Boolean(event['url']) ? (
+              {
+                Boolean(event['url']) ? (
+                <p>
+                  <span className="text-bold mr-1">{`${event['linkText']}:`}</span>
                   <a href={event['url']} target="_blank" rel="noopener noreferrer">
                     {event['url']}
                   </a>
-                  ) : (
-                    <span>More information will follow</span>
-                  )
-                }
-              </p>
+                </p>
+                ) : (
+                  <p>More information will follow</p>
+                )
+              }
               <p>
                 <span className="text-bold mr-1">Original time:</span>
                 <time>{originalStartDate.toLocaleString(DateTime.DATETIME_FULL)}</time> - <time>{originalEndDate.toLocaleString(DateTime.DATETIME_FULL)}</time>
